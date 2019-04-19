@@ -1,0 +1,14 @@
+image: python:3.6
+
+stages:
+  - publish
+
+publish:
+  stage: publish
+  script:
+    - pip install -U setuptools twine
+    - python setup.py sdist bdist_wheel
+    - twine upload --repository-url ${PYPI_URL} -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/*
+  only:
+    - master
+    - develop
