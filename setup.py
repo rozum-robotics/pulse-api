@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-NAME = 'pulseapi'
+NAME = 'pulse-api'
 DESCRIPTION = 'Python API for Pulse Robotic Arm with useful utilities'
 URL = 'https://rozum.com'
 EMAIL = 'ilya.grozov@rozum.com'

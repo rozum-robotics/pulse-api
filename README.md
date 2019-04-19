@@ -10,12 +10,12 @@ Python 3.4+
 ### Installation
 
 Using pip: 
-`pip install pulseapi --trusted-host pip.rozum.com -i http://pip.rozum.com/simple` 
+`pip install pulse-api --trusted-host pip.rozum.com -i http://pip.rozum.com/simple` 
 to get the latest version. 
 
 To install specific version: 
-`pip install pulseapi==v1.v2.v3 --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
-where **v1**, **v2**, and **v3** (e.g. pulse-rest==1.3.1) are version numbers as listed below in compatibility table.
+`pip install pulse-api==v1.v2.v3 --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
+where **v1**, **v2**, and **v3** (e.g. pulse-api==1.4.3) are version numbers as listed below in compatibility table.
 
 #### Software compatibility table
 Pulse desk version  | Python api version
