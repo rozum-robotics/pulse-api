@@ -10,7 +10,7 @@ DESCRIPTION = 'Python API for Pulse Robotic Arm with useful utilities'
 URL = 'https://rozum.com'
 EMAIL = 'ilya.grozov@rozum.com'
 AUTHOR = 'Ilya Grozov'
-VERSION = '1.4.3.dev1'
+VERSION = '1.4.3.dev2'
 
 if 'dev' in VERSION:
     DEVELOPMENT_STATUS = 'Development Status :: 4 - Beta'
