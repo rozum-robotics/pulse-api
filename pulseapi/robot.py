@@ -20,8 +20,11 @@ class RobotPulse(object):
     def change_base(self, base_position):
         return self._api.change_base(base_position)
 
-    def change_tool(self, new_tool):
-        return self._api.change_tool(new_tool)
+    def change_tool_info(self, new_tool_info):
+        return self._api.change_tool_info(new_tool_info)
+
+    def change_tool_shape(self, new_tool_shape):
+        return self._api.change_tool_shape(new_tool_shape)
 
     def close_gripper(self, timeout=None):
         if timeout is not None:
