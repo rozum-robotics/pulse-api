@@ -88,7 +88,7 @@ class RobotPulse(object):
                   tcp_max_velocity=2.0):
         return self._api.run_poses(poses,
                                    speed=speed,
-                                   type=motion_type,
+                                   motion_type=motion_type,
                                    tcp_max_velocity=tcp_max_velocity)
 
     def run_positions(self,
@@ -98,7 +98,7 @@ class RobotPulse(object):
                       tcp_max_velocity=2.0):
         return self._api.run_positions(positions,
                                        speed=speed,
-                                       type=motion_type,
+                                       motion_type=motion_type,
                                        tcp_max_velocity=tcp_max_velocity)
 
     def set_digital_output_high(self, port):
@@ -114,7 +114,7 @@ class RobotPulse(object):
                  tcp_max_velocity=2.0):
         return self._api.set_pose(target_pose,
                                   speed=speed,
-                                  type=motion_type,
+                                  motion_type=motion_type,
                                   tcp_max_velocity=tcp_max_velocity)
 
     def set_position(self,
@@ -124,7 +124,7 @@ class RobotPulse(object):
                      tcp_max_velocity=2.0):
         return self._api.set_position(target_position,
                                       speed=speed,
-                                      type=motion_type,
+                                      motion_type=motion_type,
                                       tcp_max_velocity=tcp_max_velocity)
 
     def status_motion(self):
