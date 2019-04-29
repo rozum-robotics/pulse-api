@@ -8,9 +8,9 @@ here = os.path.abspath(os.path.dirname(__file__))
 NAME = 'pulse-api'
 DESCRIPTION = 'Python API for Pulse Robotic Arm with useful utilities'
 URL = 'https://rozum.com'
-EMAIL = 'ilya.grozov@rozum.com'
-AUTHOR = 'Ilya Grozov'
-VERSION = '1.4.3.dev2'
+EMAIL = 'dev@rozum.com'
+AUTHOR = 'Rozum Robotics'
+VERSION = '1.4.3.dev3'
 
 if 'dev' in VERSION:
     DEVELOPMENT_STATUS = 'Development Status :: 4 - Beta'
@@ -22,7 +22,7 @@ REQUIRED = [
     'six >= 1.10',
     'python_dateutil >= 2.5.3',
     'urllib3 >= 1.15.1',
-    'pdhttp >= 1.4.3.dev1'
+    'pdhttp >= 1.4.3.dev3'
 ]
 DEPENDENCY_LINKS = [
         'http://pip.rozum.com/#/package/pdhttp',
