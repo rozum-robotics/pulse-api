@@ -140,13 +140,3 @@ class RobotPulse(object):
     def await_motion(self, asking_interval=0.1):
         while self.status_motion() != MotionStatus.IDLE:
             time.sleep(asking_interval)
-
-    def await_stop(self, asking_interval=0.1):
-        status = self.status_motion()
-        while status != MotionStatus.IDLE:
-            time.sleep(asking_interval)
-            if (status == MotionStatus.EMERGENCY
-                    or status == MotionStatus.ERROR
-                    or status == MotionStatus.MOTION_FAILED):
-                raise PulseApiException('Failed to await stop: {}'.format(status))
-            status = self.status_motion()
