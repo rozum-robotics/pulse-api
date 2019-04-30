@@ -34,6 +34,7 @@ Examples:
 * ["Base" api](#base-api)
 * [Environment api](#environment-api)
 * [Exceptions handling](#exceptions-handling)
+* [Versions api](#versions-api)
 
 [Documentation and further information](#documentation-and-further-information)
 
@@ -296,6 +297,22 @@ except PulseApiException as e:
     if robot.status_motion() == MotionStatus.ERROR:
         robot.recover()
         print('Robot recovered from error')
+
+```
+
+#### Versions api
+You may need to get information about software and hardware versions. For example,
+you want to contact developers because you noticed some strange behaviour. Example below 
+will give you additional information about robot components that you can send to developers:
+```python
+from pulseapi import Versions
+
+host = '127.0.0.1:8080'  # replace with valid robot address
+versions = Versions(host)
+
+print(versions.hardware())
+print(versions.software())
+print(versions.robot_software())
 
 ```
 
