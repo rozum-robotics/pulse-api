@@ -5,7 +5,6 @@ import time
 from pdhttp.api.robot_api import RobotApi
 from pdhttp.models import MotionStatus
 from pulseapi.constants import MT_JOINT
-from pdhttp.rest import ApiException as PulseApiException
 
 
 class RobotPulse(object):
