@@ -50,7 +50,7 @@ robot = RobotPulse(host)
 Possible motion targets:
 * Positions (`set_position`, `run_positions` and `get_position` methods) - control robot tcp 
 (tool center point). Use `position` helper method to create motion target.
-* Poses (`set_pose` and `run_poses` methods) - control motor angles directly.
+* Poses (`set_pose`, `run_poses` and `get_pose` methods) - control motor angles directly.
 Use `pose` helper method to create motion target.
 
 Possible motion types:
