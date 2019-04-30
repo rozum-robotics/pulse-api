@@ -55,8 +55,11 @@ class RobotPulse(object):
     def get_position(self):
         return self._api.get_position()
 
-    def get_tool(self):
-        return self._api.get_tool()
+    def get_tool_info(self):
+        return self._api.get_tool_info()
+
+    def get_tool_shape(self):
+        return self._api.get_tool_shape()
 
     def identifier(self):
         return self._api.identifier()
