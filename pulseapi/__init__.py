@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from pdhttp.rest import ApiException as PulseApiException
-from pdhttp import Point, Rotation
+from pdhttp import Point, Rotation, MotionStatus
 from pulseapi.environment import (create_box_obstacle,
                                   create_capsule_obstacle,
                                   create_plane_obstacle,
