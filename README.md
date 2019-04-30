@@ -27,15 +27,15 @@ Example uses the latest version of library.
 You may need to change something in order to make it work in previous versions.
 
 Examples:
-* [API initialization](#API initialization)
-* [Motion control](#Motion control)
-* [Devices and signals](#Devices and signals control)
-* ["Tool" api](#Tool api)
-* ["Base" api](#Base api)
-* [Environment api](#Environment api)
-* [Exceptions handling](#Exceptions handling)
+* [API initialization](#api-initialization)
+* [Motion control](#motion-control)
+* [Devices and signals](#devices-and-signals-control)
+* ["Tool" api](#tool-api)
+* ["Base" api](#base-api)
+* [Environment api](#environment-api)
+* [Exceptions handling](#exceptions-handling)
 
-[Documentation and further information](#Documentation and further information)
+[Documentation and further information](#documentation-and-further-information)
 
 #### API initialization
 ```python
