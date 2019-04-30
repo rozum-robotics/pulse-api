@@ -44,6 +44,7 @@ from pulseapi import RobotPulse
 host = "127.0.0.1:8080"  # replace with valid robot address 
 robot = RobotPulse(host)
 ```
+[Back to table of contents](#Getting started)
 
 #### Motion control
 Possible motion targets:
@@ -57,7 +58,7 @@ Possible motion types:
 * Linear (`MT_LINEAR`)
 
 Auxiliary methods:
-* `await_motion` - waits until robot finishes movements. **Will be soon replaced.**
+* `await_motion` - waits until robot finishes movements. **Will be replaced soon.**
 * `status_motion` - the function returns the actual state of the robotic arm - 
 whether it is running (in motion), idle (not in motion), in the zero gravity mode, 
 or in error state.
@@ -69,6 +70,8 @@ can cause damage to its components.
 moving without retaining its last position. In this state, the user can move the 
 robotic arm by hand (e.g., to verify/test a motion trajectory).
 * `pack` - asking the arm to reach a compact pose for transportation
+* `status_motors` - returns the actual states of the six servo motors integrated 
+into the joints of the robotic arm.
 
 **WARNING!** This is an example, you must replace motion targets according to 
 your specific case. Before launching this example make sure that manipulator 
@@ -121,7 +124,12 @@ robot.await_motion()
 
 # stop the arm in last position
 robot.freeze()
+
+# get information from motors
+print(robot.status_motors())
+
 ```
+[Back to table of contents](#Getting started)
 
 #### Devices and signals control
 Methods:
@@ -155,6 +163,7 @@ if robot.get_digital_input(3) == SIG_HIGH:
 if robot.get_digital_input(1) == SIG_LOW:
     print('Input port 1 is inactive')
 ```
+[Back to table of contents](#Getting started)
 
 #### Tool api
 Sometimes it is convenient to calculate trajectory according to used tool and 
@@ -176,7 +185,7 @@ from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
 robot = RobotPulse()
 
-# recieve info about current tool
+# receive info about current tool
 current_tool_info = robot.get_tool_info()
 current_tool_shape = robot.get_tool_shape()
 print('Current tool info\n{}'.format(current_tool_info))
@@ -195,6 +204,7 @@ print('New tool info\n{}'.format(robot.get_tool_info()))
 print('New tool shape\n{}'.format(robot.get_tool_shape()))
 
 ```
+[Back to table of contents](#Getting started)
 
 #### Base api
 Sometimes it is convenient to calculate trajectory relatively to some specific 
@@ -218,12 +228,76 @@ robot.change_base(new_base)
 print('New base\n{}'.format(robot.get_base()))
 
 ```
+[Back to table of contents](#Getting started)
 
 #### Environment api
-Add virtual obstacles to take into account while calculating trajectories and 
-checking for collisions
+Add virtual obstacles to take into account while calculating collisions.
 
+Provided methods:
+* `add_to_environment` - add obstacle to environment. Use helper functions 
+listed below to create objects that should be provided to this method.
+* `get_all_from_environment` - return all obstacles from environment.
+* `get_from_environment_by_name` -  return obstacle from environment by name.
+* `remove_all_from_environment` - remove all obstacles from robot environment.
+* `remove_from_environment_by_name` -  remove obstacle from robot environment by name.
+
+Helper functions:
+* `create_box_obstacle`
+* `create_capsule_obstacle`
+* `create_plane_obstacle`
+
+```python
+from pulseapi import RobotPulse, Point, position
+from pulseapi import create_plane_obstacle, create_box_obstacle, create_capsule_obstacle
+
+robot = RobotPulse()
+print('Current environment\n{}'.format(robot.get_all_from_environment()))
+# add some obstacles to environment so that possible collisions are calculated
+box = create_box_obstacle(Point(0.1, 0.1, 0.1), position((1, 1, 1), (0, 0, 0)), 'example_box')
+capsule = create_capsule_obstacle(0.1, Point(0.5, 0.5, 0.2), Point(0.5, 0.5, 0.5), 'example_capsule')
+plane = create_plane_obstacle([Point(-0.5, 0.4, 0), Point(-0.5, 0, 0), Point(-0.5, 0, 0.1)], 'example_plane')
+robot.add_to_environment(box)
+robot.add_to_environment(capsule)
+robot.add_to_environment(plane)
+print('New environment\n{}'.format(robot.get_all_from_environment()))
+print('Get example box\n{}'.format(robot.get_from_environment_by_name(box.name)))
+# remove some obstacles
+robot.remove_from_environment_by_name(box.name)
+print('Environment without box\n{}'.format(robot.get_all_from_environment()))
+# remove all obstacles from environment
+robot.remove_all_from_environment()
+print('Empty environment\n{}'.format(robot.get_all_from_environment()))
+
+```
+
+[Back to table of contents](#Getting started)
 #### Exceptions handling
+Possible errors could be found [here](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
+This client wraps errors from robot into `PulseApiException`.
+
+Provided methods:
+* `recover` - the function recovers the arm after an emergency, setting its motion status to IDLE. 
+Recovery is possible only after an emergency that is not fatal — corresponding 
+to the ERROR status.
+
+For example, we can trigger api exception by sending `pose` into `set_position`
+method.
+
+```python
+from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
+
+robot = RobotPulse()
+
+try:
+    robot.set_position(pose([0, -90, 90, -90, -90, 0]), 10)
+    robot.await_motion()
+except PulseApiException as e:
+    print('Exception {}while calling robot at {} '.format(e, robot.host))
+    if robot.status_motion() == MotionStatus.ERROR:
+        robot.recover()
+        print('Robot recovered from error')
+
+```
 
 ### Documentation and further information
 Could be found and downloaded 
