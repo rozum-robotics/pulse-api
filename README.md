@@ -44,7 +44,7 @@ from pulseapi import RobotPulse
 host = "127.0.0.1:8080"  # replace with valid robot address 
 robot = RobotPulse(host)
 ```
-[Back to table of contents](#Getting started)
+[Back to table of contents](#getting-started)
 
 #### Motion control
 Possible motion targets:
@@ -129,7 +129,7 @@ robot.freeze()
 print(robot.status_motors())
 
 ```
-[Back to table of contents](#Getting started)
+[Back to table of contents](#getting-started)
 
 #### Devices and signals control
 Methods:
@@ -163,7 +163,7 @@ if robot.get_digital_input(3) == SIG_HIGH:
 if robot.get_digital_input(1) == SIG_LOW:
     print('Input port 1 is inactive')
 ```
-[Back to table of contents](#Getting started)
+[Back to table of contents](#getting-started)
 
 #### Tool api
 Sometimes it is convenient to calculate trajectory according to used tool and 
@@ -204,7 +204,7 @@ print('New tool info\n{}'.format(robot.get_tool_info()))
 print('New tool shape\n{}'.format(robot.get_tool_shape()))
 
 ```
-[Back to table of contents](#Getting started)
+[Back to table of contents](#getting-started)
 
 #### Base api
 Sometimes it is convenient to calculate trajectory relatively to some specific 
@@ -228,7 +228,7 @@ robot.change_base(new_base)
 print('New base\n{}'.format(robot.get_base()))
 
 ```
-[Back to table of contents](#Getting started)
+[Back to table of contents](#getting-started)
 
 #### Environment api
 Add virtual obstacles to take into account while calculating collisions.
@@ -270,7 +270,7 @@ print('Empty environment\n{}'.format(robot.get_all_from_environment()))
 
 ```
 
-[Back to table of contents](#Getting started)
+[Back to table of contents](#getting-started)
 #### Exceptions handling
 Possible errors could be found [here](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
 This client wraps errors from robot into `PulseApiException`.
