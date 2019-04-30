@@ -14,6 +14,7 @@ class RobotPulse(object):
         if host is not None:
             self._api.api_client.configuration.host = host
         self.logger = self._api.api_client.configuration.logger
+        self.host = self._api.api_client.configuration.host
 
     def add_to_environment(self, obstacle):
         return self._api.add_to_environment(obstacle)
