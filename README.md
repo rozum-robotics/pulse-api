@@ -280,7 +280,7 @@ print('Get example box\n{}'.format(robot.get_from_environment_by_name(box.name))
 # remove specific obstacles
 robot.remove_from_environment_by_name(box.name)
 print('Environment without box\n{}'.format(robot.get_all_from_environment()))
-# remove all obstacles from environment
+# remove all obstacles from an environment
 robot.remove_all_from_environment()
 print('Empty environment\n{}'.format(robot.get_all_from_environment()))
 
@@ -290,12 +290,12 @@ print('Empty environment\n{}'.format(robot.get_all_from_environment()))
 
 #### Exception handling
 For information about errors, see the [API reference](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
-The client wraps errors from robot into `PulseApiException`.
+The client wraps errors from the robot into `PulseApiException`.
 
 Available methods:
 * `recover` - the function recovers the arm after an emergency, setting its motion status to IDLE. 
-Recovery is possible only after an emergency that is not fatal — corresponding 
-to the ERROR status.
+Recovery is possible only after an emergency that is not fatal (corresponds 
+to the ERROR status).
 
 For example, we can trigger an API exception by sending `pose` into `set_position`
 method.
@@ -316,7 +316,7 @@ except PulseApiException as e:
         print('Robot recovered from error')
 
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
 #### Versions API
 Use the Version API methods to get information about the software and hardware versions.
@@ -326,10 +326,7 @@ strange robot behaviour.
 Available methods:
 * `hardware` - returns the hardware versions for all motors, the USB-CAN dongle, safety board and wrist.
 * `software` - returns the software version for all motors, the USB-CAN dongle, safety board and wrist.
-* `robot_software` - returns the software version of the robot.
-
-Example below will give you additional information about versions of robot components that 
-you can send to developers:
+* `robot_software` - returns the version of the robot control software.
 
 ```python
 from pulseapi import Versions
@@ -342,7 +339,7 @@ print(versions.software())
 print(versions.robot_software())
 
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
 ### Documentation and further information
 For further details, see the
