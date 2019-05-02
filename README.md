@@ -47,32 +47,35 @@ robot = RobotPulse(host)
 
 #### Motion control
 Possible motion targets:
-* Positions (`set_position`, `run_positions` and `get_position` methods) - control robot tcp 
-(tool center point). Use `position` helper method to create motion target.
-* Poses (`set_pose`, `run_poses` and `get_pose` methods) - control motor angles directly.
-Use `pose` helper method to create motion target.
+* Positions (`set_position`, `run_positions` and `get_position` methods) - to control 
+the location of the robot's TCP (tool center point). Use the `position` helper method to create a 
+motion target.
+* Poses (`set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
+Use the `pose` helper method to create the motion target.
 
 Possible motion types:
 * Joint (`MT_JOINT`, default)
 * Linear (`MT_LINEAR`)
 
 Auxiliary methods:
-* `await_motion` - waits until robot finishes movements. **Will be replaced soon.**
-* `status_motion` - the function returns the actual state of the robotic arm - 
-whether it is running (in motion), idle (not in motion), in the zero gravity mode, 
+* `await_motion` - periodically requests robot status and waits until robot finishes 
+movements. **To be replaced soon.**
+* `status_motion` - returns the actual state of the robotic arm: running (arm in motion), 
+idle (arm not in motion), in the zero gravity mode, 
 or in error state.
-* `freeze` - the function sets the arm in the "freeze" state. 
+* `freeze` - sets the arm in the "freeze" state. 
 The arm stops moving, retaining its last position.  
-**Note:**  in the state, it is not advisable to move the arm by hand as this 
+**Note:**  In the state, it is not advisable to move the arm by hand as this 
 can cause damage to its components.
-* `relax` -  the function sets the arm in the \"relaxed\" state. The arm stops 
+* `relax` -  sets the arm in the \"relaxed\" state. The arm stops 
 moving without retaining its last position. In this state, the user can move the 
 robotic arm by hand (e.g., to verify/test a motion trajectory).
 * `pack` - asking the arm to reach a compact pose for transportation.
 * `status_motors` - returns the actual states of the six servo motors integrated 
 into the joints of the robotic arm.
 
-**WARNING!** This is an example, you must replace motion targets according to 
+**WARNING!** The following example is sample code. Before running, you must 
+replace reference motion targets in the sample with the ones applicable to
 your specific case. Before launching this example make sure that manipulator 
 would not cause any damage to your facilities.
 
