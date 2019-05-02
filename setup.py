@@ -22,7 +22,7 @@ REQUIRED = [
     'six >= 1.10',
     'python_dateutil >= 2.5.3',
     'urllib3 >= 1.15.1',
-    'pdhttp >= 1.4.3.dev3'
+    'pdhttp >= 1.4.3.dev4'
 ]
 DEPENDENCY_LINKS = [
         'http://pip.rozum.com/#/package/pdhttp',
