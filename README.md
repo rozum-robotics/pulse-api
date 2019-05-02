@@ -302,8 +302,16 @@ except PulseApiException as e:
 
 #### Versions api
 You may need to get information about software and hardware versions. For example,
-you want to contact developers because you noticed some strange behaviour. Example below 
-will give you additional information about robot components that you can send to developers:
+you want to contact developers because you noticed some strange behaviour. 
+
+Provided methods:
+* `hardware` - return hardware version for all motors, usb-can, safety, wrist.
+* `software` - return software version for all motors, usb-can, safety, wrist.
+* `robot_software` - return robot software version.
+
+Example below will give you additional information about versions of robot components that 
+you can send to developers:
+
 ```python
 from pulseapi import Versions
 
