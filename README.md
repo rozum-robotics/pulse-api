@@ -167,10 +167,10 @@ robot.open_gripper(0)
 # set the first output port to the active state
 robot.set_digital_output_high(1)
 
-# execute some operations when input port 3 is active
+# execute required operations when input port 3 is active
 if robot.get_digital_input(3) == SIG_HIGH:
     print('Input port 3 is active')
-# execute some operations when input port 1 is inactive
+# execute required operations when input port 1 is inactive
 if robot.get_digital_input(1) == SIG_LOW:
     print('Input port 1 is inactive')
 ```
@@ -181,9 +181,9 @@ Use the Tool API methods when you need to calculate a robot motion trajectory wi
 regard to the used tool and to take the tool into account when the robot calculates collisions.
 
 Available methods:
-* `change_tool_info` - info to be used in trajectory calculation
-* `change_tool_shape` - pass info to be used for collision validation
-* `get_tool_info`, `get_tool_shape` - receive information about current settings
+* `change_tool_info` - set tool info for trajectory calculations.
+* `change_tool_shape` - set info for collision validation.
+* `get_tool_info`, `get_tool_shape` - receive information about current tool settings.
 
 Helper functions:
 * `tool_info` - creates a tool info instance to be passed into 
@@ -248,12 +248,12 @@ print('New base\n{}'.format(robot.get_base()))
 Use the Environment API to add virtual obstacles to be taken into account when calculating collisions.
 
 Available methods:
-* `add_to_environment` - adds an obstacle to environment. Use the helper functions 
-listed below to create objects that should be provided to this method.
-* `get_all_from_environment` - returns all obstacles from environment.
-* `get_from_environment_by_name` -  returns obstacle with a specific name from an environment.
+* `add_to_environment` - adds an obstacle to an environment. Use the helper functions 
+to describe obstacles.
+* `get_all_from_environment` - returns all obstacles from an environment.
+* `get_from_environment_by_name` -  returns an obstacle with a specific name from an environment.
 * `remove_all_from_environment` - removes all obstacles from an environment.
-* `remove_from_environment_by_name` -  removes obstacle with a specific name from an environment.
+* `remove_from_environment_by_name` -  removes an obstacle with a specific name from an environment.
 
 Helper functions:
 * `create_box_obstacle`
@@ -268,7 +268,7 @@ host = "127.0.0.1:8080"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 print('Current environment\n{}'.format(robot.get_all_from_environment()))
-# add some obstacles to the environment for calculating collisions
+# add obstacles to the environment for calculating collisions
 box = create_box_obstacle(Point(0.1, 0.1, 0.1), position((1, 1, 1), (0, 0, 0)), 'example_box')
 capsule = create_capsule_obstacle(0.1, Point(0.5, 0.5, 0.2), Point(0.5, 0.5, 0.5), 'example_capsule')
 plane = create_plane_obstacle([Point(-0.5, 0.4, 0), Point(-0.5, 0, 0), Point(-0.5, 0, 0.1)], 'example_plane')
