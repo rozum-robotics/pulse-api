@@ -244,7 +244,7 @@ print('New base\n{}'.format(robot.get_base()))
 ```
 [Back to the table of contents](#getting-started)
 
-#### Environment api
+#### Environment API
 Use the Environment API to add virtual obstacles to be taken into account when calculating collisions.
 
 Available methods:
