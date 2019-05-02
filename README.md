@@ -70,7 +70,7 @@ can cause damage to its components.
 * `relax` -  the function sets the arm in the \"relaxed\" state. The arm stops 
 moving without retaining its last position. In this state, the user can move the 
 robotic arm by hand (e.g., to verify/test a motion trajectory).
-* `pack` - asking the arm to reach a compact pose for transportation
+* `pack` - asking the arm to reach a compact pose for transportation.
 * `status_motors` - returns the actual states of the six servo motors integrated 
 into the joints of the robotic arm.
 
