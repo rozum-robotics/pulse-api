@@ -40,9 +40,7 @@ setup(
     version=VERSION,
     packages=find_packages(),
     install_requires=REQUIRED,
-    dependency_links=[
-        'https://pypi.example.org/pypi/somedep/'
-    ],
+    dependency_links=DEPENDENCY_LINKS,
     url=URL,
     license='MIT',
     classifiers=[
