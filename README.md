@@ -31,7 +31,7 @@ Examples:
 * ["Tool" API](#tool-api)
 * ["Base" API](#base-api)
 * ["Environment" API](#environment-api)
-* [Exceptions handling](#exceptions-handling)
+* [Exception handling](#exceptions-handling)
 * ["Versions" API](#versions-api)
 
 [Documentation and further information](#documentation-and-further-information)
@@ -279,7 +279,7 @@ print('Empty environment\n{}'.format(robot.get_all_from_environment()))
 
 [Back to table of contents](#getting-started)
 
-#### Exceptions handling
+#### Exception handling
 Possible errors could be found [here](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
 This client wraps errors from robot into `PulseApiException`.
 
