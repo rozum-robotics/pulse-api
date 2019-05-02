@@ -54,17 +54,17 @@ robot = RobotPulse(host)
 #### Motion control
 Possible motion targets:
 * Positions (`set_position`, `run_positions` and `get_position` methods) - to control 
-the location of the robot's TCP (tool center point). Use the `position` helper method to create a 
+the location of the robot's TCP (tool center point). Use the `position` helper function to create a 
 motion target.
 * Poses (`set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
-Use the `pose` helper method to create a motion target.
+Use the `pose` helper function to create a motion target.
 
 Possible motion types:
 * Joint (`MT_JOINT`, default)
 * Linear (`MT_LINEAR`)
 
 Auxiliary methods:
-* `await_motion` - periodically requests robot status and waits until robot finishes 
+* `await_motion` - periodically requests robot status (default: every 0.1 s) and waits until robot finishes 
 movements. **To be replaced soon.**
 * `status_motion` - returns the actual state of the robotic arm: running (arm in motion), 
 idle (arm not in motion), in the zero gravity mode, 
@@ -112,22 +112,22 @@ def my_await_motion(robot_instance, asking_interval=0.1):
         status = robot_instance.status_motion()
 
 robot.set_pose(pose_target, SPEED)
-robot.await_motion()  # waits the end of motion
+robot.await_motion()  # checks every 0.1 s whether the motion is finished 
 print('Current pose:\n{}'.format(robot.get_pose()))
 
 robot.set_position(position_target, SPEED)
-robot.await_motion(0.5) # checks whether the motion is finished finishes every 0.5 s
+robot.await_motion(0.5) # checks every 0.5 s whether the motion is finished
 print('Current position:\n{}'.format(robot.get_position()))
 
-# robot should go through multiple position waypoints (trajectory)
+# command the robot to go through multiple position waypoints (execute a trajectory)
 robot.run_positions(position_targets, SPEED)
 my_await_motion(robot)
 
-# set linear motion type
+# set the linear motion type
 robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
 robot.await_motion()
 
-# limit TCP velocity to be not greater than 1 cm/s
+# limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
 robot.run_positions(position_targets, SPEED, 
     motion_type=MT_LINEAR, tcp_max_velocity=0.01)
 robot.await_motion()
