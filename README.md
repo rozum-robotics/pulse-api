@@ -1,23 +1,29 @@
 # Pulse Robot Python API 
 
-This folder contains `Python` wrapper for the [pulse robot](https://rozum.com/robotic-arm/) REST API. 
+This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API. 
 Tested with Python 3. Compatibility with Python 2 is not guaranteed but the underlying API (called `pdhttp`) 
-is generated using [swagger-codegen](https://github.com/swagger-api/swagger-codegen) so it may work for you.
+supports Python 2.
 
 ## Requirements
 Python 3.4+
 
 ### Installation
 
-To get the latest version use the following command: 
+To get the latest version, use the following command: 
+
 `pip install pulse-api --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`  
 
 To install a specific version: 
+
 `pip install pulse-api==v1.v2.v3 --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
 where **v1**, **v2**, and **v3** (e.g. pulse-api==1.4.3) are version numbers as listed below in the compatibility table.
 
+**Note:** To install the underlying API (`pdhttp`), use:
+`pip install pdhttp --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
+
+
 ### Software compatibility table
-Pulse desk version  | Python api version
+Pulse desk UI version  | Python API version
 ------------------- |-------------------
 1.4.3               | 1.4.3
 
@@ -51,7 +57,7 @@ Possible motion targets:
 the location of the robot's TCP (tool center point). Use the `position` helper method to create a 
 motion target.
 * Poses (`set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
-Use the `pose` helper method to create the motion target.
+Use the `pose` helper method to create a motion target.
 
 Possible motion types:
 * Joint (`MT_JOINT`, default)
