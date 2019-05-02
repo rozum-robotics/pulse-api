@@ -143,10 +143,10 @@ print(robot.status_motors())
 
 #### Controlling accessories and signals
 Available methods:
-* `close_gripper`, `open_gripper` with a preset timeout before continuing execution of commands (default: 500 ms). 
+* `close_gripper`, `open_gripper` with a preset timeout before executing further commands (default: 500 ms). 
 Supported grippers: Schunk and OnRobot.
-* `set_digital_output_high` `set_digital_output_low`, `get_digital_output` with provided port.
-* `get_digital_input` with provided port.
+* `set_digital_output_high` `set_digital_output_low`, `get_digital_output` - to work with output ports on the controlbox.
+* `get_digital_input` to work with input ports on the controlbox.
 
 Signals:
 * SIG_LOW - port is inactive
