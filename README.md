@@ -1,21 +1,20 @@
-# Pulse Robot REST API Python
+# Pulse Robot Python API 
 
-This folder contains `Python` wrapper for the [pulse robot](https://rozum.com/robotic-arm/) REST api. 
-Tested on Python 3. Compatibility with Python 2 is not guarantied but underlying api (called `pdhttp`) is generated using 
-[swagger-codegen](https://github.com/swagger-api/swagger-codegen) so it may work for you.
+This folder contains `Python` wrapper for the [pulse robot](https://rozum.com/robotic-arm/) REST API. 
+Tested with Python 3. Compatibility with Python 2 is not guaranteed but the underlying API (called `pdhttp`) 
+is generated using [swagger-codegen](https://github.com/swagger-api/swagger-codegen) so it may work for you.
 
 ## Requirements
 Python 3.4+
 
 ### Installation
 
-Using pip: 
-`pip install pulse-api --trusted-host pip.rozum.com -i http://pip.rozum.com/simple` 
-to get the latest version. 
+To get the latest version use the following command: 
+`pip install pulse-api --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`  
 
-To install specific version: 
+To install a specific version: 
 `pip install pulse-api==v1.v2.v3 --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
-where **v1**, **v2**, and **v3** (e.g. pulse-api==1.4.3) are version numbers as listed below in compatibility table.
+where **v1**, **v2**, and **v3** (e.g. pulse-api==1.4.3) are version numbers as listed below in the compatibility table.
 
 ### Software compatibility table
 Pulse desk version  | Python api version
@@ -23,18 +22,17 @@ Pulse desk version  | Python api version
 1.4.3               | 1.4.3
 
 ### Getting started
-Example uses the latest version of library. 
-You may need to change something in order to make it work in previous versions.
+Examples use the latest version of library. 
 
 Examples:
 * [API initialization](#api-initialization)
 * [Motion control](#motion-control)
-* [Devices and signals](#devices-and-signals-control)
-* ["Tool" api](#tool-api)
-* ["Base" api](#base-api)
-* [Environment api](#environment-api)
+* [Accessories and signals](#accessories-and-signals-control)
+* ["Tool" API](#tool-api)
+* ["Base" API](#base-api)
+* ["Environment" API](#environment-api)
 * [Exceptions handling](#exceptions-handling)
-* [Versions api](#versions-api)
+* ["Versions" API](#versions-api)
 
 [Documentation and further information](#documentation-and-further-information)
 
@@ -134,7 +132,7 @@ print(robot.status_motors())
 ```
 [Back to table of contents](#getting-started)
 
-#### Devices and signals control
+#### Accessories and signals control
 Methods:
 * `close_gripper`, `open_gripper` with provided timeout (default: 500 ms). 
 Supported grippers: Schunk and OnRobot.
