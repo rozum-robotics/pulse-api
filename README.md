@@ -210,13 +210,13 @@ print('New tool info\n{}'.format(robot.get_tool_info()))
 print('New tool shape\n{}'.format(robot.get_tool_shape()))
 
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
 #### Base API
-Sometimes it is convenient to calculate trajectory relatively to some specific 
-point in space.
+Use the Base API methods when you need to calculate a robot motion trajectory
+relative to a specific point in space.
 
-Provided methods: 
+Available methods: 
 * `change_base`
 * `get_base`
 
@@ -239,15 +239,15 @@ print('New base\n{}'.format(robot.get_base()))
 [Back to the table of contents](#getting-started)
 
 #### Environment api
-Add virtual obstacles to take into account while calculating collisions.
+Use the Environment API to add virtual obstacles to be taken into account when calculating collisions.
 
-Provided methods:
-* `add_to_environment` - add obstacle to environment. Use helper functions 
+Available methods:
+* `add_to_environment` - adds an obstacle to environment. Use the helper functions 
 listed below to create objects that should be provided to this method.
-* `get_all_from_environment` - return all obstacles from environment.
-* `get_from_environment_by_name` -  return obstacle from environment by name.
-* `remove_all_from_environment` - remove all obstacles from robot environment.
-* `remove_from_environment_by_name` -  remove obstacle from robot environment by name.
+* `get_all_from_environment` - returns all obstacles from environment.
+* `get_from_environment_by_name` -  returns obstacle with a specific name from an environment.
+* `remove_all_from_environment` - removes all obstacles from an environment.
+* `remove_from_environment_by_name` -  removes obstacle with a specific name from an environment.
 
 Helper functions:
 * `create_box_obstacle`
@@ -262,7 +262,7 @@ host = "127.0.0.1:8080"  # replace with valid robot address
 robot = RobotPulse(host)
 
 print('Current environment\n{}'.format(robot.get_all_from_environment()))
-# add some obstacles to environment so that possible collisions are calculated
+# add some obstacles to the environment for calculating collisions
 box = create_box_obstacle(Point(0.1, 0.1, 0.1), position((1, 1, 1), (0, 0, 0)), 'example_box')
 capsule = create_capsule_obstacle(0.1, Point(0.5, 0.5, 0.2), Point(0.5, 0.5, 0.5), 'example_capsule')
 plane = create_plane_obstacle([Point(-0.5, 0.4, 0), Point(-0.5, 0, 0), Point(-0.5, 0, 0.1)], 'example_plane')
@@ -271,7 +271,7 @@ robot.add_to_environment(capsule)
 robot.add_to_environment(plane)
 print('New environment\n{}'.format(robot.get_all_from_environment()))
 print('Get example box\n{}'.format(robot.get_from_environment_by_name(box.name)))
-# remove some obstacles
+# remove specific obstacles
 robot.remove_from_environment_by_name(box.name)
 print('Environment without box\n{}'.format(robot.get_all_from_environment()))
 # remove all obstacles from environment
@@ -280,18 +280,18 @@ print('Empty environment\n{}'.format(robot.get_all_from_environment()))
 
 ```
 
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
 #### Exception handling
-Possible errors could be found [here](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
-This client wraps errors from robot into `PulseApiException`.
+For information about errors, see the [API reference](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
+The client wraps errors from robot into `PulseApiException`.
 
-Provided methods:
+Available methods:
 * `recover` - the function recovers the arm after an emergency, setting its motion status to IDLE. 
 Recovery is possible only after an emergency that is not fatal — corresponding 
 to the ERROR status.
 
-For example, we can trigger api exception by sending `pose` into `set_position`
+For example, we can trigger an API exception by sending `pose` into `set_position`
 method.
 
 ```python
@@ -312,14 +312,15 @@ except PulseApiException as e:
 ```
 [Back to table of contents](#getting-started)
 
-#### Versions api
-You may need to get information about software and hardware versions. For example,
-you want to contact developers because you noticed some strange behaviour. 
+#### Versions API
+Use the Version API methods to get information about the software and hardware versions.
+You may need to use the methods for contacting support specialists when you notice
+strange robot behaviour.
 
-Provided methods:
-* `hardware` - return hardware version for all motors, usb-can, safety, wrist.
-* `software` - return software version for all motors, usb-can, safety, wrist.
-* `robot_software` - return robot software version.
+Available methods:
+* `hardware` - returns the hardware versions for all motors, the USB-CAN dongle, safety board and wrist.
+* `software` - returns the software version for all motors, the USB-CAN dongle, safety board and wrist.
+* `robot_software` - returns the software version of the robot.
 
 Example below will give you additional information about versions of robot components that 
 you can send to developers:
@@ -338,5 +339,5 @@ print(versions.robot_software())
 [Back to table of contents](#getting-started)
 
 ### Documentation and further information
-Could be found and downloaded 
-[here](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
+For further details, see the
+[API reference guide](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
