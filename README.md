@@ -83,7 +83,9 @@ import math
 import time
 from pulseapi import position, pose, RobotPulse, MT_LINEAR, MotionStatus
 
-robot = RobotPulse()
+host = "127.0.0.1:8080"  # replace with valid robot address 
+robot = RobotPulse(host)
+
 # create motion targets
 pose_target = pose([0, -90, 90, -90, -90, 0])
 position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
@@ -146,7 +148,8 @@ Signals:
 ```python
 from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 
-robot = RobotPulse()
+host = "127.0.0.1:8080"  # replace with valid robot address 
+robot = RobotPulse(host)
 
 # ask robot to close gripper and continue commands execution after 500 ms
 robot.close_gripper() 
@@ -184,7 +187,8 @@ Helper functions:
 from pulseapi import RobotPulse, position, Point
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
-robot = RobotPulse()
+host = "127.0.0.1:8080"  # replace with valid robot address 
+robot = RobotPulse(host)
 
 # receive info about current tool
 current_tool_info = robot.get_tool_info()
@@ -217,7 +221,9 @@ Provided methods:
 
 ```python
 from pulseapi import RobotPulse, position
-robot = RobotPulse()
+
+host = "127.0.0.1:8080"  # replace with valid robot address 
+robot = RobotPulse(host)
 
 current_base = robot.get_base()
 print('Current base\n{}'.format(current_base))
@@ -251,7 +257,9 @@ Helper functions:
 from pulseapi import RobotPulse, Point, position
 from pulseapi import create_plane_obstacle, create_box_obstacle, create_capsule_obstacle
 
-robot = RobotPulse()
+host = "127.0.0.1:8080"  # replace with valid robot address 
+robot = RobotPulse(host)
+
 print('Current environment\n{}'.format(robot.get_all_from_environment()))
 # add some obstacles to environment so that possible collisions are calculated
 box = create_box_obstacle(Point(0.1, 0.1, 0.1), position((1, 1, 1), (0, 0, 0)), 'example_box')
@@ -287,7 +295,8 @@ method.
 ```python
 from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
 
-robot = RobotPulse()
+host = "127.0.0.1:8080"  # replace with valid robot address 
+robot = RobotPulse(host)
 
 try:
     robot.set_position(pose([0, -90, 90, -90, -90, 0]), 10)
