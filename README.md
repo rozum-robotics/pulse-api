@@ -27,11 +27,11 @@ Examples use the latest version of library.
 Examples:
 * [API initialization](#api-initialization)
 * [Motion control](#motion-control)
-* [Accessories and signals](#accessories-and-signals-control)
+* [Controlling accessories and signals](#controlling-accessories-and-signals)
 * ["Tool" API](#tool-api)
 * ["Base" API](#base-api)
 * ["Environment" API](#environment-api)
-* [Exception handling](#exceptions-handling)
+* [Exception handling](#exception-handling)
 * ["Versions" API](#versions-api)
 
 [Documentation and further information](#documentation-and-further-information)
@@ -96,9 +96,9 @@ position_targets = [
     position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
     position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
 ]
-SPEED = 30  # choose desired speed
+SPEED = 30  # set the desired speed
 
-# motion status usage example
+# example of using the motion status command
 def my_await_motion(robot_instance, asking_interval=0.1):
     status = robot_instance.status_motion()
     while status != MotionStatus.IDLE:
@@ -106,41 +106,41 @@ def my_await_motion(robot_instance, asking_interval=0.1):
         status = robot_instance.status_motion()
 
 robot.set_pose(pose_target, SPEED)
-robot.await_motion()  # wait for motion to be finished
+robot.await_motion()  # waits the end of motion
 print('Current pose:\n{}'.format(robot.get_pose()))
 
 robot.set_position(position_target, SPEED)
-robot.await_motion(0.5) # checks that motion finished every 0.5 s
+robot.await_motion(0.5) # checks whether the motion is finished finishes every 0.5 s
 print('Current position:\n{}'.format(robot.get_position()))
 
 # robot should go through multiple position waypoints (trajectory)
 robot.run_positions(position_targets, SPEED)
 my_await_motion(robot)
 
-# change the motion type in order to provide linear motions
+# set linear motion type
 robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
 robot.await_motion()
 
-# limit tcp velocity to be not greater than 1 cm/s
+# limit TCP velocity to be not greater than 1 cm/s
 robot.run_positions(position_targets, SPEED, 
     motion_type=MT_LINEAR, tcp_max_velocity=0.01)
 robot.await_motion()
 
-# stop the arm in last position
+# stop the arm in the last position
 robot.freeze()
 
-# get information from motors
+# get status from motors
 print(robot.status_motors())
 
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
-#### Accessories and signals control
-Methods:
-* `close_gripper`, `open_gripper` with provided timeout (default: 500 ms). 
+#### Controlling accessories and signals
+Available methods:
+* `close_gripper`, `open_gripper` with a preset timeout before continuing execution of commands (default: 500 ms). 
 Supported grippers: Schunk and OnRobot.
-* `set_digital_output_high` `set_digital_output_low`, `get_digital_output` with provided port
-* `get_digital_input` with provided port
+* `set_digital_output_high` `set_digital_output_low`, `get_digital_output` with provided port.
+* `get_digital_input` with provided port.
 
 Signals:
 * SIG_LOW - port is inactive
@@ -152,13 +152,13 @@ from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 host = "127.0.0.1:8080"  # replace with valid robot address 
 robot = RobotPulse(host)
 
-# ask robot to close gripper and continue commands execution after 500 ms
+# ask the robot to close the gripper and continue execution of commands after 500 ms
 robot.close_gripper() 
 
-# ask robot to open gripper and immediately continue commands execution
+# ask the robot to open the gripper and begin to execute further commands immediately 
 robot.open_gripper(0)
 
-# set the first output port to active state
+# set the first output port to the active state
 robot.set_digital_output_high(1)
 
 # execute some operations when input port 3 is active
@@ -168,21 +168,21 @@ if robot.get_digital_input(3) == SIG_HIGH:
 if robot.get_digital_input(1) == SIG_LOW:
     print('Input port 1 is inactive')
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
-#### Tool api
-Sometimes it is convenient to calculate trajectory according to used tool and 
-take it into account while calculating collisions.
+#### Tool API
+Use the Tool API methods when you need to calculate a robot motion trajectory with
+regard to the used tool and to take the tool into account when the robot calculates collisions.
 
-Provided methods:
+Available methods:
 * `change_tool_info` - info to be used in trajectory calculation
-* `change_tool_shape` - pass info to be used collision validation
+* `change_tool_shape` - pass info to be used for collision validation
 * `get_tool_info`, `get_tool_shape` - receive information about current settings
 
 Helper functions:
-* `tool_info` - creates instance of tool info to be passed into 
+* `tool_info` - creates a tool info instance to be passed into 
 `change_tool_info` method.
-* `tool_shape` - creates tool shape to be passed into `change_tool_shape`
+* `tool_shape` - creates a tool shape instance to be passed into `change_tool_shape` method.
 
 ```python
 from pulseapi import RobotPulse, position, Point
@@ -191,7 +191,7 @@ from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 host = "127.0.0.1:8080"  # replace with valid robot address 
 robot = RobotPulse(host)
 
-# receive info about current tool
+# get info about the current tool
 current_tool_info = robot.get_tool_info()
 current_tool_shape = robot.get_tool_shape()
 print('Current tool info\n{}'.format(current_tool_info))
@@ -212,7 +212,7 @@ print('New tool shape\n{}'.format(robot.get_tool_shape()))
 ```
 [Back to table of contents](#getting-started)
 
-#### Base api
+#### Base API
 Sometimes it is convenient to calculate trajectory relatively to some specific 
 point in space.
 
@@ -236,7 +236,7 @@ robot.change_base(new_base)
 print('New base\n{}'.format(robot.get_base()))
 
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
 #### Environment api
 Add virtual obstacles to take into account while calculating collisions.
