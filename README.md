@@ -34,11 +34,11 @@ Examples:
 * [API initialization](#api-initialization)
 * [Motion control](#motion-control)
 * [Controlling accessories and signals](#controlling-accessories-and-signals)
-* ["Tool" API](#tool-api)
-* ["Base" API](#base-api)
-* ["Environment" API](#environment-api)
+* [Tool API](#tool-api)
+* [Base API](#base-api)
+* [Environment API](#environment-api)
 * [Exception handling](#exception-handling)
-* ["Versions" API](#versions-api)
+* [Versions API](#versions-api)
 
 [Documentation and further information](#documentation-and-further-information)
 
@@ -46,7 +46,7 @@ Examples:
 ```python
 from pulseapi import RobotPulse
 # create an instance of the API wrapper class
-host = "127.0.0.1:8080"  # replace with valid robot address 
+host = "127.0.0.1:8080"  # replace with a valid robot address 
 robot = RobotPulse(host)
 ```
 [Back to table of contents](#getting-started)
@@ -90,7 +90,7 @@ import math
 import time
 from pulseapi import position, pose, RobotPulse, MT_LINEAR, MotionStatus
 
-host = "127.0.0.1:8080"  # replace with valid robot address 
+host = "127.0.0.1:8080"  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # create motion targets
@@ -104,7 +104,7 @@ position_targets = [
 ]
 SPEED = 30  # set the desired speed
 
-# example of using the motion status command
+# use the motion status command as shown below
 def my_await_motion(robot_instance, asking_interval=0.1):
     status = robot_instance.status_motion()
     while status != MotionStatus.IDLE:
@@ -155,7 +155,7 @@ Signals:
 ```python
 from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 
-host = "127.0.0.1:8080"  # replace with valid robot address 
+host = "127.0.0.1:8080"  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # ask the robot to close the gripper and continue execution of commands after 500 ms
@@ -194,7 +194,7 @@ Helper functions:
 from pulseapi import RobotPulse, position, Point
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
-host = "127.0.0.1:8080"  # replace with valid robot address 
+host = "127.0.0.1:8080"  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # get info about the current tool
@@ -229,7 +229,7 @@ Available methods:
 ```python
 from pulseapi import RobotPulse, position
 
-host = "127.0.0.1:8080"  # replace with valid robot address 
+host = "127.0.0.1:8080"  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 current_base = robot.get_base()
@@ -264,7 +264,7 @@ Helper functions:
 from pulseapi import RobotPulse, Point, position
 from pulseapi import create_plane_obstacle, create_box_obstacle, create_capsule_obstacle
 
-host = "127.0.0.1:8080"  # replace with valid robot address 
+host = "127.0.0.1:8080"  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 print('Current environment\n{}'.format(robot.get_all_from_environment()))
@@ -303,7 +303,7 @@ method.
 ```python
 from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
 
-host = "127.0.0.1:8080"  # replace with valid robot address 
+host = "127.0.0.1:8080"  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 try:
@@ -334,7 +334,7 @@ you can send to developers:
 ```python
 from pulseapi import Versions
 
-host = '127.0.0.1:8080'  # replace with valid robot address
+host = '127.0.0.1:8080'  # replace with a valid robot address
 versions = Versions(host)
 
 print(versions.hardware())
