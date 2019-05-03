@@ -16,7 +16,7 @@ To get the latest version, use the following command:
 To install a specific version: 
 
 `pip install pulse-api==v1.v2.v3 --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
-where **v1**, **v2**, and **v3** (e.g. pulse-api==1.4.3) are version numbers as listed below in the compatibility table.
+where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as listed below in the compatibility table.
 
 **Note:** To install the underlying API (`pdhttp`), use:
 `pip install pdhttp --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
@@ -28,7 +28,7 @@ Pulse desk UI version  | Python API version
 1.4.3               | 1.4.3
 
 ### Getting started
-Examples use the latest version of library. 
+Examples use the latest version of the library. 
 
 Examples:
 * [Quickstart](#quickstart)
@@ -45,8 +45,8 @@ Examples:
 
 #### Quickstart
 
-**WARNING!** Before launching this example make sure that manipulator 
-would not cause any damage to your facilities.
+**WARNING!** Before launching this example, make sure that there are no facilities
+within 0.6 meters around the manipulator.
 
 ```python
 import math
@@ -128,8 +128,8 @@ Possible motion types:
 * Linear (`MT_LINEAR`)
 
 Auxiliary methods:
-* `await_motion` - periodically requests robot status (default: every 0.1 s) and waits until robot finishes 
-movements. **To be replaced soon.**
+* `await_motion` - periodically requests robot status (default: every 0.1 s) and 
+waits until the robot finishes movements. **To be replaced soon.**
 * `status_motion` - returns the actual state of the robotic arm: running (arm in motion), 
 idle (arm not in motion), in the zero gravity mode, 
 or in error state.
@@ -146,7 +146,7 @@ into the joints of the robotic arm.
 
 **WARNING!** The following example is sample code. Before running, you must 
 replace reference motion targets in the sample with the ones applicable to
-your specific case. Before launching this example make sure that manipulator 
+your specific case. Before launching this example, make sure that manipulator 
 would not cause any damage to your facilities.
 
 ```python
@@ -246,7 +246,7 @@ regard to the used tool and to take the tool into account when the robot calcula
 
 Available methods:
 * `change_tool_info` - set tool info for trajectory calculations.
-* `change_tool_shape` - set info for collision validation.
+* `change_tool_shape` - set tool shape for collision validation.
 * `get_tool_info`, `get_tool_shape` - receive information about current tool settings.
 
 Helper functions:
@@ -312,7 +312,7 @@ print('New base\n{}'.format(robot.get_base()))
 Use the Environment API to add virtual obstacles to be taken into account when calculating collisions.
 
 Available methods:
-* `add_to_environment` - adds an obstacle to an environment. Use the helper functions 
+* `add_to_environment` - adds an obstacle to an environment. Use the helper functions below
 to describe obstacles.
 * `get_all_from_environment` - returns all obstacles from an environment.
 * `get_from_environment_by_name` -  returns an obstacle with a specific name from an environment.
