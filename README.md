@@ -103,7 +103,7 @@ while True:
         print('Exception {}while calling robot at {} '.format(e, robot.host))
         break
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
 #### API initialization
 ```python
@@ -112,7 +112,7 @@ from pulseapi import RobotPulse
 host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 ```
-[Back to table of contents](#getting-started)
+[Back to the table of contents](#getting-started)
 
 #### Motion control
 Possible motion targets:
