@@ -102,6 +102,7 @@ while True:
         print('Exception {}while calling robot at {} '.format(e, robot.host))
         break
 ```
+[Back to table of contents](#getting-started)
 
 #### API initialization
 ```python
