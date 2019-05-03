@@ -25,7 +25,7 @@ REQUIRED = [
     'pdhttp >= 1.4.3.dev4'
 ]
 DEPENDENCY_LINKS = [
-        'http://pip.rozum.com/#/package/pdhttp',
+    'https://pip.rozum.com/#/package/pdhttp',
 ]
 # Import the README and use it as the long-description.
 # Note: this will only work if 'README.md' is present in your MANIFEST.in file!
