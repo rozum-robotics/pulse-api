@@ -31,6 +31,7 @@ Pulse desk UI version  | Python API version
 Examples use the latest version of library. 
 
 Examples:
+* [Quickstart](#quickstart)
 * [API initialization](#api-initialization)
 * [Motion control](#motion-control)
 * [Controlling accessories and signals](#controlling-accessories-and-signals)
@@ -42,11 +43,71 @@ Examples:
 
 [Documentation and further information](#documentation-and-further-information)
 
+#### Quickstart
+
+**WARNING!** Before launching this example make sure that manipulator 
+would not cause any damage to your facilities.
+
+```python
+import math
+from pulseapi import RobotPulse, pose, position, PulseApiException, MT_LINEAR
+
+host = '127.0.0.1:8080'  # replace with a valid robot address
+robot = RobotPulse(host)  # create an instance of the API wrapper class
+
+# create motion targets
+home_pose = pose([0 -90, 0, -90, -90, 0])
+start_pose = pose([0, -90, 90, -90, -90, 0])
+pose_targets = [
+    pose([10, -90, 90, -90, -90, 0]),
+    pose([10 -90, 0, -90, -90, 0]),
+]
+position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
+position_targets = [
+    position([-0.37, -0.12, 0.35], [math.pi, 0, 0]),
+    position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
+    position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
+    position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
+]
+
+SPEED = 30  # set the desired speed
+
+while True:
+    try:
+        robot.set_pose(home_pose, SPEED)
+        robot.await_motion()  # checks every 0.1 s whether the motion is finished 
+        
+        robot.set_pose(start_pose, SPEED)
+        robot.await_motion()
+        
+        robot.set_position(position_target, SPEED)
+        robot.await_motion()
+        
+        # command the robot to go through multiple position waypoints (execute a trajectory)
+        robot.run_positions(position_targets, SPEED)
+        robot.await_motion()
+        
+        # set the linear motion type
+        robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
+        robot.await_motion()
+        
+        # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
+        robot.run_positions(position_targets, SPEED, 
+                            motion_type=MT_LINEAR, tcp_max_velocity=0.01)
+        robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
+        # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
+        robot.run_poses(pose_targets, SPEED, tcp_max_velocity=0.1)
+        
+    except PulseApiException as e:
+        print('Exception {}while calling robot at {} '.format(e, robot.host))
+        break
+```
+
 #### API initialization
 ```python
 from pulseapi import RobotPulse
 # create an instance of the API wrapper class
-host = "127.0.0.1:8080"  # replace with a valid robot address 
+host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 ```
 [Back to table of contents](#getting-started)
@@ -90,7 +151,7 @@ import math
 import time
 from pulseapi import position, pose, RobotPulse, MT_LINEAR, MotionStatus
 
-host = "127.0.0.1:8080"  # replace with a valid robot address 
+host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # create motion targets
@@ -155,7 +216,7 @@ Signals:
 ```python
 from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 
-host = "127.0.0.1:8080"  # replace with a valid robot address 
+host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # ask the robot to close the gripper and continue execution of commands after 500 ms
@@ -194,7 +255,7 @@ Helper functions:
 from pulseapi import RobotPulse, position, Point
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
-host = "127.0.0.1:8080"  # replace with a valid robot address 
+host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # get info about the current tool
@@ -229,7 +290,7 @@ Available methods:
 ```python
 from pulseapi import RobotPulse, position
 
-host = "127.0.0.1:8080"  # replace with a valid robot address 
+host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 current_base = robot.get_base()
@@ -264,7 +325,7 @@ Helper functions:
 from pulseapi import RobotPulse, Point, position
 from pulseapi import create_plane_obstacle, create_box_obstacle, create_capsule_obstacle
 
-host = "127.0.0.1:8080"  # replace with a valid robot address 
+host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 print('Current environment\n{}'.format(robot.get_all_from_environment()))
@@ -303,7 +364,7 @@ method.
 ```python
 from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
 
-host = "127.0.0.1:8080"  # replace with a valid robot address 
+host = '127.0.0.1:8080'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 try:
