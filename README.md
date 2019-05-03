@@ -95,6 +95,7 @@ while True:
         robot.run_positions(position_targets, SPEED, 
                             motion_type=MT_LINEAR, tcp_max_velocity=0.01)
         robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
+        
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
         robot.run_poses(pose_targets, SPEED, tcp_max_velocity=0.1)
         
