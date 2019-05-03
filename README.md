@@ -99,6 +99,7 @@ while True:
         robot.run_poses(pose_targets, SPEED, tcp_max_velocity=0.1)
         
     except PulseApiException as e:
+        # handle possible errors
         print('Exception {}while calling robot at {} '.format(e, robot.host))
         break
 ```
