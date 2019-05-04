@@ -11,15 +11,15 @@ Python 3.4+
 
 To get the latest version, use the following command: 
 
-`pip install pulse-api -i http://pip.rozum.com/simple`  
+`pip install pulse-api -i https://pip.rozum.com/simple`  
 
 To install a specific version: 
 
-`pip install pulse-api==v1.v2.v3 -i http://pip.rozum.com/simple`
+`pip install pulse-api==v1.v2.v3 -i https://pip.rozum.com/simple`
 where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as listed below in the compatibility table.
 
 **Note:** To install the underlying API (`pdhttp`), use:
-`pip install pdhttp --trusted-host pip.rozum.com -i http://pip.rozum.com/simple`
+`pip install pdhttp --trusted-host pip.rozum.com -i https://pip.rozum.com/simple`
 
 
 ### Software compatibility table
