@@ -13,6 +13,7 @@ class RobotPulse(object):
         if host is not None:
             self._api.api_client.configuration.host = host
         self.logger = self._api.api_client.configuration.logger
+        self.host = self._api.api_client.configuration.host
 
     def add_to_environment(self, obstacle):
         return self._api.add_to_environment(obstacle)
@@ -20,8 +21,11 @@ class RobotPulse(object):
     def change_base(self, base_position):
         return self._api.change_base(base_position)
 
-    def change_tool(self, new_tool):
-        return self._api.change_tool(new_tool)
+    def change_tool_info(self, new_tool_info):
+        return self._api.change_tool_info(new_tool_info)
+
+    def change_tool_shape(self, new_tool_shape):
+        return self._api.change_tool_shape(new_tool_shape)
 
     def close_gripper(self, timeout=None):
         if timeout is not None:
@@ -52,8 +56,11 @@ class RobotPulse(object):
     def get_position(self):
         return self._api.get_position()
 
-    def get_tool(self):
-        return self._api.get_tool()
+    def get_tool_info(self):
+        return self._api.get_tool_info()
+
+    def get_tool_shape(self):
+        return self._api.get_tool_shape()
 
     def identifier(self):
         return self._api.identifier()
@@ -85,7 +92,7 @@ class RobotPulse(object):
                   tcp_max_velocity=2.0):
         return self._api.run_poses(poses,
                                    speed=speed,
-                                   type=motion_type,
+                                   motion_type=motion_type,
                                    tcp_max_velocity=tcp_max_velocity)
 
     def run_positions(self,
@@ -95,7 +102,7 @@ class RobotPulse(object):
                       tcp_max_velocity=2.0):
         return self._api.run_positions(positions,
                                        speed=speed,
-                                       type=motion_type,
+                                       motion_type=motion_type,
                                        tcp_max_velocity=tcp_max_velocity)
 
     def set_digital_output_high(self, port):
@@ -111,7 +118,7 @@ class RobotPulse(object):
                  tcp_max_velocity=2.0):
         return self._api.set_pose(target_pose,
                                   speed=speed,
-                                  type=motion_type,
+                                  motion_type=motion_type,
                                   tcp_max_velocity=tcp_max_velocity)
 
     def set_position(self,
@@ -121,7 +128,7 @@ class RobotPulse(object):
                      tcp_max_velocity=2.0):
         return self._api.set_position(target_position,
                                       speed=speed,
-                                      type=motion_type,
+                                      motion_type=motion_type,
                                       tcp_max_velocity=tcp_max_velocity)
 
     def status_motion(self):

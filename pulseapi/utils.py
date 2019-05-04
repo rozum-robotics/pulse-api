@@ -1,4 +1,5 @@
-from pdhttp import Position, Point, Rotation, Pose, Tool
+from pdhttp import (Position, Point, Rotation, Pose, ToolInfo, ToolShape,
+                    VersionApi)
 
 
 def position(point, rotation):
@@ -28,5 +29,25 @@ def pose(angles):
     return Pose(angles)
 
 
-def tool(tcp_position, shape, name='unnamed_tool'):
-    return Tool(name=name, tcp=tcp_position, shape=shape)
+def tool_info(tcp_position, name='unnamed_tool'):
+    return ToolInfo(name=name, tcp=tcp_position)
+
+
+def tool_shape(shape):
+    return ToolShape(shape=shape)
+
+
+class Versions:
+    def __init__(self, host=None):
+        self._api = VersionApi()
+        if host is not None:
+            self._api.api_client.configuration.host = host
+
+    def hardware(self):
+        return self._api.get_hardware_version()
+
+    def software(self):
+        return self._api.get_software_version()
+
+    def robot_software(self):
+        return self._api.get_robot_software_version()

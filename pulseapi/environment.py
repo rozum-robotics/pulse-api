@@ -1,4 +1,5 @@
-from pdhttp import BoxObstacle, CapsuleObstacle, PlaneObstacle
+from pdhttp import (BoxObstacle, CapsuleObstacle, PlaneObstacle,
+                    SimplifiedCapsuleObstacle)
 
 
 def create_box_obstacle(sides, center_position, name='unnamed_box'):
@@ -14,3 +15,9 @@ def create_capsule_obstacle(radius,
 
 def create_plane_obstacle(points, name='unnamed_plane'):
     return PlaneObstacle('PLANE', name, points)
+
+
+def create_simple_capsule_obstacle(radius, start_point, finish_point):
+    return SimplifiedCapsuleObstacle(radius=radius,
+                                     begin=start_point,
+                                     finish=finish_point)
