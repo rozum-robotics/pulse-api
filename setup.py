@@ -10,7 +10,7 @@ DESCRIPTION = 'Python API for Pulse Robotic Arm with useful utilities'
 URL = 'https://rozum.com'
 EMAIL = 'dev@rozum.com'
 AUTHOR = 'Rozum Robotics'
-VERSION = '1.4.3.dev4'
+VERSION = '1.4.3.dev5'
 
 if 'dev' in VERSION:
     DEVELOPMENT_STATUS = 'Development Status :: 4 - Beta'
@@ -22,7 +22,7 @@ REQUIRED = [
     'six >= 1.10',
     'python_dateutil >= 2.5.3',
     'urllib3 >= 1.15.1',
-    'pdhttp >= 1.4.3.dev4'
+    'pdhttp >= 1.4.3.dev5'
 ]
 DEPENDENCY_LINKS = [
     'https://pip.rozum.com/#/package/pdhttp',
