@@ -10,5 +10,4 @@ publish:
     - python setup.py sdist bdist_wheel
     - twine upload --repository-url ${PYPI_URL} -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/*
   only:
-    - master
-    - develop
+    - tags
