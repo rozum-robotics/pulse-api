@@ -19,7 +19,7 @@ To install a specific version:
 where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as listed below in the compatibility table.
 
 **Note:** To install the underlying API (`pdhttp`), use:
-`pip install pdhttp --trusted-host pip.rozum.com -i https://pip.rozum.com/simple`
+`pip install pdhttp -i https://pip.rozum.com/simple`
 
 
 ### Software compatibility table
@@ -92,8 +92,8 @@ while True:
         robot.await_motion()
         
         # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-        robot.run_positions(position_targets, SPEED, 
-                            motion_type=MT_LINEAR, tcp_max_velocity=0.01)
+        robot.run_positions(position_targets, tcp_max_velocity=0.01, 
+                            motion_type=MT_LINEAR)
         robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
         
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
@@ -101,7 +101,7 @@ while True:
         
     except PulseApiException as e:
         # handle possible errors
-        print('Exception {}while calling robot at {} '.format(e, robot.host))
+        print('Exception {} while calling robot at {} '.format(e, robot.host))
         break
 ```
 [Back to the table of contents](#getting-started)
@@ -192,8 +192,8 @@ robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
 robot.await_motion()
 
 # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-robot.run_positions(position_targets, SPEED, 
-    motion_type=MT_LINEAR, tcp_max_velocity=0.01)
+robot.run_positions(position_targets, tcp_max_velocity=0.01, 
+    motion_type=MT_LINEAR)
 robot.await_motion()
 
 # stop the arm in the last position
