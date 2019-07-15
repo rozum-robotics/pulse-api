@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import time
 
 from pdhttp.api.robot_api import RobotApi
@@ -7,7 +5,7 @@ from pdhttp.models import MotionStatus
 from pulseapi.constants import MT_JOINT
 
 
-class RobotPulse(object):
+class RobotPulse:
     def __init__(self, host=None):
         self._api = RobotApi()
         if host is not None:
@@ -85,25 +83,43 @@ class RobotPulse(object):
     def remove_from_environment_by_name(self, obstacle_name):
         return self._api.remove_from_environment_by_name(obstacle_name)
 
-    def run_poses(self,
-                  poses,
-                  speed,
-                  motion_type=MT_JOINT,
-                  tcp_max_velocity=2.0):
-        return self._api.run_poses(poses,
-                                   speed=speed,
-                                   motion_type=motion_type,
-                                   tcp_max_velocity=tcp_max_velocity)
+    def run_poses(
+        self,
+        poses,
+        speed=None,
+        velocity=None,
+        acceleration=None,
+        tcp_max_velocity=None,
+        motion_type=MT_JOINT,
+    ):
+        self.__check_motion_parameters(
+            speed, velocity, acceleration, tcp_max_velocity
+        )
+        return self._api.run_poses(
+            poses,
+            speed=speed,
+            motion_type=motion_type,
+            tcp_max_velocity=tcp_max_velocity,
+        )
 
-    def run_positions(self,
-                      positions,
-                      speed,
-                      motion_type=MT_JOINT,
-                      tcp_max_velocity=2.0):
-        return self._api.run_positions(positions,
-                                       speed=speed,
-                                       motion_type=motion_type,
-                                       tcp_max_velocity=tcp_max_velocity)
+    def run_positions(
+        self,
+        positions,
+        speed=None,
+        velocity=None,
+        acceleration=None,
+        tcp_max_velocity=None,
+        motion_type=MT_JOINT,
+    ):
+        self.__check_motion_parameters(
+            speed, velocity, acceleration, tcp_max_velocity
+        )
+        return self._api.run_positions(
+            positions,
+            speed=speed,
+            motion_type=motion_type,
+            tcp_max_velocity=tcp_max_velocity,
+        )
 
     def set_digital_output_high(self, port):
         return self._api.set_digital_output_high(port)
@@ -111,25 +127,43 @@ class RobotPulse(object):
     def set_digital_output_low(self, port):
         return self._api.set_digital_output_low(port)
 
-    def set_pose(self,
-                 target_pose,
-                 speed,
-                 motion_type=MT_JOINT,
-                 tcp_max_velocity=2.0):
-        return self._api.set_pose(target_pose,
-                                  speed=speed,
-                                  motion_type=motion_type,
-                                  tcp_max_velocity=tcp_max_velocity)
+    def set_pose(
+        self,
+        target_pose,
+        speed=None,
+        velocity=None,
+        acceleration=None,
+        tcp_max_velocity=None,
+        motion_type=MT_JOINT,
+    ):
+        self.__check_motion_parameters(
+            speed, velocity, acceleration, tcp_max_velocity
+        )
+        return self._api.set_pose(
+            target_pose,
+            speed=speed,
+            motion_type=motion_type,
+            tcp_max_velocity=tcp_max_velocity,
+        )
 
-    def set_position(self,
-                     target_position,
-                     speed,
-                     motion_type=MT_JOINT,
-                     tcp_max_velocity=2.0):
-        return self._api.set_position(target_position,
-                                      speed=speed,
-                                      motion_type=motion_type,
-                                      tcp_max_velocity=tcp_max_velocity)
+    def set_position(
+        self,
+        target_position,
+        speed=None,
+        velocity=None,
+        acceleration=None,
+        tcp_max_velocity=None,
+        motion_type=MT_JOINT,
+    ):
+        self.__check_motion_parameters(
+            speed, velocity, acceleration, tcp_max_velocity
+        )
+        return self._api.set_position(
+            target_position,
+            speed=speed,
+            motion_type=motion_type,
+            tcp_max_velocity=tcp_max_velocity,
+        )
 
     def status_motion(self):
         return self._api.status_motion()
@@ -140,3 +174,39 @@ class RobotPulse(object):
     def await_motion(self, asking_interval=0.1):
         while self.status_motion() != MotionStatus.IDLE:
             time.sleep(asking_interval)
+
+    @staticmethod
+    def __check_motion_parameters(
+        speed=None, velocity=None, acceleration=None, tcp_max_velocity=None
+    ):
+        if speed is not None:
+            if (
+                velocity is not None
+                or acceleration is not None
+                or tcp_max_velocity is not None
+            ):
+                raise ValueError(
+                    """Parameters "velocity", "acceleration" and 
+                    "tcp_max_velocity" are prohibited when "speed" is used."""
+                )
+        elif velocity is not None:
+            if speed is not None or tcp_max_velocity is not None:
+                raise ValueError(
+                    """Parameters "speed" and "tcp_max_velocity" are
+                    prohibited when "velocity" is used."""
+                )
+        elif tcp_max_velocity is not None:
+            if (
+                speed is not None
+                or velocity is not None
+                or acceleration is not None
+            ):
+                raise ValueError(
+                    """Parameters "speed", "velocity" and "acceleration" 
+                    are prohibited when "tcp_max_velocity" is used"""
+                )
+        elif acceleration is not None:
+            raise ValueError(
+                'Parameter "acceleration" without "velocity" is prohibited'
+            )
+
