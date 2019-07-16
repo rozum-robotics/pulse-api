@@ -92,14 +92,15 @@ class RobotPulse:
         tcp_max_velocity=None,
         motion_type=MT_JOINT,
     ):
-        self.__check_motion_parameters(
-            speed, velocity, acceleration, tcp_max_velocity
-        )
         return self._api.run_poses(
             poses,
-            speed=speed,
-            motion_type=motion_type,
-            tcp_max_velocity=tcp_max_velocity,
+            **self.__extract_motion_params(
+                speed=speed,
+                velocity=velocity,
+                acceleration=acceleration,
+                tcp_max_velocity=tcp_max_velocity,
+                motion_type=motion_type,
+            )
         )
 
     def run_positions(
@@ -111,14 +112,15 @@ class RobotPulse:
         tcp_max_velocity=None,
         motion_type=MT_JOINT,
     ):
-        self.__check_motion_parameters(
-            speed, velocity, acceleration, tcp_max_velocity
-        )
         return self._api.run_positions(
             positions,
-            speed=speed,
-            motion_type=motion_type,
-            tcp_max_velocity=tcp_max_velocity,
+            **self.__extract_motion_params(
+                speed=speed,
+                velocity=velocity,
+                acceleration=acceleration,
+                tcp_max_velocity=tcp_max_velocity,
+                motion_type=motion_type,
+            )
         )
 
     def set_digital_output_high(self, port):
@@ -136,14 +138,15 @@ class RobotPulse:
         tcp_max_velocity=None,
         motion_type=MT_JOINT,
     ):
-        self.__check_motion_parameters(
-            speed, velocity, acceleration, tcp_max_velocity
-        )
         return self._api.set_pose(
             target_pose,
-            speed=speed,
-            motion_type=motion_type,
-            tcp_max_velocity=tcp_max_velocity,
+            **self.__extract_motion_params(
+                speed=speed,
+                velocity=velocity,
+                acceleration=acceleration,
+                tcp_max_velocity=tcp_max_velocity,
+                motion_type=motion_type,
+            )
         )
 
     def set_position(
@@ -155,14 +158,15 @@ class RobotPulse:
         tcp_max_velocity=None,
         motion_type=MT_JOINT,
     ):
-        self.__check_motion_parameters(
-            speed, velocity, acceleration, tcp_max_velocity
-        )
         return self._api.set_position(
             target_position,
-            speed=speed,
-            motion_type=motion_type,
-            tcp_max_velocity=tcp_max_velocity,
+            **self.__extract_motion_params(
+                speed=speed,
+                velocity=velocity,
+                acceleration=acceleration,
+                tcp_max_velocity=tcp_max_velocity,
+                motion_type=motion_type,
+            )
         )
 
     def status_motion(self):
@@ -176,37 +180,5 @@ class RobotPulse:
             time.sleep(asking_interval)
 
     @staticmethod
-    def __check_motion_parameters(
-        speed=None, velocity=None, acceleration=None, tcp_max_velocity=None
-    ):
-        if speed is not None:
-            if (
-                velocity is not None
-                or acceleration is not None
-                or tcp_max_velocity is not None
-            ):
-                raise ValueError(
-                    """Parameters "velocity", "acceleration" and 
-                    "tcp_max_velocity" are prohibited when "speed" is used."""
-                )
-        elif velocity is not None:
-            if speed is not None or tcp_max_velocity is not None:
-                raise ValueError(
-                    """Parameters "speed" and "tcp_max_velocity" are
-                    prohibited when "velocity" is used."""
-                )
-        elif tcp_max_velocity is not None:
-            if (
-                speed is not None
-                or velocity is not None
-                or acceleration is not None
-            ):
-                raise ValueError(
-                    """Parameters "speed", "velocity" and "acceleration" 
-                    are prohibited when "tcp_max_velocity" is used"""
-                )
-        elif acceleration is not None:
-            raise ValueError(
-                'Parameter "acceleration" without "velocity" is prohibited'
-            )
-
+    def __extract_motion_params(**kwargs):
+        return {k: v for k, v in locals()["kwargs"].items() if v is not None}
