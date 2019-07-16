@@ -1,5 +1,12 @@
-from pdhttp import (Position, Point, Rotation, Pose, ToolInfo, ToolShape,
-                    VersionApi)
+from pdhttp import (
+    Position,
+    Point,
+    Rotation,
+    Pose,
+    ToolInfo,
+    ToolShape,
+    VersionApi,
+)
 
 
 def position(point, rotation):
@@ -29,7 +36,7 @@ def pose(angles):
     return Pose(angles)
 
 
-def tool_info(tcp_position, name='unnamed_tool'):
+def tool_info(tcp_position, name="unnamed_tool"):
     return ToolInfo(name=name, tcp=tcp_position)
 
 
