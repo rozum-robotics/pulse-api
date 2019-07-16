@@ -75,17 +75,21 @@ position_targets = [
     position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
 ]
 
-SPEED = 30  # set the desired speed
+SPEED = 30  # set the desired speed (controls both motor velocity and acceleration)
+VELOCITY = 40 # set the desired motor velocity
+ACCELERATION = 50 # set the desired motor acceleration
 
 while True:
     try:
-        robot.set_pose(home_pose, SPEED)
+        robot.set_pose(home_pose, speed=SPEED)
         robot.await_motion()  # checks every 0.1 s whether the motion is finished 
         
-        robot.set_pose(start_pose, SPEED)
+        robot.set_pose(start_pose, velocity=VELOCITY)
         robot.await_motion()
         
-        robot.set_position(position_target, SPEED)
+        robot.set_position(position_target, 
+                           velocity=VELOCITY, 
+                           acceleration=ACCELERATION)
         robot.await_motion()
         
         # command the robot to go through multiple position waypoints (execute a trajectory)
@@ -93,7 +97,10 @@ while True:
         robot.await_motion()
         
         # set the linear motion type
-        robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
+        robot.run_positions(position_targets, 
+                            velocity=VELOCITY,
+                            acceleration=ACCELERATION, 
+                            motion_type=MT_LINEAR)
         robot.await_motion()
         
         # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
@@ -102,7 +109,7 @@ while True:
         robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
         
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
-        robot.run_poses(pose_targets, SPEED, tcp_max_velocity=0.1)
+        robot.run_poses(pose_targets, tcp_max_velocity=TCP_MAX_VELOCITY)
         
     except PulseApiException as e:
         # handle possible errors
