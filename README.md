@@ -109,7 +109,7 @@ while True:
         robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
         
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
-        robot.run_poses(pose_targets, tcp_max_velocity=TCP_MAX_VELOCITY)
+        robot.run_poses(pose_targets, tcp_max_velocity=0.1)
         
     except PulseApiException as e:
         # handle possible errors
