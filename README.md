@@ -27,10 +27,10 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 
 
 ### Software compatibility table
-Pulse Desk UI version  | Python API version
-------------------- |-------------------
-1.4.3               | 1.4.3
-1.4.4               | 1.4.4
+Pulse Desk UI version   | Python API version
+------------------------|-------------------
+1.4.3                   | 1.4.3
+1.4.4                   | 1.4.4
 
 ### Getting started
 Examples use the latest version of the library. 
