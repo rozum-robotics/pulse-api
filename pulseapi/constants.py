@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from pdhttp.models import MotionType, Signal
 
 SIG_HIGH = Signal.HIGH
