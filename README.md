@@ -78,6 +78,8 @@ position_targets = [
 SPEED = 30  # set the desired speed (controls both motor velocity and acceleration)
 VELOCITY = 40 # set the desired motor velocity
 ACCELERATION = 50 # set the desired motor acceleration
+TCP_VELOCITY_1CM = 0.01
+TCP_VELOCITY_10CM = 0.1
 
 while True:
     try:
@@ -104,12 +106,12 @@ while True:
         robot.await_motion()
         
         # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-        robot.run_positions(position_targets, tcp_max_velocity=0.01, 
+        robot.run_positions(position_targets, tcp_max_velocity=TCP_VELOCITY_1CM, 
                             motion_type=MT_LINEAR)
         robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
         
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
-        robot.run_poses(pose_targets, tcp_max_velocity=0.1)
+        robot.run_poses(pose_targets, tcp_max_velocity=TCP_VELOCITY_1CM)
         
     except PulseApiException as e:
         # handle possible errors
@@ -179,6 +181,7 @@ position_targets = [
     position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
 ]
 SPEED = 30  # set the desired speed
+TCP_VELOCITY_1CM = 0.01
 
 # use the motion status command as shown below
 def my_await_motion(robot_instance, asking_interval=0.1):
@@ -204,7 +207,7 @@ robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
 robot.await_motion()
 
 # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-robot.run_positions(position_targets, tcp_max_velocity=0.01, 
+robot.run_positions(position_targets, tcp_max_velocity=TCP_VELOCITY_1CM, 
     motion_type=MT_LINEAR)
 robot.await_motion()
 
