@@ -47,7 +47,7 @@ setup(
     extras_require=EXTRAS,
     dependency_links=DEPENDENCY_LINKS,
     url=URL,
-    license="MIT",
+    license="Apache License 2.0",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         DEVELOPMENT_STATUS,
