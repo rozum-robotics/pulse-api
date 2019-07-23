@@ -10,4 +10,9 @@ from pulseapi.constants import MT_JOINT, MT_LINEAR, SIG_HIGH, SIG_LOW
 from pulseapi.robot import RobotPulse
 from pulseapi.utils import pose, position, tool_info, tool_shape, Versions
 
+try:
+    from pulseapi.aiorobot import AioRobotPulse
+except ImportError as ie:
+    pass
+
 RestApiException = PulseApiException  # backward compatibility alias
