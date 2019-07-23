@@ -13,6 +13,13 @@ from pulseapi.utils import pose, position, tool_info, tool_shape, Versions
 try:
     from pulseapi.aiorobot import AioRobotPulse
 except ImportError as ie:
-    pass
+    import warnings
+
+    warnings.warn(
+        "Asyncio-based client is not available. "
+        "To use this feature install pulse-api[aio] "
+        "(Run in terminal: pip install -U pulse-api[aio] -i"
+        "https://pip.rozum.com/simple)"
+    )
 
 RestApiException = PulseApiException  # backward compatibility alias
