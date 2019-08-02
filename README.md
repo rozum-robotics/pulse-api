@@ -56,11 +56,11 @@ host = '127.0.0.1:8080'  # replace with a valid robot address
 robot = RobotPulse(host)  # create an instance of the API wrapper class
 
 # create motion targets
-home_pose = pose([0 -90, 0, -90, -90, 0])
+home_pose = pose([0, -90, 0, -90, -90, 0])
 start_pose = pose([0, -90, 90, -90, -90, 0])
 pose_targets = [
     pose([10, -90, 90, -90, -90, 0]),
-    pose([10 -90, 0, -90, -90, 0]),
+    pose([10, -90, 0, -90, -90, 0]),
 ]
 position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
 position_targets = [
