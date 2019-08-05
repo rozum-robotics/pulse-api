@@ -1,36 +1,42 @@
-# Pulse Robot Python API 
+# Pulse Robot Python API
 
-This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API. 
-Tested with Python 3. Compatibility with Python 2 is not guaranteed but the underlying API (called `pdhttp`) 
+<a href="https://www.python.org/"><img alt="Python: 3.4 | 3.5 | 3.6 | 3.7" src="https://img.shields.io/badge/python-3.4%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg"></a>
+<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.4.3-green.svg"></a>
+
+This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API.
+Tested with Python 3. Compatibility with Python 2 is not guaranteed but the underlying API (called `pdhttp`)
 supports Python 2.
 
 ## Requirements
+
 Python 3.4+
 
 ### Installation
 
-To get the latest version, use the following command: 
+To get the latest version, use the following command:
 
-`pip install pulse-api -i https://pip.rozum.com/simple`  
+`pip3 install pulse-api -i https://pip.rozum.com/simple`  
 
-To install a specific version: 
+To install a specific version:
 
-`pip install pulse-api==v1.v2.v3 -i https://pip.rozum.com/simple`
+`pip3 install pulse-api==v1.v2.v3 -i https://pip.rozum.com/simple`
 where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as listed below in the compatibility table.
 
 **Note:** To install the underlying API (`pdhttp`), use:
-`pip install pdhttp --trusted-host pip.rozum.com -i https://pip.rozum.com/simple`
-
+`pip3 install pdhttp --trusted-host pip.rozum.com -i https://pip.rozum.com/simple`
 
 ### Software compatibility table
+
 Pulse Desk UI version  | Python API version
 ------------------- |-------------------
 1.4.3               | 1.4.3
 
 ### Getting started
-Examples use the latest version of the library. 
+
+Examples use the latest version of the library.
 
 Examples:
+
 * [Quickstart](#quickstart)
 * [API initialization](#api-initialization)
 * [Motion control](#motion-control)
@@ -52,15 +58,15 @@ within 0.6 meters around the manipulator.
 import math
 from pulseapi import RobotPulse, pose, position, PulseApiException, MT_LINEAR
 
-host = '127.0.0.1:8080'  # replace with a valid robot address
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)  # create an instance of the API wrapper class
 
 # create motion targets
-home_pose = pose([0 -90, 0, -90, -90, 0])
+home_pose = pose([0, -90, 0, -90, -90, 0])
 start_pose = pose([0, -90, 90, -90, -90, 0])
 pose_targets = [
     pose([10, -90, 90, -90, -90, 0]),
-    pose([10 -90, 0, -90, -90, 0]),
+    pose([10, -90, 0, -90, -90, 0]),
 ]
 position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
 position_targets = [
@@ -110,7 +116,7 @@ while True:
 ```python
 from pulseapi import RobotPulse
 # create an instance of the API wrapper class
-host = '127.0.0.1:8080'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address 
 robot = RobotPulse(host)
 ```
 [Back to the table of contents](#getting-started)
@@ -154,7 +160,7 @@ import math
 import time
 from pulseapi import position, pose, RobotPulse, MT_LINEAR, MotionStatus
 
-host = '127.0.0.1:8080'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # create motion targets
@@ -219,7 +225,7 @@ Signals:
 ```python
 from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 
-host = '127.0.0.1:8080'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # ask the robot to close the gripper and continue execution of commands after 500 ms
@@ -258,7 +264,7 @@ Helper functions:
 from pulseapi import RobotPulse, position, Point
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
-host = '127.0.0.1:8080'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 # get info about the current tool
@@ -293,7 +299,7 @@ Available methods:
 ```python
 from pulseapi import RobotPulse, position
 
-host = '127.0.0.1:8080'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 current_base = robot.get_base()
@@ -328,7 +334,7 @@ Helper functions:
 from pulseapi import RobotPulse, Point, position
 from pulseapi import create_plane_obstacle, create_box_obstacle, create_capsule_obstacle
 
-host = '127.0.0.1:8080'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 print('Current environment\n{}'.format(robot.get_all_from_environment()))
@@ -367,7 +373,7 @@ method.
 ```python
 from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
 
-host = '127.0.0.1:8080'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address 
 robot = RobotPulse(host)
 
 try:
@@ -395,7 +401,7 @@ Available methods:
 ```python
 from pulseapi import Versions
 
-host = '127.0.0.1:8080'  # replace with a valid robot address
+host = '127.0.0.1:8081'  # replace with a valid robot address
 versions = Versions(host)
 
 print(versions.hardware())
