@@ -1,7 +1,7 @@
 # Pulse Robot Python API
 
 <a href="https://www.python.org/"><img alt="Python: 3.4 | 3.5 | 3.6 | 3.7" src="https://img.shields.io/badge/python-3.4%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg"></a>
-<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.4.3-green.svg"></a>
+<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.4.4-green.svg"></a>
 
 This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API.
 Tested with Python 3. Compatibility with Python 2 is not guaranteed but the underlying API (called `pdhttp`)
@@ -30,6 +30,7 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 Pulse Desk UI version  | Python API version
 ------------------- |-------------------
 1.4.3               | 1.4.3
+1.4.4               | 1.4.4
 
 ### Getting started
 
@@ -81,78 +82,85 @@ SPEED = 30  # set the desired speed
 while True:
     try:
         robot.set_pose(home_pose, SPEED)
-        robot.await_motion()  # checks every 0.1 s whether the motion is finished 
-        
+        robot.await_motion()  # checks every 0.1 s whether the motion is finished
+
         robot.set_pose(start_pose, SPEED)
         robot.await_motion()
-        
+
         robot.set_position(position_target, SPEED)
         robot.await_motion()
-        
+
         # command the robot to go through multiple position waypoints (execute a trajectory)
         robot.run_positions(position_targets, SPEED)
         robot.await_motion()
-        
+
         # set the linear motion type
         robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
         robot.await_motion()
-        
+
         # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-        robot.run_positions(position_targets, SPEED, 
+        robot.run_positions(position_targets, SPEED,
                             motion_type=MT_LINEAR, tcp_max_velocity=0.01)
         robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
-        
+
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
         robot.run_poses(pose_targets, SPEED, tcp_max_velocity=0.1)
-        
+
     except PulseApiException as e:
         # handle possible errors
         print('Exception {}while calling robot at {} '.format(e, robot.host))
         break
 ```
+
 [Back to the table of contents](#getting-started)
 
 #### API initialization
+
 ```python
 from pulseapi import RobotPulse
 # create an instance of the API wrapper class
-host = '127.0.0.1:8081'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)
 ```
+
 [Back to the table of contents](#getting-started)
 
 #### Motion control
+
 Possible motion targets:
-* Positions (`set_position`, `run_positions` and `get_position` methods) - to control 
-the location of the robot's TCP (tool center point). Use the `position` helper function to create a 
+
+* Positions (`set_position`, `run_positions` and `get_position` methods) - to control
+the location of the robot's TCP (tool center point). Use the `position` helper function to create a
 motion target.
 * Poses (`set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
 Use the `pose` helper function to create a motion target.
 
 Possible motion types:
+
 * Joint (`MT_JOINT`, default)
 * Linear (`MT_LINEAR`)
 
 Auxiliary methods:
-* `await_motion` - periodically requests robot status (default: every 0.1 s) and 
+
+* `await_motion` - periodically requests robot status (default: every 0.1 s) and
 waits until the robot finishes movements. **To be replaced soon.**
-* `status_motion` - returns the actual state of the robotic arm: running (arm in motion), 
-idle (arm not in motion), in the zero gravity mode, 
+* `status_motion` - returns the actual state of the robotic arm: running (arm in motion),
+idle (arm not in motion), in the zero gravity mode,
 or in error state.
-* `freeze` - sets the arm in the "freeze" state. 
+* `freeze` - sets the arm in the "freeze" state.
 The arm stops moving, retaining its last position.  
-**Note:**  In the state, it is not advisable to move the arm by hand as this 
+**Note:**  In the state, it is not advisable to move the arm by hand as this
 can cause damage to its components.
-* `relax` -  sets the arm in the \"relaxed\" state. The arm stops 
-moving without retaining its last position. In this state, the user can move the 
+* `relax` -  sets the arm in the \"relaxed\" state. The arm stops
+moving without retaining its last position. In this state, the user can move the
 robotic arm by hand (e.g., to verify/test a motion trajectory).
 * `pack` - asking the arm to reach a compact pose for transportation.
-* `status_motors` - returns the actual states of the six servo motors integrated 
+* `status_motors` - returns the actual states of the six servo motors integrated
 into the joints of the robotic arm.
 
-**WARNING!** The following example is sample code. Before running, you must 
+**WARNING!** The following example is sample code. Before running, you must
 replace reference motion targets in the sample with the ones applicable to
-your specific case. Before launching this example, make sure that manipulator 
+your specific case. Before launching this example, make sure that manipulator
 would not cause any damage to your facilities.
 
 ```python
@@ -160,7 +168,7 @@ import math
 import time
 from pulseapi import position, pose, RobotPulse, MT_LINEAR, MotionStatus
 
-host = '127.0.0.1:8081'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # create motion targets
@@ -182,7 +190,7 @@ def my_await_motion(robot_instance, asking_interval=0.1):
         status = robot_instance.status_motion()
 
 robot.set_pose(pose_target, SPEED)
-robot.await_motion()  # checks every 0.1 s whether the motion is finished 
+robot.await_motion()  # checks every 0.1 s whether the motion is finished
 print('Current pose:\n{}'.format(robot.get_pose()))
 
 robot.set_position(position_target, SPEED)
@@ -198,7 +206,7 @@ robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
 robot.await_motion()
 
 # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-robot.run_positions(position_targets, SPEED, 
+robot.run_positions(position_targets, SPEED,
     motion_type=MT_LINEAR, tcp_max_velocity=0.01)
 robot.await_motion()
 
@@ -209,29 +217,33 @@ robot.freeze()
 print(robot.status_motors())
 
 ```
+
 [Back to the table of contents](#getting-started)
 
 #### Controlling accessories and signals
+
 Available methods:
-* `close_gripper`, `open_gripper` with a preset timeout before executing further commands (default: 500 ms). 
+
+* `close_gripper`, `open_gripper` with a preset timeout before executing further commands (default: 500 ms).
 Supported grippers: Schunk and OnRobot.
 * `set_digital_output_high` `set_digital_output_low`, `get_digital_output` - to work with output ports on the controlbox.
 * `get_digital_input` to work with input ports on the controlbox.
 
 Signals:
+
 * SIG_LOW - port is inactive
 * SIG_HIGH - port is active
 
 ```python
 from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 
-host = '127.0.0.1:8081'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # ask the robot to close the gripper and continue execution of commands after 500 ms
-robot.close_gripper() 
+robot.close_gripper()
 
-# ask the robot to open the gripper and begin to execute further commands immediately 
+# ask the robot to open the gripper and begin to execute further commands immediately
 robot.open_gripper(0)
 
 # set the first output port to the active state
@@ -244,19 +256,23 @@ if robot.get_digital_input(3) == SIG_HIGH:
 if robot.get_digital_input(1) == SIG_LOW:
     print('Input port 1 is inactive')
 ```
+
 [Back to the table of contents](#getting-started)
 
 #### Tool API
+
 Use the Tool API methods when you need to calculate a robot motion trajectory with
 regard to the used tool and to take the tool into account when the robot calculates collisions.
 
 Available methods:
+
 * `change_tool_info` - set tool info for trajectory calculations.
 * `change_tool_shape` - set tool shape for collision validation.
 * `get_tool_info`, `get_tool_shape` - receive information about current tool settings.
 
 Helper functions:
-* `tool_info` - creates a tool info instance to be passed into 
+
+* `tool_info` - creates a tool info instance to be passed into
 `change_tool_info` method.
 * `tool_shape` - creates a tool shape instance to be passed into `change_tool_shape` method.
 
@@ -264,7 +280,7 @@ Helper functions:
 from pulseapi import RobotPulse, position, Point
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
-host = '127.0.0.1:8081'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # get info about the current tool
@@ -286,20 +302,23 @@ print('New tool info\n{}'.format(robot.get_tool_info()))
 print('New tool shape\n{}'.format(robot.get_tool_shape()))
 
 ```
+
 [Back to the table of contents](#getting-started)
 
 #### Base API
+
 Use the Base API methods when you need to calculate a robot motion trajectory
 relative to a specific point in space.
 
-Available methods: 
+Available methods:
+
 * `change_base`
 * `get_base`
 
 ```python
 from pulseapi import RobotPulse, position
 
-host = '127.0.0.1:8081'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)
 
 current_base = robot.get_base()
@@ -312,12 +331,15 @@ robot.change_base(new_base)
 print('New base\n{}'.format(robot.get_base()))
 
 ```
+
 [Back to the table of contents](#getting-started)
 
 #### Environment API
+
 Use the Environment API to add virtual obstacles to be taken into account when calculating collisions.
 
 Available methods:
+
 * `add_to_environment` - adds an obstacle to an environment. Use the helper functions below
 to describe obstacles.
 * `get_all_from_environment` - returns all obstacles from an environment.
@@ -326,6 +348,7 @@ to describe obstacles.
 * `remove_from_environment_by_name` -  removes an obstacle with a specific name from an environment.
 
 Helper functions:
+
 * `create_box_obstacle`
 * `create_capsule_obstacle`
 * `create_plane_obstacle`
@@ -334,7 +357,7 @@ Helper functions:
 from pulseapi import RobotPulse, Point, position
 from pulseapi import create_plane_obstacle, create_box_obstacle, create_capsule_obstacle
 
-host = '127.0.0.1:8081'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)
 
 print('Current environment\n{}'.format(robot.get_all_from_environment()))
@@ -359,12 +382,14 @@ print('Empty environment\n{}'.format(robot.get_all_from_environment()))
 [Back to the table of contents](#getting-started)
 
 #### Exception handling
+
 For information about errors, see the [API reference](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
 The client wraps errors from the robot into `PulseApiException`.
 
 Available methods:
-* `recover` - the function recovers the arm after an emergency, setting its motion status to IDLE. 
-Recovery is possible only after an emergency that is not fatal (corresponds 
+
+* `recover` - the function recovers the arm after an emergency, setting its motion status to IDLE.
+Recovery is possible only after an emergency that is not fatal (corresponds
 to the ERROR status).
 
 For example, we can trigger an API exception by sending `pose` into `set_position`
@@ -373,7 +398,7 @@ method.
 ```python
 from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
 
-host = '127.0.0.1:8081'  # replace with a valid robot address 
+host = '127.0.0.1:8081'  # replace with a valid robot address
 robot = RobotPulse(host)
 
 try:
@@ -394,6 +419,7 @@ You may need to use the methods for contacting support specialists when you noti
 strange robot behaviour.
 
 Available methods:
+
 * `hardware` - returns the hardware versions for all motors, the USB-CAN dongle, safety board and wrist.
 * `software` - returns the software version for all motors, the USB-CAN dongle, safety board and wrist.
 * `robot_software` - returns the version of the robot control software.
@@ -409,8 +435,10 @@ print(versions.software())
 print(versions.robot_software())
 
 ```
+
 [Back to the table of contents](#getting-started)
 
 ### Documentation and further information
+
 For further details, see the
 [API reference guide](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
