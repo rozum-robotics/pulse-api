@@ -10,7 +10,7 @@ DESCRIPTION = "Python API for Pulse Robotic Arm with useful utilities"
 URL = "https://rozum.com"
 EMAIL = "dev@rozum.com"
 AUTHOR = "Rozum Robotics"
-VERSION = "1.4.4.dev1"
+VERSION = "1.5.0.dev0"
 
 if "dev" in VERSION:
     DEVELOPMENT_STATUS = "Development Status :: 4 - Beta"
@@ -22,14 +22,14 @@ REQUIRED = [
     "six >= 1.10",
     "python_dateutil >= 2.5.3",
     "urllib3 >= 1.15.1",
-    "pdhttp >= 1.4.4.dev1",
+    "pdhttp >= 1.5.0.dev0",
 ]
 DEPENDENCY_LINKS = [
     "https://pip.rozum.com/#/package/pdhttp",
 ]
 
 EXTRAS = {
-    "aio": ["aiopdhttp >= 1.4.4.dev2"]
+    "aio": ["aiopdhttp >= 1.5.0.dev0"]
 }
 # Import the README and use it as the long-description.
 # Note: this will only work if 'README.md' is present in your MANIFEST.in file!
