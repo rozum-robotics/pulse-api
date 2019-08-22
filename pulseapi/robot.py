@@ -1,4 +1,5 @@
 import time
+from deprecated import deprecated
 
 from pdhttp.api.robot_api import RobotApi
 from pdhttp.models import MotionStatus
@@ -169,8 +170,12 @@ class RobotPulse:
             )
         )
 
+    @deprecated(reason="You should use status() method", version="1.5.0")
     def status_motion(self):
         return self._api.status_motion()
+
+    def status(self):
+        return self._api.status()
 
     def status_motors(self):
         return self._api.status_motors()
