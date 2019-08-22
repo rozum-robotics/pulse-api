@@ -23,6 +23,7 @@ REQUIRED = [
     "python_dateutil >= 2.5.3",
     "urllib3 >= 1.15.1",
     "pdhttp >= 1.5.0.dev2",
+    "Deprecated >= 1.2.6",
 ]
 DEPENDENCY_LINKS = [
     "https://pip.rozum.com/#/package/pdhttp",
