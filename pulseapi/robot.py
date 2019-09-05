@@ -170,7 +170,6 @@ class RobotPulse:
             )
         )
 
-    @deprecated(reason="You should use status() method", version="1.5.0")
     def status_motion(self):
         return self._api.status_motion()
 
