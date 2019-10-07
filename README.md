@@ -95,7 +95,7 @@ while True:
         # checks every 0.1 s whether the motion is finished
         robot.await_motion()
 
-        robot.set_pose(start_pose, velocity=VELOCITY)
+        robot.set_pose(start_pose, velocity=VELOCITY, acceleration=ACCELERATION)
         robot.await_motion()
 
         robot.set_position(
