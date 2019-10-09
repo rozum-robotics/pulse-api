@@ -207,6 +207,7 @@ position_targets = [
 SPEED = 30  # set the desired speed
 TCP_VELOCITY_1CM = 0.01
 
+
 # use the motion status command as shown below
 def my_await_motion(robot_instance, asking_interval=0.1):
     status = robot_instance.status_motion()
