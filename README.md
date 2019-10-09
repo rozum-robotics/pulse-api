@@ -207,6 +207,7 @@ position_targets = [
 SPEED = 30  # set the desired speed
 TCP_VELOCITY_1CM = 0.01
 
+
 # use the motion status command as shown below
 def my_await_motion(robot_instance, asking_interval=0.1):
     status = robot_instance.status_motion()
@@ -273,8 +274,8 @@ robot = RobotPulse(host)
 robot.close_gripper()
 
 # ask the robot to open the gripper and begin to execute further
-# commands immediately
-robot.open_gripper(0)
+# commands after 100 ms
+robot.open_gripper(100)
 
 # set the first output port to the active state
 robot.set_digital_output_high(1)
