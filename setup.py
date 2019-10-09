@@ -30,7 +30,7 @@ DEPENDENCY_LINKS = [
 ]
 
 EXTRAS = {
-    "aio": ["aiopdhttp >= 1.5.0.dev2"]
+    "aio": ["aiopdhttp >= 1.5.0.dev3"]
 }
 # Import the README and use it as the long-description.
 # Note: this will only work if 'README.md' is present in your MANIFEST.in file!
