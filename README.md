@@ -273,8 +273,8 @@ robot = RobotPulse(host)
 robot.close_gripper()
 
 # ask the robot to open the gripper and begin to execute further
-# commands immediately
-robot.open_gripper(0)
+# commands after 100 ms
+robot.open_gripper(100)
 
 # set the first output port to the active state
 robot.set_digital_output_high(1)
