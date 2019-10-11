@@ -1,5 +1,6 @@
 certifi==2019.3.9
-pdhttp==1.4.3
+pdhttp==1.5.0.dev2
 python-dateutil==2.8.0
 six==1.12.0
 urllib3==1.24.2
+Deprecated==1.2.6
