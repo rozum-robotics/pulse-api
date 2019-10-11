@@ -488,4 +488,4 @@ print(versions.robot_software())
 ### Documentation and further information
 
 For further details, see the
-[API reference guide](https://rozum.com/tpl/pdf/ARM/PULSE%20ROBOT_API%20REFERENCE%20GUIDE_v.6.pdf).
+[API reference guide](https://rozum.com/documentation/robotic-arm/75/rest-api-reference-guide/).
