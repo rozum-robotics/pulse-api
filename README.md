@@ -1,18 +1,37 @@
 # Pulse Robot Python API
 
 <a href="https://www.python.org/"><img alt="Python: 3.4 | 3.5 | 3.6 | 3.7" src="https://img.shields.io/badge/python-3.4%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg"></a>
-<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.5.0-green.svg"></a>
+<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.5.1-green.svg"></a>
 <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API.
 Tested with Python 3. Compatibility with Python 2 is not guaranteed but the underlying API (called `pdhttp`)
 supports Python 2.
 
+- [Pulse Robot Python API](#pulse-robot-python-api)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Software compatibility table](#software-compatibility-table)
+    - [Getting started](#getting-started)
+      - [Quickstart](#quickstart)
+      - [API initialization](#api-initialization)
+      - [Motion control](#motion-control)
+      - [Controlling accessories and signals](#controlling-accessories-and-signals)
+      - [Tool API](#tool-api)
+      - [Base API](#base-api)
+      - [Environment API](#environment-api)
+      - [Exception handling](#exception-handling)
+      - [Versions API](#versions-api)
+      - [Documentation and further information](#documentation-and-further-information)
+
+[Documentation and further information](#documentation-and-further-information)
+
+
 ## Requirements
 
 Python 3.4+
 
-### Installation
+## Installation
 
 To get the latest version, use the following command:
 
@@ -26,31 +45,18 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 **Note:** To install the underlying API (`pdhttp`), use:
 `pip3 install pdhttp -i https://pip.rozum.com/simple`
 
-### Software compatibility table
+## Software compatibility table
 
 | Pulse Desk UI version | Python API version |
 | --------------------- | ------------------ |
 | 1.4.3                 | 1.4.3              |
 | 1.4.4                 | 1.4.4              |
-| 1.5.0                 | 1.5.0              |
+| 1.5.0                 | 1.5.0, 1.5.1       |
+| 1.5.1                 | 1.5.0, 1.5.1       |
 
 ### Getting started
 
 Examples use the latest version of the library.
-
-Examples:
-
-* [Quickstart](#quickstart)
-* [API initialization](#api-initialization)
-* [Motion control](#motion-control)
-* [Controlling accessories and signals](#controlling-accessories-and-signals)
-* [Tool API](#tool-api)
-* [Base API](#base-api)
-* [Environment API](#environment-api)
-* [Exception handling](#exception-handling)
-* [Versions API](#versions-api)
-
-[Documentation and further information](#documentation-and-further-information)
 
 #### Quickstart
 
@@ -485,7 +491,7 @@ print(versions.robot_software())
 
 [Back to the table of contents](#getting-started)
 
-### Documentation and further information
+#### Documentation and further information
 
 For further details, see the
-[API reference guide](https://rozum.com/documentation/robotic-arm/75/rest-api-reference-guide/).
+[API reference guide](https://rozum.com/documentation/robotic-arm/pulse-75/rest-api-reference-guide/).
