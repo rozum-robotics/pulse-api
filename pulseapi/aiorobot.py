@@ -1,22 +1,23 @@
 import asyncio
 from aiopdhttp.api import RobotApi
 from pulseapi import RobotPulse, MotionStatus
-
+import pulseapi.logging as pulse_logging
 
 class AioRobotPulse(RobotPulse):
     
-    def __init__(self, host=None):
+    def __init__(self, host=None, log_config=None):
         self._api = RobotApi()
         if host is not None:
             host = "http://" + host
             self._api.api_client.configuration.host = host
-        self.logger = self._api.api_client.configuration.logger
+        self.logger = pulse_logging.configure(log_config)
         self.host = self._api.api_client.configuration.host
     
     async def __aenter__(self):
         return self
     
     async def stop(self, asking_interval=0.1):
+        self.logger.debug(str(asking_interval))
         while await self.status_motion() != MotionStatus.IDLE:
             await asyncio.sleep(asking_interval)
     
