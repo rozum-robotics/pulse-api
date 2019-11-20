@@ -69,6 +69,9 @@ class RobotPulse:
     def get_tool_shape(self):
         return self._api.get_tool_shape()
 
+    def information(self):
+        return self._api.information()
+
     def identifier(self):
         return self._api.identifier()
 
