@@ -4,7 +4,7 @@ import logging
 import logging.config
 
 from pdhttp.api.robot_api import RobotApi
-from pdhttp.models import MotionStatus
+from pdhttp.models import MotionStatus, SystemState
 from pulseapi.constants import MT_JOINT
 import pulseapi.logging as pulse_logging
 
@@ -188,17 +188,29 @@ class RobotPulse:
         )
         return self._api.set_position(target_position, **motion_parameters)
 
+    @deprecated(reason="You should use status() method", version="1.6.0")
     def status_motion(self):
         result = self._api.status_motion()
         self.logger.debug(result)
         return result
-
+    
+    def status(self):
+        result = self._api.status()
+        self.logger.debug(result)
+        return result
+    
     def status_motors(self):
         return self._api.status_motors()
 
+    @deprecated(reason="You should use await_stop() method", version="1.6.0")
     def await_motion(self, asking_interval=0.1):
         self.logger.debug(str(asking_interval))
         while self.status_motion() != MotionStatus.IDLE:
+            time.sleep(asking_interval)
+
+    def await_stop(self, asking_interval=0.1):
+        self.logger.debug(str(asking_interval))
+        while self.status().state == SystemState.MOTION:
             time.sleep(asking_interval)
 
     @staticmethod
