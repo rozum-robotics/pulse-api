@@ -164,6 +164,14 @@ the location of the robot's TCP (tool center point). Use the `position` helper f
 motion target.
 * Poses (`set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
 Use the `pose` helper function to create a motion target.
+* Jogging (`jogging` method) - enter the 'jogging' mode. If the robotic arm 
+already in the 'jogging' mode, use this method to control the direction of the movement.
+Use `jog` helper function to create motion target.
+The motion target has six components ('x', 'y', 'z', 'rx', 'ry', 'rz'). 
+Components are optional with default value equal to 0. Components control
+accelerations along the corresponding axis relative to the _base_ coordinate
+system of the robotic arm. To disable the mode, pass `jog` motion target, where
+all components are zeros.
 
 Possible motion types:
 
@@ -201,7 +209,7 @@ would not cause any damage to your facilities.
 ```python
 import math
 import time
-from pulseapi import position, pose, RobotPulse, MT_LINEAR, SystemState
+from pulseapi import position, pose, RobotPulse, MT_LINEAR, SystemState, jog
 
 host = "127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
@@ -255,6 +263,23 @@ robot.freeze()
 
 # get status from motors
 print(robot.status_motors())
+
+# jogging example
+# command the robot to execute preparatory motion targets
+robot.set_pose(pose(0, -90, 0, -90, -90, 0), SPEED)
+robot.set_position(position([-0.45, -0, 0.33], [math.pi, 0, 0]), SPEED)
+robot.await_stop()
+# start the jogging mode and execute motion targets
+robot.jogging(jog(x=-1, y=-1))
+time.sleep(2)
+robot.jogging(jog(x=1, y=1))
+time.sleep(7)
+robot.jogging(jog(rx=1, rz=-1))
+time.sleep(5)
+robot.jogging(jog(-0.1, -0.8, 0.1, 0, -1, 0.7))
+time.sleep(5)
+# disable the jogging mode
+robot.jogging(jog())
 
 ```
 
@@ -462,9 +487,10 @@ try:
     robot.await_stop()
 except PulseApiException as e:
     print("Exception {}while calling robot at {} ".format(e, robot.host))
-    if robot.status().state == SystemState.ERROR:
+    status = robot.status()
+    if status.state == SystemState.ERROR:
         robot.recover()
-        print("Robot recovered from error")
+        print("Robot recovered from error. Error message: {}".format(status.message))
 
 ```
 
