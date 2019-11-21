@@ -1,20 +1,21 @@
 import time
 from deprecated import deprecated
 import logging
-import logging.config
 
 from pdhttp.api.robot_api import RobotApi
 from pdhttp.models import MotionStatus, SystemState
 from pulseapi.constants import MT_JOINT
-import pulseapi.logging as pulse_logging
 
 
 class RobotPulse:
-    def __init__(self, host=None, log_config=None):
+    def __init__(self, host=None, logger=None):
         self._api = RobotApi()
         if host is not None:
             self._api.api_client.configuration.host = host
-        self.logger = pulse_logging.configure(log_config)
+        if logger is None:
+            logger = logging.getLogger("pulseapi")
+            logger.addHandler(logging.NullHandler())
+        self.logger = logger
         self.host = self._api.api_client.configuration.host
 
     def add_to_environment(self, obstacle):
