@@ -6,6 +6,8 @@ from pdhttp import (
     ToolInfo,
     ToolShape,
     VersionApi,
+    JoggingAcceleration,
+    JoggingAccelerationAcceleration,
 )
 
 
@@ -34,6 +36,20 @@ def pose(angles):
     :return: Pose
     """
     return Pose(angles)
+
+
+def jog(x=0, y=0, z=0, rx=0, ry=0, rz=0):
+    """Creates motion target for jogging mode.
+    
+    Jogging acceleration is a six-component vector ('x', 'y', 'z', 'rx', 'ry', 'rz'). 
+    Components are optional and relative to the base coordinate system of the robotic arm. 
+    Default value, corresponding to absense of the movement: 0. 
+    Values MUST belong to [-1;1] range inclusively.
+    
+    """
+    return JoggingAcceleration(
+        JoggingAccelerationAcceleration(x, y, z, rx, ry, rz)
+    )
 
 
 def tool_info(tcp_position, name="unnamed_tool"):
