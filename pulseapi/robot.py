@@ -76,8 +76,8 @@ class RobotPulse:
     def identifier(self):
         return self._api.identifier()
 
-    def jogging(self, acceleration):
-        return self._api.jogging(acceleration)
+    def jogging(self, jog_value):
+        return self._api.jogging(jog_value)
 
     def open_gripper(self, timeout=None):
         self.logger.debug(str(timeout))
