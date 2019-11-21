@@ -99,20 +99,20 @@ while True:
     try:
         robot.set_pose(home_pose, speed=SPEED)
         # checks every 0.1 s whether the motion is finished
-        robot.await_motion()
+        robot.await_stop()
 
         robot.set_pose(start_pose, velocity=VELOCITY, acceleration=ACCELERATION)
-        robot.await_motion()
+        robot.await_stop()
 
         robot.set_position(
             position_target, velocity=VELOCITY, acceleration=ACCELERATION
         )
-        robot.await_motion()
+        robot.await_stop()
 
         # command the robot to go through multiple position waypoints
         # (execute a trajectory)
         robot.run_positions(position_targets, SPEED)
-        robot.await_motion()
+        robot.await_stop()
 
         # set the linear motion type
         robot.run_positions(
@@ -121,7 +121,7 @@ while True:
             acceleration=ACCELERATION,
             motion_type=MT_LINEAR,
         )
-        robot.await_motion()
+        robot.await_stop()
 
         # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
         robot.run_positions(
@@ -130,7 +130,7 @@ while True:
             motion_type=MT_LINEAR,
         )
         # checks every 0.5 s whether the motion is finished
-        robot.await_motion(0.5)
+        robot.await_stop(0.5)
 
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
         robot.run_poses(pose_targets, tcp_max_velocity=TCP_VELOCITY_1CM)
@@ -173,10 +173,15 @@ Possible motion types:
 Auxiliary methods:
 
 * `await_motion` - periodically requests robot status (default: every 0.1 s) and
-waits until the robot finishes movements. **To be replaced soon.**
+waits until the robot finishes movements. **Deprecated, use await_stop**
+* `await_stop` - periodically requests robot status (default: every 0.1 s) and
+waits until the robot finishes movements.
 * `status_motion` - returns the actual state of the robotic arm: running (arm in motion),
-idle (arm not in motion), in the zero gravity mode,
-or in error state.
+idle (arm not in motion), in the zero gravity mode, or in error state.
+**Deprecated, use status**
+* `status` - returns the actual state of the robotic arm - whether it is
+initializing, or twisted, or running (in motion), or active (not in motion), or 
+in the zero gravity mode, or failed (broken, failed initializing or in emergency).
 * `freeze` - sets the arm in the "freeze" state.
 The arm stops moving, retaining its last position.  
 **Note:**  In the state, it is not advisable to move the arm by hand as this
@@ -196,7 +201,7 @@ would not cause any damage to your facilities.
 ```python
 import math
 import time
-from pulseapi import position, pose, RobotPulse, MT_LINEAR, MotionStatus
+from pulseapi import position, pose, RobotPulse, MT_LINEAR, SystemState
 
 host = "127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
@@ -214,36 +219,36 @@ SPEED = 30  # set the desired speed
 TCP_VELOCITY_1CM = 0.01
 
 
-# use the motion status command as shown below
-def my_await_motion(robot_instance, asking_interval=0.1):
-    status = robot_instance.status_motion()
-    while status != MotionStatus.IDLE:
+# use the status command as shown below
+def my_await_stop(robot_instance, asking_interval=0.1):
+    status = robot_instance.status()
+    while status.state == SystemState.MOTION:
         time.sleep(asking_interval)
-        status = robot_instance.status_motion()
+        status = robot_instance.status()
 
 
 robot.set_pose(pose_target, SPEED)
-robot.await_motion()  # checks every 0.1 s whether the motion is finished
+robot.await_stop()  # checks every 0.1 s whether the motion is finished
 print("Current pose:\n{}".format(robot.get_pose()))
 
 robot.set_position(position_target, SPEED)
-robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
+robot.await_stop(0.5)  # checks every 0.5 s whether the motion is finished
 print("Current position:\n{}".format(robot.get_position()))
 
 # command the robot to go through multiple position waypoints
 # (execute a trajectory)
 robot.run_positions(position_targets, SPEED)
-my_await_motion(robot)
+my_await_stop(robot)
 
 # set the linear motion type
 robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
-robot.await_motion()
+robot.await_stop()
 
 # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
 robot.run_positions(
     position_targets, tcp_max_velocity=TCP_VELOCITY_1CM, motion_type=MT_LINEAR
 )
-robot.await_motion()
+robot.await_stop()
 
 # stop the arm in the last position
 robot.freeze()
@@ -447,17 +452,17 @@ For example, we can trigger an API exception by sending `pose` into `set_positio
 method.
 
 ```python
-from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
+from pulseapi import RobotPulse, PulseApiException, pose, SystemState
 
 host = "127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 try:
     robot.set_position(pose([0, -90, 90, -90, -90, 0]), 10)
-    robot.await_motion()
+    robot.await_stop()
 except PulseApiException as e:
     print("Exception {}while calling robot at {} ".format(e, robot.host))
-    if robot.status_motion() == MotionStatus.ERROR:
+    if robot.status().state == SystemState.ERROR:
         robot.recover()
         print("Robot recovered from error")
 
