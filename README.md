@@ -266,7 +266,7 @@ print(robot.status_motors())
 
 # jogging example
 # command the robot to execute preparatory motion targets
-robot.set_pose(pose(0, -90, 0, -90, -90, 0), SPEED)
+robot.set_pose(pose([0, -90, 0, -90, -90, 0]), SPEED)
 robot.set_position(position([-0.45, -0, 0.33], [math.pi, 0, 0]), SPEED)
 robot.await_stop()
 # start the jogging mode and execute motion targets
