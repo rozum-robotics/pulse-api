@@ -47,6 +47,8 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 
 ## Software compatibility table
 
+[Changelog](./CHANGELOG.md)
+
 | Pulse Desk UI version | Python API version |
 | --------------------- | ------------------ |
 | 1.4.3                 | 1.4.3              |
