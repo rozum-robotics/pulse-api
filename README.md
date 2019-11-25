@@ -1,18 +1,37 @@
 # Pulse Robot Python API
 
 <a href="https://www.python.org/"><img alt="Python: 3.4 | 3.5 | 3.6 | 3.7" src="https://img.shields.io/badge/python-3.4%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg"></a>
-<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.5.0-green.svg"></a>
+<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.6.0-green.svg"></a>
 <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API.
 Tested with Python 3. Compatibility with Python 2 is not guaranteed but the underlying API (called `pdhttp`)
 supports Python 2.
 
+- [Pulse Robot Python API](#pulse-robot-python-api)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Software compatibility table](#software-compatibility-table)
+    - [Getting started](#getting-started)
+      - [Quickstart](#quickstart)
+      - [API initialization](#api-initialization)
+      - [Motion control](#motion-control)
+      - [Controlling accessories and signals](#controlling-accessories-and-signals)
+      - [Tool API](#tool-api)
+      - [Base API](#base-api)
+      - [Environment API](#environment-api)
+      - [Exception handling](#exception-handling)
+      - [Versions API](#versions-api)
+      - [Documentation and further information](#documentation-and-further-information)
+
+[Documentation and further information](#documentation-and-further-information)
+
+
 ## Requirements
 
 Python 3.4+
 
-### Installation
+## Installation
 
 To get the latest version, use the following command:
 
@@ -26,31 +45,20 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 **Note:** To install the underlying API (`pdhttp`), use:
 `pip3 install pdhttp -i https://pip.rozum.com/simple`
 
-### Software compatibility table
+## Software compatibility table
+
+[Changelog](./CHANGELOG.md)
 
 | Pulse Desk UI version | Python API version |
 | --------------------- | ------------------ |
 | 1.4.3                 | 1.4.3              |
 | 1.4.4                 | 1.4.4              |
-| 1.5.0                 | 1.5.0              |
+| 1.5.0, 1.5.1, 1.5.2   | 1.5.0              |
+| 1.6.0                 | 1.6.0              |
 
 ### Getting started
 
 Examples use the latest version of the library.
-
-Examples:
-
-* [Quickstart](#quickstart)
-* [API initialization](#api-initialization)
-* [Motion control](#motion-control)
-* [Controlling accessories and signals](#controlling-accessories-and-signals)
-* [Tool API](#tool-api)
-* [Base API](#base-api)
-* [Environment API](#environment-api)
-* [Exception handling](#exception-handling)
-* [Versions API](#versions-api)
-
-[Documentation and further information](#documentation-and-further-information)
 
 #### Quickstart
 
@@ -93,20 +101,20 @@ while True:
     try:
         robot.set_pose(home_pose, speed=SPEED)
         # checks every 0.1 s whether the motion is finished
-        robot.await_motion()
+        robot.await_stop()
 
         robot.set_pose(start_pose, velocity=VELOCITY, acceleration=ACCELERATION)
-        robot.await_motion()
+        robot.await_stop()
 
         robot.set_position(
             position_target, velocity=VELOCITY, acceleration=ACCELERATION
         )
-        robot.await_motion()
+        robot.await_stop()
 
         # command the robot to go through multiple position waypoints
         # (execute a trajectory)
         robot.run_positions(position_targets, SPEED)
-        robot.await_motion()
+        robot.await_stop()
 
         # set the linear motion type
         robot.run_positions(
@@ -115,7 +123,7 @@ while True:
             acceleration=ACCELERATION,
             motion_type=MT_LINEAR,
         )
-        robot.await_motion()
+        robot.await_stop()
 
         # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
         robot.run_positions(
@@ -124,7 +132,7 @@ while True:
             motion_type=MT_LINEAR,
         )
         # checks every 0.5 s whether the motion is finished
-        robot.await_motion(0.5)
+        robot.await_stop(0.5)
 
         # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
         robot.run_poses(pose_targets, tcp_max_velocity=TCP_VELOCITY_1CM)
@@ -158,6 +166,14 @@ the location of the robot's TCP (tool center point). Use the `position` helper f
 motion target.
 * Poses (`set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
 Use the `pose` helper function to create a motion target.
+* Jogging (`jogging` method) - enter the 'jogging' mode. If the robotic arm 
+already in the 'jogging' mode, use this method to control the direction of the movement.
+Use `jog` helper function to create motion target.
+The motion target has six components ('x', 'y', 'z', 'rx', 'ry', 'rz'). 
+Components are optional with default value equal to 0. Components control
+accelerations along the corresponding axis relative to the _base_ coordinate
+system of the robotic arm. To disable the mode, pass `jog` motion target, where
+all components are zeros.
 
 Possible motion types:
 
@@ -167,10 +183,15 @@ Possible motion types:
 Auxiliary methods:
 
 * `await_motion` - periodically requests robot status (default: every 0.1 s) and
-waits until the robot finishes movements. **To be replaced soon.**
+waits until the robot finishes movements. **Deprecated, use await_stop**
+* `await_stop` - periodically requests robot status (default: every 0.1 s) and
+waits until the robot finishes movements.
 * `status_motion` - returns the actual state of the robotic arm: running (arm in motion),
-idle (arm not in motion), in the zero gravity mode,
-or in error state.
+idle (arm not in motion), in the zero gravity mode, or in error state.
+**Deprecated, use status**
+* `status` - returns the actual state of the robotic arm - whether it is
+initializing, or twisted, or running (in motion), or active (not in motion), or 
+in the zero gravity mode, or failed (broken, failed initializing or in emergency).
 * `freeze` - sets the arm in the "freeze" state.
 The arm stops moving, retaining its last position.  
 **Note:**  In the state, it is not advisable to move the arm by hand as this
@@ -190,7 +211,7 @@ would not cause any damage to your facilities.
 ```python
 import math
 import time
-from pulseapi import position, pose, RobotPulse, MT_LINEAR, MotionStatus
+from pulseapi import position, pose, RobotPulse, MT_LINEAR, SystemState, jog
 
 host = "127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
@@ -208,42 +229,60 @@ SPEED = 30  # set the desired speed
 TCP_VELOCITY_1CM = 0.01
 
 
-# use the motion status command as shown below
-def my_await_motion(robot_instance, asking_interval=0.1):
-    status = robot_instance.status_motion()
-    while status != MotionStatus.IDLE:
+# use the status command as shown below
+def my_await_stop(robot_instance, asking_interval=0.1):
+    status = robot_instance.status()
+    while status.state == SystemState.MOTION:
         time.sleep(asking_interval)
-        status = robot_instance.status_motion()
+        status = robot_instance.status()
+
 
 
 robot.set_pose(pose_target, SPEED)
-robot.await_motion()  # checks every 0.1 s whether the motion is finished
+robot.await_stop()  # checks every 0.1 s whether the motion is finished
 print("Current pose:\n{}".format(robot.get_pose()))
 
 robot.set_position(position_target, SPEED)
-robot.await_motion(0.5)  # checks every 0.5 s whether the motion is finished
+robot.await_stop(0.5)  # checks every 0.5 s whether the motion is finished
 print("Current position:\n{}".format(robot.get_position()))
 
 # command the robot to go through multiple position waypoints
 # (execute a trajectory)
 robot.run_positions(position_targets, SPEED)
-my_await_motion(robot)
+my_await_stop(robot)
 
 # set the linear motion type
 robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
-robot.await_motion()
+robot.await_stop()
 
 # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
 robot.run_positions(
     position_targets, tcp_max_velocity=TCP_VELOCITY_1CM, motion_type=MT_LINEAR
 )
-robot.await_motion()
+robot.await_stop()
 
 # stop the arm in the last position
 robot.freeze()
 
 # get status from motors
 print(robot.status_motors())
+
+# jogging example
+# command the robot to execute preparatory motion targets
+robot.set_pose(pose([0, -90, 0, -90, -90, 0]), SPEED)
+robot.set_position(position([-0.45, -0, 0.33], [math.pi, 0, 0]), SPEED)
+robot.await_stop()
+# start the jogging mode and execute motion targets
+robot.jogging(jog(x=-1, y=-1))
+time.sleep(2)
+robot.jogging(jog(x=1, y=1))
+time.sleep(7)
+robot.jogging(jog(rx=1, rz=-1))
+time.sleep(5)
+robot.jogging(jog(-0.1, -0.8, 0.1, 0, -1, 0.7))
+time.sleep(5)
+# disable the jogging mode
+robot.jogging(jog())
 
 ```
 
@@ -441,19 +480,20 @@ For example, we can trigger an API exception by sending `pose` into `set_positio
 method.
 
 ```python
-from pulseapi import RobotPulse, PulseApiException, pose, MotionStatus
+from pulseapi import RobotPulse, PulseApiException, pose, SystemState
 
 host = "127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 try:
     robot.set_position(pose([0, -90, 90, -90, -90, 0]), 10)
-    robot.await_motion()
+    robot.await_stop()
 except PulseApiException as e:
     print("Exception {}while calling robot at {} ".format(e, robot.host))
-    if robot.status_motion() == MotionStatus.ERROR:
+    status = robot.status()
+    if status.state == SystemState.ERROR:
         robot.recover()
-        print("Robot recovered from error")
+        print("Robot recovered from error. Error message: {}".format(status.message))
 
 ```
 
@@ -485,7 +525,7 @@ print(versions.robot_software())
 
 [Back to the table of contents](#getting-started)
 
-### Documentation and further information
+#### Documentation and further information
 
 For further details, see the
-[API reference guide](https://rozum.com/documentation/robotic-arm/75/rest-api-reference-guide/).
+[API reference guide](https://rozum.com/documentation/robotic-arm/pulse-75/rest-api-reference-guide/).
