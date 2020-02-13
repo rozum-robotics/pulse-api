@@ -49,7 +49,7 @@ def pose(
     :param angles: list containing 6 angles for motors (in degrees). Order: base-0th, tcp-5th
     :return: Pose
     """
-    return Pose(angles)
+    return Pose(angles, actions)
 
 
 def jog(
