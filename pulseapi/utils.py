@@ -1,3 +1,4 @@
+from typing import Iterable, List, Optional, Union
 from pdhttp import (
     Position,
     Point,
@@ -8,10 +9,21 @@ from pdhttp import (
     VersionApi,
     JoggingAcceleration,
     JoggingAccelerationAcceleration,
+    RobotActionType,
+    OutputRobotAction,
+    GripperRobotAction,
+    RobotAction,
+    SimplifiedCapsuleObstacle,
 )
 
+ActionsList = List[Union[OutputRobotAction, GripperRobotAction]]
 
-def position(point, rotation):
+
+def position(
+    point: Iterable[float],
+    rotation: Iterable[float],
+    actions: Optional[ActionsList] = None,
+) -> Position:
     """Creates position motion target.
 
     Use this method to create positions which will be passed to set_position and run_positions methods of RobotPulse.
@@ -24,10 +36,12 @@ def position(point, rotation):
     :param rotation: list containing roll, pitch, yaw coordinates (in radians) for TCP
     :return: Position
     """
-    return Position(Point(*point), Rotation(*rotation))
+    return Position(Point(*point), Rotation(*rotation), actions)
 
 
-def pose(angles):
+def pose(
+    angles: Iterable[float], actions: Optional[ActionsList] = None
+) -> Pose:
     """Creates pose motion target.
 
     Use this method to create poses which will be passed to set_pose and run_poses methods of RobotPulse.
@@ -35,10 +49,17 @@ def pose(angles):
     :param angles: list containing 6 angles for motors (in degrees). Order: base-0th, tcp-5th
     :return: Pose
     """
-    return Pose(angles)
+    return Pose(angles, actions)
 
 
-def jog(x=0, y=0, z=0, rx=0, ry=0, rz=0):
+def jog(
+    x: float = 0,
+    y: float = 0,
+    z: float = 0,
+    rx: float = 0,
+    ry: float = 0,
+    rz: float = 0,
+) -> JoggingAcceleration:
     """Creates motion target for jogging mode.
     
     Jogging acceleration is a six-component vector ('x', 'y', 'z', 'rx', 'ry', 'rz'). 
@@ -52,11 +73,11 @@ def jog(x=0, y=0, z=0, rx=0, ry=0, rz=0):
     )
 
 
-def tool_info(tcp_position, name="unnamed_tool"):
+def tool_info(tcp_position: Position, name: str = "unnamed_tool") -> ToolInfo:
     return ToolInfo(name=name, tcp=tcp_position)
 
 
-def tool_shape(shape):
+def tool_shape(shape: List[SimplifiedCapsuleObstacle]) -> ToolShape:
     return ToolShape(shape=shape)
 
 
