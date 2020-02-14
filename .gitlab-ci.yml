@@ -5,6 +5,8 @@ stages:
 
 publish:
   stage: publish
+  tags:
+    - rnd-dev
   script:
     - pip install -U setuptools twine
     - python setup.py sdist bdist_wheel
