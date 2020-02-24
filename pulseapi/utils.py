@@ -31,11 +31,16 @@ def position(
     Example: there is need to move robot's TCP to point with coordinates x=0.3m, y=0.2m, z=0.1m
     and look down vertically relative to base. Call _position((0.3, 0.2, 0.1), (3.1415, 0, 0))_ and pass result to one
     of the methods mentioned earlier.
-
-    :param point: list containing x, y, z coordinates (in meters) where robot should move its TCP
-    :param rotation: list containing roll, pitch, yaw coordinates (in radians) for TCP
-    :return: Position
-    """
+    
+    :param point: list or tupple containing x, y, z coordinates (in meters) where robot should move its TCP
+    :type point: Iterable[float]
+    :param rotation: list or tupple containing roll, pitch, yaw coordinates (in radians) for TCP
+    :type rotation: Iterable[float]
+    :param actions: list containing actions from pulseapi.actions module, defaults to None
+    :type actions: Optional[ActionsList], optional
+    :return: position motion target
+    :rtype: Position
+    """    
     return Position(Point(*point), Rotation(*rotation), actions)
 
 
@@ -43,11 +48,15 @@ def pose(
     angles: Iterable[float], actions: Optional[ActionsList] = None
 ) -> Pose:
     """Creates pose motion target.
-
+    
     Use this method to create poses which will be passed to set_pose and run_poses methods of RobotPulse.
-
-    :param angles: list containing 6 angles for motors (in degrees). Order: base-0th, tcp-5th
-    :return: Pose
+    
+    :param angles: list or tupple containing 6 angles for motors (in degrees). Order: base-0th, tcp-5th
+    :type angles: Iterable[float]
+    :param actions:  list containing actions from pulseapi.actions module, defaults to None
+    :type actions: Optional[ActionsList], optional
+    :return: pose motion target
+    :rtype: Pose
     """
     return Pose(angles, actions)
 
