@@ -19,6 +19,7 @@ supports Python 2.
       - [API initialization](#api-initialization)
       - [Motion control](#motion-control)
       - [Controlling accessories and signals](#controlling-accessories-and-signals)
+      - [Controlling accessories and signals during trajectory execution](#controlling-accessories-and-signals-during-trajectory-execution)
       - [Tool API](#tool-api)
       - [Base API](#base-api)
       - [Environment API](#environment-api)
@@ -57,6 +58,7 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 | 1.4.4                 | 1.4.4              |
 | 1.5.0, 1.5.1, 1.5.2   | 1.5.0              |
 | 1.6.0                 | 1.6.0              |
+| 1.7.0                 | 1.7.0              |
 
 ### Getting started
 
@@ -146,7 +148,7 @@ while True:
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### API initialization
 
@@ -157,7 +159,7 @@ host = "127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Motion control
 
@@ -287,7 +289,7 @@ robot.jogging(jog())
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Controlling accessories and signals
 
@@ -329,7 +331,66 @@ if robot.get_digital_input(1) == SIG_LOW:
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
+
+#### Controlling accessories and signals during trajectory execution
+
+Use `output_action()`, `open_gripper_action()`, `close_gripper_action()` functions combined with
+`pose()` and `position()` helper functions to control gripper/output signals during trajectory
+execution.
+
+**Note:** actions are performed asynchronously.
+
+```python
+from pulseapi import (
+    RobotPulse, 
+    SIG_LOW, 
+    SIG_HIGH, 
+    output_action, 
+    position,
+    open_gripper_action,
+    close_gripper_action,
+)
+
+host = "127.0.0.1:8081"  # replace with a valid robot address
+robot = RobotPulse(host)
+
+# create motion targets with actions
+
+# ask the robot to set output signal to SIG_LOW value on port 1
+# when it reaches the specified pose
+pose_target = pose([0, -90, 90, -90, -90, 0], [output_action(1, SIG_LOW)])
+
+# ask the robot to set output signal to SIG_HIGH value on port 1
+# when it reaches the specified position
+position_target = position(
+    [-0.42, -0.12, 0.35], [math.pi, 0, 0], [output_action(1, SIG_HIGH)]
+)
+
+position_targets = [
+    # ask the robot to open gripper at the specified position
+    position([-0.37, -0.12, 0.35], [math.pi, 0, 0], [close_gripper_action()]),
+    position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
+    position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
+    # ask the robot to close gripper at the specified position and 
+    # to set output signal to SIG_LOW value on port 1 at the specified position 
+    position([-0.37, -0.17, 0.35], [math.pi, 0, 0], [
+        open_gripper_action(),
+        output_action(1, SIG_LOW),
+    ]),
+]
+SPEED = 30  # set the desired speed
+
+robot.set_pose(pose_target, SPEED)
+robot.await_stop()
+
+robot.set_position(position_target, SPEED)
+robot.await_stop()
+
+robot.run_positions(position_targets, SPEED)
+robot.await_stop()
+```
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Tool API
 
@@ -375,7 +436,7 @@ print("New tool shape\n{}".format(robot.get_tool_shape()))
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Base API
 
@@ -404,7 +465,7 @@ print("New base\n{}".format(robot.get_base()))
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Environment API
 
@@ -464,7 +525,7 @@ print("Empty environment\n{}".format(robot.get_all_from_environment()))
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Exception handling
 
@@ -498,7 +559,7 @@ except PulseApiException as e:
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Versions API
 
@@ -524,7 +585,7 @@ print(versions.robot_software())
 
 ```
 
-[Back to the table of contents](#getting-started)
+[Back to the table of contents](#pulse-robot-python-api)
 
 #### Documentation and further information
 
