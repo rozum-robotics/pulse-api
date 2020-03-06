@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0:
+* added `pulseapi.actions` module
+* `pulseapi.utils` module:
+  * added optional `actions` parameter to `pose()` and `position()` functions
+  * docstrings refactoring
+
+
 ## 1.6.0
 
 * `pulseapi.robot` module:

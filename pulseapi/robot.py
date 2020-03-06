@@ -217,7 +217,7 @@ class RobotPulse:
 
     def await_stop(self, asking_interval=0.1):
         self.logger.debug(str(asking_interval))
-        while self.status().state == SystemState.MOTION:
+        while self.status() == SystemState.MOTION:
             time.sleep(asking_interval)
 
     @staticmethod
