@@ -5,100 +5,106 @@ import logging
 from pdhttp.api.robot_api import RobotApi
 from pdhttp.models import MotionStatus, SystemState
 from pulseapi.constants import MT_JOINT
+from pulseapi.session import Session
 
 
 class RobotPulse:
-    def __init__(self, host=None, logger=None):
+    def __init__(self, session: Session = None, logger: logging.Logger = None):
         self._api = RobotApi()
-        if host is not None:
-            self._api.api_client.configuration.host = host
+        self._session = session
+
+        self._api.api_client.configuration.host = session.location
         if logger is None:
             logger = logging.getLogger("pulseapi")
             logger.addHandler(logging.NullHandler())
+
         self.logger = logger
         self.host = self._api.api_client.configuration.host
+        self._token = self._session.token
 
     def add_to_environment(self, obstacle):
         self.logger.debug(str(obstacle))
-        return self._api.add_to_environment(obstacle)
+        return self._api.add_to_environment(obstacle, self._token)
 
     def change_base(self, base_position):
         self.logger.debug(str(base_position))
-        return self._api.change_base(base_position)
+        return self._api.change_base(base_position, self._token)
 
     def change_tool_info(self, new_tool_info):
         self.logger.debug(str(new_tool_info))
-        return self._api.change_tool_info(new_tool_info)
+        return self._api.change_tool_info(new_tool_info, self._token)
 
     def change_tool_shape(self, new_tool_shape):
         self.logger.debug(str(new_tool_shape))
-        return self._api.change_tool_shape(new_tool_shape)
+        return self._api.change_tool_shape(new_tool_shape, self._token)
 
     def close_gripper(self, timeout=None):
         self.logger.debug(str(timeout))
         if timeout is not None:
-            return self._api.close_gripper(timeout=timeout)
-        return self._api.close_gripper()
+            return self._api.close_gripper(self._token, timeout=timeout)
+        return self._api.close_gripper(self._token)
 
     def freeze(self):
-        return self._api.freeze()
+        return self._api.freeze(self._token)
 
     def get_all_from_environment(self):
-        return self._api.get_all_from_environment()
+        return self._api.get_all_from_environment(self._token)
 
     def get_base(self):
-        return self._api.get_base()
+        return self._api.get_base(self._token)
 
     def get_digital_input(self, port):
-        return self._api.get_digital_input(port)
+        return self._api.get_digital_input(port, self._token)
 
     def get_digital_output(self, port):
-        return self._api.get_digital_output(port)
+        return self._api.get_digital_output(port, self._token)
 
     def get_from_environment_by_name(self, obstacle_name):
-        return self._api.get_from_environment_by_name(obstacle_name)
+        return self._api.get_from_environment_by_name(
+            obstacle_name, self._token
+        )
 
     def get_pose(self):
-        return self._api.get_pose()
+        return self._api.get_pose(self._token)
 
     def get_position(self):
-        return self._api.get_position()
+        return self._api.get_position(self._token)
 
     def get_tool_info(self):
-        return self._api.get_tool_info()
+        return self._api.get_tool_info(self._token)
 
     def get_tool_shape(self):
-        return self._api.get_tool_shape()
+        return self._api.get_tool_shape(self._token)
 
     def information(self):
-        return self._api.information()
+        return self._api.information(self._token)
 
     def identifier(self):
-        return self._api.identifier()
+        return self._api.identifier(self._token)
 
     def jogging(self, jog_value):
-        return self._api.jogging(jog_value)
+        return self._api.jogging(jog_value, self._token)
 
     def open_gripper(self, timeout=None):
         self.logger.debug(str(timeout))
         if timeout is not None:
-            return self._api.open_gripper(timeout=timeout)
-        return self._api.open_gripper()
+            return self._api.open_gripper(self._token, timeout=timeout)
+        return self._api.open_gripper(self._token)
 
     def pack(self):
-        return self._api.pack()
+        return self._api.pack(self._token)
 
     def recover(self):
-        return self._api.recover()
+        return self._api.recover(self._token)
 
     def relax(self):
-        return self._api.relax()
+        return self._api.relax(self._token)
 
     def remove_all_from_environment(self):
-        return self._api.remove_all_from_environment()
+        return self._api.remove_all_from_environment(self._token)
 
     def remove_from_environment_by_name(self, obstacle_name):
-        return self._api.remove_from_environment_by_name(obstacle_name)
+        return self._api.remove_from_environment_by_name(obstacle_name, self._token)
 
     def run_poses(
         self,
@@ -119,7 +125,7 @@ class RobotPulse:
         self.logger.debug(
             str(dict(poses=poses, motion_parameters=motion_parameters))
         )
-        return self._api.run_poses(poses, **motion_parameters)
+        return self._api.run_poses(poses, self._token, **motion_parameters)
 
     def run_positions(
         self,
@@ -140,13 +146,13 @@ class RobotPulse:
         self.logger.debug(
             str(dict(positions=positions, motion_parameters=motion_parameters))
         )
-        return self._api.run_positions(positions, **motion_parameters)
+        return self._api.run_positions(positions, self._token, **motion_parameters)
 
     def set_digital_output_high(self, port):
-        return self._api.set_digital_output_high(port)
+        return self._api.set_digital_output_high(port, self._token)
 
     def set_digital_output_low(self, port):
-        return self._api.set_digital_output_low(port)
+        return self._api.set_digital_output_low(port, self._token)
 
     def set_pose(
         self,
@@ -167,7 +173,7 @@ class RobotPulse:
         self.logger.debug(
             str(dict(pose=target_pose, motion_parameters=motion_parameters))
         )
-        return self._api.set_pose(target_pose, **motion_parameters)
+        return self._api.set_pose(target_pose, self._token, **motion_parameters)
 
     def set_position(
         self,
@@ -193,21 +199,21 @@ class RobotPulse:
                 )
             )
         )
-        return self._api.set_position(target_position, **motion_parameters)
+        return self._api.set_position(target_position, self._token, **motion_parameters)
 
     @deprecated(reason="You should use status() method", version="1.6.0")
     def status_motion(self):
-        result = self._api.status_motion()
+        result = self._api.status_motion(self._token)
         self.logger.debug(result)
         return result
-    
+
     def status(self):
-        result = self._api.status()
+        result = self._api.status(self._token)
         self.logger.debug(result)
         return result
-    
+
     def status_motors(self):
-        return self._api.status_motors()
+        return self._api.status_motors(self._token)
 
     @deprecated(reason="You should use await_stop() method", version="1.6.0")
     def await_motion(self, asking_interval=0.1):
