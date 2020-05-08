@@ -1,4 +1,5 @@
 import enum
+import contextlib
 import pdhttp
 
 
@@ -10,6 +11,7 @@ class Session:
         self._api = pdhttp.SessionApi()
         self._api.api_client.configuration.host = location
         self._token = None
+        self.location = location
 
     def open_session(self, mode: pdhttp.Session):
         _, _, headers = self._api.open_session_with_http_info(
@@ -28,3 +30,27 @@ class Session:
     @property
     def token(self):
         return self._token
+
+    @property
+    def location(self):
+        return self._api.api_client.configuration.host
+    
+    @location.setter
+    def location(self, new_location):
+        self._api.api_client.configuration.host = new_location
+
+    @contextlib.contextmanager
+    def rw_context(self):
+        try:
+            self.open_session(self.READ_WRITE)
+            yield self
+        finally:
+            self.close_session()
+    
+    @contextlib.contextmanager
+    def ro_context(self):
+        try:
+            self.open_session(self.READ_ONLY)
+            yield self
+        finally:
+            self.close_session()
