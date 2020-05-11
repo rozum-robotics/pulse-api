@@ -75,7 +75,6 @@ def refresh_token(func):
             if "expired" in pae.body:
                 session = obj._session
                 session.open_session(session.mode)
-                print("token refreshed")
                 result = func(*args, **kwargs)
         return result
     
