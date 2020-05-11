@@ -1,7 +1,10 @@
 import enum
 import contextlib
+import functools
+
 import pdhttp
 import pulseapi
+# Session token expired
 
 class Session:
     READ_WRITE = pdhttp.Session(mode="READ_WRITE")
@@ -14,8 +17,9 @@ class Session:
         self.location = location
 
     def open_session(self, mode: pdhttp.Session):
+        self._mode = mode
         _, _, headers = self._api.open_session_with_http_info(
-            mode, _return_http_data_only=False
+            self._mode, _return_http_data_only=False
         )
         self._token = headers["Authentication-Info"]
 
@@ -23,6 +27,7 @@ class Session:
         if self._token is not None:
             self._api.delete_session(self._token)
             self._token = None
+        self._mode = None
 
     def __enter__(self):
         self.open_session(self.READ_WRITE)
@@ -38,6 +43,10 @@ class Session:
         return self._token
 
     @property
+    def mode(self):
+        return self._mode
+
+    @property
     def location(self):
         return self._api.api_client.configuration.host
     
@@ -46,7 +55,7 @@ class Session:
         self._api.api_client.configuration.host = new_location
     
     @contextlib.contextmanager
-    def ro_context(self):
+    def read_only(self):
         try:
             self.open_session(self.READ_ONLY)
             yield self
@@ -54,3 +63,20 @@ class Session:
             raise
         finally:
             self.close_session()
+
+
+def refresh_token(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        obj = args[0]
+        try:
+            result = func(*args, **kwargs)
+        except pulseapi.PulseApiException as pae:
+            if "expired" in pae.body:
+                session = obj._session
+                session.open_session(session.mode)
+                print("token refreshed")
+                result = func(*args, **kwargs)
+        return result
+    
+    return wrapper
