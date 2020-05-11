@@ -1,7 +1,7 @@
 import enum
 import contextlib
 import pdhttp
-
+import pulseapi
 
 class Session:
     READ_WRITE = pdhttp.Session(mode="READ_WRITE")
@@ -20,12 +20,9 @@ class Session:
         self._token = headers["Authentication-Info"]
 
     def close_session(self):
-        if self._token is None:
-            raise AttributeError(
-                "The session token is None. Check that you openned sesion first."
-            )
-        self._api.delete_session(self._token)
-        self._token = None
+        if self._token is not None:
+            self._api.delete_session(self._token)
+            self._token = None
 
     @property
     def token(self):
@@ -44,6 +41,8 @@ class Session:
         try:
             self.open_session(self.READ_WRITE)
             yield self
+        except pulseapi.PulseApiException:
+            raise
         finally:
             self.close_session()
     
@@ -52,5 +51,7 @@ class Session:
         try:
             self.open_session(self.READ_ONLY)
             yield self
+        except pulseapi.PulseApiException:
+            raise
         finally:
             self.close_session()
