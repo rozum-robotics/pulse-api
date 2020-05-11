@@ -24,6 +24,15 @@ class Session:
             self._api.delete_session(self._token)
             self._token = None
 
+    def __enter__(self):
+        self.open_session(self.READ_WRITE)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close_session()
+        if exc_value is not None:
+            raise exc_value
+        
     @property
     def token(self):
         return self._token
@@ -35,23 +44,13 @@ class Session:
     @location.setter
     def location(self, new_location):
         self._api.api_client.configuration.host = new_location
-
-    @contextlib.contextmanager
-    def rw_context(self):
-        try:
-            self.open_session(self.READ_WRITE)
-            yield self
-        except pulseapi.PulseApiException:
-            raise
-        finally:
-            self.close_session()
     
     @contextlib.contextmanager
     def ro_context(self):
         try:
             self.open_session(self.READ_ONLY)
             yield self
-        except pulseapi.PulseApiException:
+        except:
             raise
         finally:
             self.close_session()
