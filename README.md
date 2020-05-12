@@ -237,7 +237,7 @@ session.close_session()
 
 ```
 
-**Note:** if you do not close session it will expire only after 60 seconds.
+**Note:** if you do not close session, it expires only after 60 seconds.
 
 [Back to the table of contents](#pulse-robot-python-api)
 
@@ -295,77 +295,87 @@ would not cause any damage to your facilities.
 ```python
 import math
 import time
-from pulseapi import position, pose, RobotPulse, MT_LINEAR, SystemState, jog
+from pulseapi import (
+    position,
+    pose,
+    RobotPulse,
+    MT_LINEAR,
+    SystemState,
+    jog,
+    Session,
+)
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
 
-# create motion targets
-pose_target = pose([0, -90, 90, -90, -90, 0])
-position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
-position_targets = [
-    position([-0.37, -0.12, 0.35], [math.pi, 0, 0]),
-    position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
-    position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
-    position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
-]
-SPEED = 30  # set the desired speed
-TCP_VELOCITY_1CM = 0.01
+with Session(host):
+    robot = RobotPulse(host)
 
+    # create motion targets
+    pose_target = pose([0, -90, 90, -90, -90, 0])
+    position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
+    position_targets = [
+        position([-0.37, -0.12, 0.35], [math.pi, 0, 0]),
+        position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
+        position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
+        position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
+    ]
+    SPEED = 30  # set the desired speed
+    TCP_VELOCITY_1CM = 0.01
 
-# use the status command as shown below
-def my_await_stop(robot_instance, asking_interval=0.1):
-    status = robot_instance.status()
-    while status.state == SystemState.MOTION:
-        time.sleep(asking_interval)
+    # use the status command as shown below
+    def my_await_stop(robot_instance, asking_interval=0.1):
         status = robot_instance.status()
+        while status.state == SystemState.MOTION:
+            time.sleep(asking_interval)
+            status = robot_instance.status()
 
+    robot.set_pose(pose_target, SPEED)
+    robot.await_stop()  # checks every 0.1 s whether the motion is finished
+    print("Current pose:\n{}".format(robot.get_pose()))
 
-robot.set_pose(pose_target, SPEED)
-robot.await_stop()  # checks every 0.1 s whether the motion is finished
-print("Current pose:\n{}".format(robot.get_pose()))
+    robot.set_position(position_target, SPEED)
+    robot.await_stop(0.5)  # checks every 0.5 s whether the motion is finished
+    print("Current position:\n{}".format(robot.get_position()))
 
-robot.set_position(position_target, SPEED)
-robot.await_stop(0.5)  # checks every 0.5 s whether the motion is finished
-print("Current position:\n{}".format(robot.get_position()))
+    # command the robot to go through multiple position waypoints
+    # (execute a trajectory)
+    robot.run_positions(position_targets, SPEED)
+    my_await_stop(robot)
 
-# command the robot to go through multiple position waypoints
-# (execute a trajectory)
-robot.run_positions(position_targets, SPEED)
-my_await_stop(robot)
+    # set the linear motion type
+    robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
+    robot.await_stop()
 
-# set the linear motion type
-robot.run_positions(position_targets, SPEED, motion_type=MT_LINEAR)
-robot.await_stop()
+    # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
+    robot.run_positions(
+        position_targets,
+        tcp_max_velocity=TCP_VELOCITY_1CM,
+        motion_type=MT_LINEAR,
+    )
+    robot.await_stop()
 
-# limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-robot.run_positions(
-    position_targets, tcp_max_velocity=TCP_VELOCITY_1CM, motion_type=MT_LINEAR
-)
-robot.await_stop()
+    # stop the arm in the last position
+    robot.freeze()
 
-# stop the arm in the last position
-robot.freeze()
+    # get status from motors
+    print(robot.status_motors())
 
-# get status from motors
-print(robot.status_motors())
-
-# jogging example
-# command the robot to execute preparatory motion targets
-robot.set_pose(pose([0, -90, 0, -90, -90, 0]), SPEED)
-robot.set_position(position([-0.45, -0, 0.33], [math.pi, 0, 0]), SPEED)
-robot.await_stop()
-# start the jogging mode and execute motion targets
-robot.jogging(jog(x=-1, y=-1))
-time.sleep(2)
-robot.jogging(jog(x=1, y=1))
-time.sleep(7)
-robot.jogging(jog(rx=1, rz=-1))
-time.sleep(5)
-robot.jogging(jog(-0.1, -0.8, 0.1, 0, -1, 0.7))
-time.sleep(5)
-# disable the jogging mode
-robot.jogging(jog())
+    # jogging example
+    # command the robot to execute preparatory motion targets
+    robot.set_pose(pose([0, -90, 0, -90, -90, 0]), SPEED)
+    robot.set_position(position([-0.45, -0, 0.33], [math.pi, 0, 0]), SPEED)
+    robot.await_stop()
+    # start the jogging mode and execute motion targets
+    robot.jogging(jog(x=-1, y=-1))
+    time.sleep(2)
+    robot.jogging(jog(x=1, y=1))
+    time.sleep(7)
+    robot.jogging(jog(rx=1, rz=-1))
+    time.sleep(5)
+    robot.jogging(jog(-0.1, -0.8, 0.1, 0, -1, 0.7))
+    time.sleep(5)
+    # disable the jogging mode
+    robot.jogging(jog())
 
 ```
 
