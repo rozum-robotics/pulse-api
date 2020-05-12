@@ -73,7 +73,7 @@ within 0.6 meters around the manipulator.
 import math
 from pulseapi import RobotPulse, pose, position, PulseApiException, MT_LINEAR
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)  # create an instance of the API wrapper class
 
 # create motion targets
@@ -155,7 +155,7 @@ while True:
 ```python
 from pulseapi import RobotPulse
 # create an instance of the API wrapper class
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 ```
 
@@ -217,7 +217,7 @@ import math
 import time
 from pulseapi import position, pose, RobotPulse, MT_LINEAR, SystemState, jog
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # create motion targets
@@ -308,7 +308,7 @@ Signals:
 ```python
 from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # ask the robot to close the gripper and continue execution of
@@ -352,7 +352,7 @@ from pulseapi import (
     close_gripper_action,
 )
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # create motion targets with actions
@@ -413,7 +413,7 @@ Helper functions:
 from pulseapi import RobotPulse, position, Point
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # get info about the current tool
@@ -451,7 +451,7 @@ Available methods:
 ```python
 from pulseapi import RobotPulse, position
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 current_base = robot.get_base()
@@ -494,7 +494,7 @@ from pulseapi import (
     create_capsule_obstacle,
 )
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 print("Current environment\n{}".format(robot.get_all_from_environment()))
@@ -544,7 +544,7 @@ method.
 ```python
 from pulseapi import RobotPulse, PulseApiException, pose, SystemState
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 try:
@@ -576,7 +576,7 @@ Available methods:
 ```python
 from pulseapi import Versions
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 versions = Versions(host)
 
 print(versions.hardware())

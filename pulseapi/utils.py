@@ -16,6 +16,8 @@ from pdhttp import (
     SimplifiedCapsuleObstacle,
 )
 
+from pulseapi.session import Session, refresh_token
+
 ActionsList = List[Union[OutputRobotAction, GripperRobotAction]]
 
 
@@ -123,16 +125,19 @@ def tool_shape(shape: List[SimplifiedCapsuleObstacle]) -> ToolShape:
 
 
 class Versions:
-    def __init__(self, host=None):
+    def __init__(self, session: Session=None):
         self._api = VersionApi()
-        if host is not None:
-            self._api.api_client.configuration.host = host
-
+        self._session = session
+        self._api.api_client.configuration.host = self._session.location
+    
+    @refresh_token
     def hardware(self):
-        return self._api.get_hardware_version()
+        return self._api.get_hardware_version(self._session.token)
 
+    @refresh_token
     def software(self):
-        return self._api.get_software_version()
+        return self._api.get_software_version(self._session.token)
 
+    @refresh_token
     def robot_software(self):
-        return self._api.get_robot_software_version()
+        return self._api.get_robot_software_version(self._session.token)
