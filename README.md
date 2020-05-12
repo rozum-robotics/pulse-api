@@ -511,29 +511,37 @@ Helper functions:
 * `tool_shape` - creates a tool shape instance to be passed into `change_tool_shape` method.
 
 ```python
-from pulseapi import RobotPulse, position, Point
+from pulseapi import RobotPulse, position, Point, Session
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
 
-# get info about the current tool
-current_tool_info = robot.get_tool_info()
-current_tool_shape = robot.get_tool_shape()
-print("Current tool info\n{}".format(current_tool_info))
-print("Current tool shape\n{}".format(current_tool_shape))
+with Session(host) as session:
+    robot = RobotPulse(session)
 
-# create new tool properties
-new_tool_info = tool_info(position([0, 0, 0.07], [0, 0, 0]), name="CupHolder")
-new_tool_shape = tool_shape(
-    [create_simple_capsule_obstacle(0.03, Point(0, 0, 0), Point(0, 0, 0.07))]
-)
+    # get info about the current tool
+    current_tool_info = robot.get_tool_info()
+    current_tool_shape = robot.get_tool_shape()
+    print("Current tool info\n{}".format(current_tool_info))
+    print("Current tool shape\n{}".format(current_tool_shape))
 
-# change tool properties
-robot.change_tool_info(new_tool_info)
-robot.change_tool_shape(new_tool_shape)
-print("New tool info\n{}".format(robot.get_tool_info()))
-print("New tool shape\n{}".format(robot.get_tool_shape()))
+    # create new tool properties
+    new_tool_info = tool_info(
+        position([0, 0, 0.07], [0, 0, 0]), name="CupHolder"
+    )
+    new_tool_shape = tool_shape(
+        [
+            create_simple_capsule_obstacle(
+                0.03, Point(0, 0, 0), Point(0, 0, 0.07)
+            )
+        ]
+    )
+
+    # change tool properties
+    robot.change_tool_info(new_tool_info)
+    robot.change_tool_shape(new_tool_shape)
+    print("New tool info\n{}".format(robot.get_tool_info()))
+    print("New tool shape\n{}".format(robot.get_tool_shape()))
 
 ```
 
