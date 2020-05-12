@@ -72,6 +72,6 @@ setup(
     author=AUTHOR,
     author_email=EMAIL,
     description=DESCRIPTION,
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     zip_safe=False,
 )
