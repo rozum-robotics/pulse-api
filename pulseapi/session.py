@@ -4,7 +4,7 @@ import functools
 
 import pdhttp
 import pulseapi
-# Session token expired
+
 
 class Session:
     READ_WRITE = pdhttp.Session(mode="READ_WRITE")
@@ -76,6 +76,8 @@ def refresh_token(func):
                 session = obj._session
                 session.open_session(session.mode)
                 result = func(*args, **kwargs)
+            else:
+                raise pae
         return result
     
     return wrapper
