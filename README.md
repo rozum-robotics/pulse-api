@@ -697,14 +697,16 @@ Available methods:
 * `robot_software` - returns the version of the robot control software.
 
 ```python
-from pulseapi import Versions
+from pulseapi import Versions, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-versions = Versions(host)
 
-print(versions.hardware())
-print(versions.software())
-print(versions.robot_software())
+with Session(host).read_only() as session:
+    versions = Versions(session)
+
+    print(versions.hardware())
+    print(versions.software())
+    print(versions.robot_software())
 
 ```
 
