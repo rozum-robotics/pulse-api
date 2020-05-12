@@ -659,20 +659,26 @@ For example, we can trigger an API exception by sending `pose` into `set_positio
 method.
 
 ```python
-from pulseapi import RobotPulse, PulseApiException, pose, SystemState
+from pulseapi import RobotPulse, PulseApiException, pose, SystemState, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
 
-try:
-    robot.set_position(pose([0, -90, 90, -90, -90, 0]), 10)
-    robot.await_stop()
-except PulseApiException as e:
-    print("Exception {}while calling robot at {} ".format(e, robot.host))
-    status = robot.status()
-    if status.state == SystemState.ERROR:
-        robot.recover()
-        print("Robot recovered from error. Error message: {}".format(status.message))
+with Session(host) as session:
+    robot = RobotPulse(session)
+
+    try:
+        robot.set_position(pose([0, -90, 90, -90, -90, 0]), 10)
+        robot.await_stop()
+    except PulseApiException as e:
+        print("Exception {}while calling robot at {} ".format(e, robot.host))
+        status = robot.status()
+        if status.state == SystemState.BROKEN:
+            robot.recover()
+            print(
+                "Robot recovered from error. Error message: {}".format(
+                    status.message
+                )
+            )
 
 ```
 
