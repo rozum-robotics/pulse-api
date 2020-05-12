@@ -598,7 +598,7 @@ Helper functions:
 * `create_plane_obstacle`
 
 ```python
-from pulseapi import RobotPulse, Point, position
+from pulseapi import RobotPulse, Point, position, Session
 from pulseapi import (
     create_plane_obstacle,
     create_box_obstacle,
@@ -606,33 +606,39 @@ from pulseapi import (
 )
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
 
-print("Current environment\n{}".format(robot.get_all_from_environment()))
-# add obstacles to the environment for calculating collisions
-box = create_box_obstacle(
-    Point(0.1, 0.1, 0.1), position((1, 1, 1), (0, 0, 0)), "example_box"
-)
-capsule = create_capsule_obstacle(
-    0.1, Point(0.5, 0.5, 0.2), Point(0.5, 0.5, 0.5), "example_capsule"
-)
-plane = create_plane_obstacle(
-    [Point(-0.5, 0.4, 0), Point(-0.5, 0, 0), Point(-0.5, 0, 0.1)],
-    "example_plane",
-)
-robot.add_to_environment(box)
-robot.add_to_environment(capsule)
-robot.add_to_environment(plane)
-print("New environment\n{}".format(robot.get_all_from_environment()))
-print(
-    "Get example box\n{}".format(robot.get_from_environment_by_name(box.name))
-)
-# remove specific obstacles
-robot.remove_from_environment_by_name(box.name)
-print("Environment without box\n{}".format(robot.get_all_from_environment()))
-# remove all obstacles from an environment
-robot.remove_all_from_environment()
-print("Empty environment\n{}".format(robot.get_all_from_environment()))
+with Session(host) as session:
+    robot = RobotPulse(session)
+
+    print("Current environment\n{}".format(robot.get_all_from_environment()))
+    # add obstacles to the environment for calculating collisions
+    box = create_box_obstacle(
+        Point(0.1, 0.1, 0.1), position((1, 1, 1), (0, 0, 0)), "example_box"
+    )
+    capsule = create_capsule_obstacle(
+        0.1, Point(0.5, 0.5, 0.2), Point(0.5, 0.5, 0.5), "example_capsule"
+    )
+    plane = create_plane_obstacle(
+        [Point(-0.5, 0.4, 0), Point(-0.5, 0, 0), Point(-0.5, 0, 0.1)],
+        "example_plane",
+    )
+    robot.add_to_environment(box)
+    robot.add_to_environment(capsule)
+    robot.add_to_environment(plane)
+    print("New environment\n{}".format(robot.get_all_from_environment()))
+    print(
+        "Get example box\n{}".format(
+            robot.get_from_environment_by_name(box.name)
+        )
+    )
+    # remove specific obstacles
+    robot.remove_from_environment_by_name(box.name)
+    print(
+        "Environment without box\n{}".format(robot.get_all_from_environment())
+    )
+    # remove all obstacles from an environment
+    robot.remove_all_from_environment()
+    print("Empty environment\n{}".format(robot.get_all_from_environment()))
 
 ```
 
