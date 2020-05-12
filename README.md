@@ -558,19 +558,21 @@ Available methods:
 * `get_base`
 
 ```python
-from pulseapi import RobotPulse, position
+from pulseapi import RobotPulse, position, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
 
-current_base = robot.get_base()
-print("Current base\n{}".format(current_base))
+with Session(host) as session:
+    robot = RobotPulse(session)
 
-# move the new base point along x and y axes
-new_base = position([0.05, 0.05, 0], [0, 0, 0])
-robot.change_base(new_base)
+    current_base = robot.get_base()
+    print("Current base\n{}".format(current_base))
 
-print("New base\n{}".format(robot.get_base()))
+    # move the new base point along x and y axes
+    new_base = position([0.05, 0.05, 0], [0, 0, 0])
+    robot.change_base(new_base)
+
+    print("New base\n{}".format(robot.get_base()))
 
 ```
 
