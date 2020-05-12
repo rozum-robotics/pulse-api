@@ -71,80 +71,96 @@ within 0.6 meters around the manipulator.
 
 ```python
 import math
-from pulseapi import RobotPulse, pose, position, PulseApiException, MT_LINEAR
+from pulseapi import (
+    RobotPulse,
+    pose,
+    position,
+    PulseApiException,
+    MT_LINEAR,
+    Session,
+)
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)  # create an instance of the API wrapper class
 
-# create motion targets
-home_pose = pose([0, -90, 0, -90, -90, 0])
-start_pose = pose([0, -90, 90, -90, -90, 0])
-pose_targets = [
-    pose([10, -90, 90, -90, -90, 0]),
-    pose([10, -90, 0, -90, -90, 0]),
-]
-position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
-position_targets = [
-    position([-0.37, -0.12, 0.35], [math.pi, 0, 0]),
-    position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
-    position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
-    position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
-]
 
-# set the desired speed (controls both motor velocity and acceleration)
-SPEED = 30
-# set the desired motor velocity
-VELOCITY = 40
-# set the desired motor acceleration
-ACCELERATION = 50
-# set the desired tcp velocity
-TCP_VELOCITY_1CM = 0.01
-TCP_VELOCITY_10CM = 0.1
+# create session in read-write mode
+with Session(host) as session:
+    # create an instance of the API wrapper class using initialized session
+    robot = RobotPulse(session)
 
-while True:
-    try:
-        robot.set_pose(home_pose, speed=SPEED)
-        # checks every 0.1 s whether the motion is finished
-        robot.await_stop()
+    # create motion targets
+    home_pose = pose([0, -90, 0, -90, -90, 0])
+    start_pose = pose([0, -90, 90, -90, -90, 0])
+    pose_targets = [
+        pose([10, -90, 90, -90, -90, 0]),
+        pose([10, -90, 0, -90, -90, 0]),
+    ]
+    position_target = position([-0.42, -0.12, 0.35], [math.pi, 0, 0])
+    position_targets = [
+        position([-0.37, -0.12, 0.35], [math.pi, 0, 0]),
+        position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
+        position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
+        position([-0.37, -0.17, 0.35], [math.pi, 0, 0]),
+    ]
 
-        robot.set_pose(start_pose, velocity=VELOCITY, acceleration=ACCELERATION)
-        robot.await_stop()
+    # set the desired speed (controls both motor velocity and acceleration)
+    SPEED = 30
+    # set the desired motor velocity
+    VELOCITY = 40
+    # set the desired motor acceleration
+    ACCELERATION = 50
+    # set the desired tcp velocity
+    TCP_VELOCITY_1CM = 0.01
+    TCP_VELOCITY_10CM = 0.1
 
-        robot.set_position(
-            position_target, velocity=VELOCITY, acceleration=ACCELERATION
-        )
-        robot.await_stop()
+    while True:
+        try:
+            robot.set_pose(home_pose, speed=SPEED)
+            # checks every 0.1 s whether the motion is finished
+            robot.await_stop()
 
-        # command the robot to go through multiple position waypoints
-        # (execute a trajectory)
-        robot.run_positions(position_targets, SPEED)
-        robot.await_stop()
+            robot.set_pose(
+                start_pose, velocity=VELOCITY, acceleration=ACCELERATION
+            )
+            robot.await_stop()
 
-        # set the linear motion type
-        robot.run_positions(
-            position_targets,
-            velocity=VELOCITY,
-            acceleration=ACCELERATION,
-            motion_type=MT_LINEAR,
-        )
-        robot.await_stop()
+            robot.set_position(
+                position_target, velocity=VELOCITY, acceleration=ACCELERATION
+            )
+            robot.await_stop()
 
-        # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
-        robot.run_positions(
-            position_targets,
-            tcp_max_velocity=TCP_VELOCITY_1CM,
-            motion_type=MT_LINEAR,
-        )
-        # checks every 0.5 s whether the motion is finished
-        robot.await_stop(0.5)
+            # command the robot to go through multiple position waypoints
+            # (execute a trajectory)
+            robot.run_positions(position_targets, SPEED)
+            robot.await_stop()
 
-        # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
-        robot.run_poses(pose_targets, tcp_max_velocity=TCP_VELOCITY_1CM)
+            # set the linear motion type
+            robot.run_positions(
+                position_targets,
+                velocity=VELOCITY,
+                acceleration=ACCELERATION,
+                motion_type=MT_LINEAR,
+            )
+            robot.await_stop()
 
-    except PulseApiException as e:
-        # handle possible errors
-        print("Exception {} while calling robot at {} ".format(e, robot.host))
-        break
+            # limit the TCP velocity not to exceed 0.01 m/s (1 cm/s)
+            robot.run_positions(
+                position_targets,
+                tcp_max_velocity=TCP_VELOCITY_1CM,
+                motion_type=MT_LINEAR,
+            )
+            # checks every 0.5 s whether the motion is finished
+            robot.await_stop(0.5)
+
+            # limit the TCP velocity not to exceed 0.1 m/s (10 cm/s)
+            robot.run_poses(pose_targets, tcp_max_velocity=TCP_VELOCITY_1CM)
+
+        except PulseApiException as e:
+            # handle possible errors
+            print(
+                "Exception {} while calling robot at {} ".format(e, robot.host)
+            )
+            break
 
 ```
 
