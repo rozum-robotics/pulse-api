@@ -307,8 +307,8 @@ from pulseapi import (
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host):
-    robot = RobotPulse(host)
+with Session(host) as session:
+    robot = RobotPulse(sesion)
 
     # create motion targets
     pose_target = pose([0, -90, 90, -90, -90, 0])
