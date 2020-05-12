@@ -59,6 +59,7 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 | 1.5.0, 1.5.1, 1.5.2   | 1.5.0              |
 | 1.6.0                 | 1.6.0              |
 | 1.7.0                 | 1.7.0              |
+| 1.8.0                 | 1.8.0              |
 
 ### Getting started
 
@@ -168,12 +169,75 @@ with Session(host) as session:
 
 #### API initialization
 
+In order to control remote access to the robot arm you must use Sessions API 
+(since v1.8.0).
+The session itself could be initialized in two modes:
+
+* `Session.READ_WRITE` (default) provides access to all the methods including 
+  ones that change state of the robot arm (e.g. motion, changing tool and base, etc.). 
+  **Note:** only one read-write session could exist at a given time on a robot.
+  Attempts to open more than one read-write session will result in error. 
+* `Session.READ_ONLY` provides access only to the methods that read state from
+  the robot (e.g current position, tool, base, etc.). There is almost no limit 
+  on the read-only sessions count. 
+
+Examples, using context manager (recommended way to manage sessions):
+
 ```python
-from pulseapi import RobotPulse
-# create an instance of the API wrapper class
+from pulseapi import RobotPulse, Session, pose
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
+
+target_pose = pose([0, -90, 0, -90, -90, 0]) # create motion target
+
+# open read-write session
+with Session(host) as session:
+    # create an instance of the API wrapper class
+    robot = RobotPulse(session)
+    # do the necessary actions, for example
+    robot.set_pose(target_pose, 100)
+    robot.await_stop()
+# session is automatically closed here
+
+# open read-only session
+with Session(host).read_only() as session:
+    # create an instance of the API wrapper class
+    robot = RobotPulse(session)
+    # do the necessary actions, for example
+    print(robot.get_position())
+
 ```
+
+Examples, using manual session control:
+
+```python
+from pulseapi import RobotPulse, Session, pose
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
+
+target_pose = pose([0, -90, 0, -90, -90, 0]) # create motion target
+
+# open read-write session
+session = Session(host)
+session.open_session(Session.READ_WRITE)
+# create an instance of the API wrapper class
+robot = RobotPulse(session)
+# do the necessary actions, for example
+robot.set_pose(target_pose, 100)
+robot.await_stop()
+# close session
+session.close_session()
+
+# open read-only session
+session = Session(host)
+session.open_session(Session.READ_ONLY)
+# create an instance of the API wrapper class
+robot = RobotPulse(session)
+# do the necessary actions, for example
+print(robot.get_position())
+session.close_session()
+
+```
+
+**Note:** if you do not close session it will expire only after 60 seconds.
 
 [Back to the table of contents](#pulse-robot-python-api)
 
