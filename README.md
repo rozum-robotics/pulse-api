@@ -396,28 +396,30 @@ Signals:
 * SIG_HIGH - port is active
 
 ```python
-from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
+from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
 
-# ask the robot to close the gripper and continue execution of
-# commands after 500 ms
-robot.close_gripper()
+with Session(host) as session:
+    robot = RobotPulse(session)
 
-# ask the robot to open the gripper and begin to execute further
-# commands after 100 ms
-robot.open_gripper(100)
+    # ask the robot to close the gripper and continue execution of
+    # commands after 500 ms
+    robot.close_gripper()
 
-# set the first output port to the active state
-robot.set_digital_output_high(1)
+    # ask the robot to open the gripper and begin to execute further
+    # commands after 100 ms
+    robot.open_gripper(100)
 
-# execute required operations when input port 3 is active
-if robot.get_digital_input(3) == SIG_HIGH:
-    print("Input port 3 is active")
-# execute required operations when input port 1 is inactive
-if robot.get_digital_input(1) == SIG_LOW:
-    print("Input port 1 is inactive")
+    # set the first output port to the active state
+    robot.set_digital_output_high(1)
+
+    # execute required operations when input port 3 is active
+    if robot.get_digital_input(3) == SIG_HIGH:
+        print("Input port 3 is active")
+    # execute required operations when input port 1 is inactive
+    if robot.get_digital_input(1) == SIG_LOW:
+        print("Input port 1 is inactive")
 
 ```
 
@@ -432,53 +434,62 @@ execution.
 **Note:** actions are performed asynchronously.
 
 ```python
+import math
 from pulseapi import (
-    RobotPulse, 
-    SIG_LOW, 
-    SIG_HIGH, 
-    output_action, 
+    RobotPulse,
+    SIG_LOW,
+    SIG_HIGH,
+    output_action,
     position,
+    pose,
     open_gripper_action,
     close_gripper_action,
+    Session,
 )
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
-robot = RobotPulse(host)
 
-# create motion targets with actions
+with Session(host) as session:
+    robot = RobotPulse(session)
 
-# ask the robot to set output signal to SIG_LOW value on port 1
-# when it reaches the specified pose
-pose_target = pose([0, -90, 90, -90, -90, 0], [output_action(1, SIG_LOW)])
+    # create motion targets with actions
 
-# ask the robot to set output signal to SIG_HIGH value on port 1
-# when it reaches the specified position
-position_target = position(
-    [-0.42, -0.12, 0.35], [math.pi, 0, 0], [output_action(1, SIG_HIGH)]
-)
+    # ask the robot to set output signal to SIG_LOW value on port 1
+    # when it reaches the specified pose
+    pose_target = pose([0, -90, 90, -90, -90, 0], [output_action(1, SIG_LOW)])
 
-position_targets = [
-    # ask the robot to open gripper at the specified position
-    position([-0.37, -0.12, 0.35], [math.pi, 0, 0], [close_gripper_action()]),
-    position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
-    position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
-    # ask the robot to close gripper at the specified position and 
-    # to set output signal to SIG_LOW value on port 1 at the specified position 
-    position([-0.37, -0.17, 0.35], [math.pi, 0, 0], [
-        open_gripper_action(),
-        output_action(1, SIG_LOW),
-    ]),
-]
-SPEED = 30  # set the desired speed
+    # ask the robot to set output signal to SIG_HIGH value on port 1
+    # when it reaches the specified position
+    position_target = position(
+        [-0.42, -0.12, 0.35], [math.pi, 0, 0], [output_action(1, SIG_HIGH)]
+    )
 
-robot.set_pose(pose_target, SPEED)
-robot.await_stop()
+    position_targets = [
+        # ask the robot to open gripper at the specified position
+        position(
+            [-0.37, -0.12, 0.35], [math.pi, 0, 0], [close_gripper_action()]
+        ),
+        position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
+        position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
+        # ask the robot to close gripper at the specified position and
+        # to set output signal to SIG_LOW value on port 1 at the specified position
+        position(
+            [-0.37, -0.17, 0.35],
+            [math.pi, 0, 0],
+            [open_gripper_action(), output_action(1, SIG_LOW),],
+        ),
+    ]
+    SPEED = 30  # set the desired speed
 
-robot.set_position(position_target, SPEED)
-robot.await_stop()
+    robot.set_pose(pose_target, SPEED)
+    robot.await_stop()
 
-robot.run_positions(position_targets, SPEED)
-robot.await_stop()
+    robot.set_position(position_target, SPEED)
+    robot.await_stop()
+
+    robot.run_positions(position_targets, SPEED)
+    robot.await_stop()
+
 ```
 [Back to the table of contents](#pulse-robot-python-api)
 
