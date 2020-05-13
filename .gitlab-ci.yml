@@ -40,7 +40,7 @@ build-dev:
     - VERSION_POSTFIX=".dev$(date +%Y%m%d%H%M%S)"
     - echo "$(cat version)${VERSION_POSTFIX}" > version
     - python setup.py sdist bdist_wheel
-  except: 
+  except:
     - master
     - tags
 
@@ -66,7 +66,10 @@ publish:
   stage: publish
   extends: .rnd-dev-runner
   script:
-    - twine upload --repository-url ${PYPI_URL} -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/*
+    - twine upload
+      --repository-url ${PYPI_URL}
+      -u ${PYPI_USER} -p ${PYPI_PASSWORD}
+      dist/*
   only:
     - tags
     - develop
