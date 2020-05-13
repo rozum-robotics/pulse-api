@@ -99,7 +99,8 @@ def jog(
 
 
 def tool_info(tcp_position: Position, name: str = "unnamed_tool") -> ToolInfo:
-    """The function creates new TCP to match the properties of an attached or changed work tool.
+    """The function creates new TCP to match the properties of an attached or
+    changed work tool.
 
     :param tcp_position: position that defines the distance (in meters) from the
     arm's mounting flange center point to the new TCP along the x, y, and z axes accordingly,
