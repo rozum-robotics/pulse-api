@@ -50,6 +50,11 @@ sonarqube:
   image: rozum/sonar-scanner
   extends: .rnd-dev-runner
   allow_failure: true
+  before_script:
+    - python3 -V
+    - python3 -m pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
   script:
     - python3 -m pip install . -i https://pip.rozum.com/simple
     - python3 -m pip install pylint
