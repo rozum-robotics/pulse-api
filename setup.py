@@ -48,16 +48,12 @@ DEPENDENCY_LINKS = [
     "https://pip.rozum.com/#/package/pdhttp",
 ]
 
-EXTRAS = {
-    "aio": ["aiopdhttp == 1.8.0.dev0"]
-}
 
 setup(
     name=NAME,
     version=VERSION,
     packages=find_packages(),
     install_requires=REQUIRED,
-    extras_require=EXTRAS,
     dependency_links=DEPENDENCY_LINKS,
     url=URL,
     license="Apache License 2.0",
