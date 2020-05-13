@@ -7,8 +7,8 @@ import pulseapi
 
 
 class Session:
-    READ_WRITE = pdhttp.Session(mode="READ_WRITE")
-    READ_ONLY = pdhttp.Session(mode="READ_ONLY")
+    READ_WRITE_MODE = pdhttp.Session(mode="READ_WRITE")
+    READ_ONLY_MODE = pdhttp.Session(mode="READ_ONLY")
 
     def __init__(self, location: str):
         self._api = pdhttp.SessionApi()
@@ -30,14 +30,14 @@ class Session:
         self._mode = None
 
     def __enter__(self):
-        self.open_session(self.READ_WRITE)
+        self.open_session(self.READ_WRITE_MODE)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close_session()
         if exc_value is not None:
             raise exc_value
-        
+
     @property
     def token(self):
         return self._token
@@ -49,15 +49,15 @@ class Session:
     @property
     def location(self):
         return self._api.api_client.configuration.host
-    
+
     @location.setter
     def location(self, new_location):
         self._api.api_client.configuration.host = new_location
-    
+
     @contextlib.contextmanager
     def read_only(self):
         try:
-            self.open_session(self.READ_ONLY)
+            self.open_session(self.READ_ONLY_MODE)
             yield self
         except:
             raise
@@ -79,5 +79,5 @@ def refresh_token(func):
             else:
                 raise pae
         return result
-    
+
     return wrapper
