@@ -47,6 +47,7 @@ build-dev:
 
 sonarqube:
   stage: test
+  image: rozum/sonar-scanner
   extends: .rnd-dev-runner
   allow_failure: true
   script:
