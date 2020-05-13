@@ -173,11 +173,11 @@ In order to control remote access to the robot arm you must use Sessions API
 (since v1.8.0).
 The session itself could be initialized in two modes:
 
-* `Session.READ_WRITE` (default) provides access to all the methods including 
+* `Session.READ_WRITE_MODE` (default) provides access to all the methods including 
   ones that change state of the robot arm (e.g. motion, changing tool and base, etc.). 
   **Note:** only one read-write session could exist at a given time on a robot.
   Attempts to open more than one read-write session will result in error. 
-* `Session.READ_ONLY` provides access only to the methods that read state from
+* `Session.READ_ONLY_MODE` provides access only to the methods that read state from
   the robot (e.g current position, tool, base, etc.). There is almost no limit 
   on the read-only sessions count. 
 
@@ -217,7 +217,7 @@ target_pose = pose([0, -90, 0, -90, -90, 0]) # create motion target
 
 # open read-write session
 session = Session(host)
-session.open_session(Session.READ_WRITE)
+session.open_session(Session.READ_WRITE_MODE)
 # create an instance of the API wrapper class
 robot = RobotPulse(session)
 # do the necessary actions, for example
@@ -228,7 +228,7 @@ session.close_session()
 
 # open read-only session
 session = Session(host)
-session.open_session(Session.READ_ONLY)
+session.open_session(Session.READ_ONLY_MODE)
 # create an instance of the API wrapper class
 robot = RobotPulse(session)
 # do the necessary actions, for example
