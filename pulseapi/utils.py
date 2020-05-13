@@ -99,8 +99,7 @@ def jog(
 
 
 def tool_info(tcp_position: Position, name: str = "unnamed_tool") -> ToolInfo:
-    """The function creates new TCP to match the properties of an attached or
-    changed work tool.
+    """Creates new TCP to match the properties of an attached or changed work tool.
 
     :param tcp_position: position that defines the distance (in meters) from the
     arm's mounting flange center point to the new TCP along the x, y, and z axes accordingly,
@@ -115,7 +114,7 @@ def tool_info(tcp_position: Position, name: str = "unnamed_tool") -> ToolInfo:
 
 
 def tool_shape(shape: List[SimplifiedCapsuleObstacle]) -> ToolShape:
-    """The function creates new form of the working tool of the robot, which is used in the calculation of collisions.
+    """Creates new form of the working tool of the robot, which is used in the calculation of collisions.
 
     :param shape: list of simplified capsule obstacles that describe the shape of the tool.
     :type shape: List[SimplifiedCapsuleObstacle]
