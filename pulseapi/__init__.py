@@ -19,6 +19,8 @@ from pulseapi.actions import (
 try:
     from pulseapi.aiorobot import AioRobotPulse
 except ImportError as ie:
-    pass  # silent because aiorobot is experimental feature
+    # silent because aiorobot is experimental feature
+    pass
 
-RestApiException = PulseApiException  # backward compatibility alias
+# backward compatibility alias
+RestApiException = PulseApiException
