@@ -33,11 +33,11 @@ build-prod:
 build-dev:
   extends: .build-package
   script:
-    - echo "$(cat version)+${CI_COMMIT_SHORT_SHA}" > version
+    - VERSION_POSTFIX=".dev$(date +%Y%m%d%H%M%S)"
+    - echo "$(cat version)${VERSION_POSTFIX}" > version
     - python setup.py sdist bdist_wheel
-  except: 
-    - tags
-    - master
+  only: 
+    - develop
 
 
 publish:
