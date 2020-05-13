@@ -51,6 +51,7 @@ sonarqube:
   allow_failure: true
   script:
     - python3 -m pip install . -i https://pip.rozum.com/simple
+    - python3 -m pip install pylint
     - pylint pulseapi --disable all --enable F,E,R,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode --exit-zero -f json >> report.json
     - sonar-scanner
       -Dsonar.projectKey=pulse-api
