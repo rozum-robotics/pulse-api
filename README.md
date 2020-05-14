@@ -85,7 +85,7 @@ host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
 
 # create session in read-write mode
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     # create an instance of the API wrapper class using initialized session
     robot = RobotPulse(session)
 
@@ -190,7 +190,7 @@ host = "http://127.0.0.1:8081"  # replace with a valid robot address
 target_pose = pose([0, -90, 0, -90, -90, 0]) # create motion target
 
 # open read-write session
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     # create an instance of the API wrapper class
     robot = RobotPulse(session)
     # do the necessary actions, for example
@@ -199,7 +199,7 @@ with Session(host) as session:
 # session is automatically closed here
 
 # open read-only session
-with Session(host).read_only() as session:
+with Session(host, Session.READ_ONLY_MODE) as session:
     # create an instance of the API wrapper class
     robot = RobotPulse(session)
     # do the necessary actions, for example
@@ -216,8 +216,8 @@ host = "http://127.0.0.1:8081"  # replace with a valid robot address
 target_pose = pose([0, -90, 0, -90, -90, 0]) # create motion target
 
 # open read-write session
-session = Session(host)
-session.open_session(Session.READ_WRITE_MODE)
+session = Session(host, Session.READ_WRITE_MODE)
+session.open_session()
 # create an instance of the API wrapper class
 robot = RobotPulse(session)
 # do the necessary actions, for example
@@ -227,8 +227,8 @@ robot.await_stop()
 session.close_session()
 
 # open read-only session
-session = Session(host)
-session.open_session(Session.READ_ONLY_MODE)
+session = Session(host, Session.READ_ONLY_MODE)
+session.open_session()
 # create an instance of the API wrapper class
 robot = RobotPulse(session)
 # do the necessary actions, for example
@@ -307,7 +307,7 @@ from pulseapi import (
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     robot = RobotPulse(sesion)
 
     # create motion targets
@@ -400,7 +400,7 @@ from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     robot = RobotPulse(session)
 
     # ask the robot to close the gripper and continue execution of
@@ -449,7 +449,7 @@ from pulseapi import (
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     robot = RobotPulse(session)
 
     # create motion targets with actions
@@ -516,7 +516,7 @@ from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     robot = RobotPulse(session)
 
     # get info about the current tool
@@ -562,7 +562,7 @@ from pulseapi import RobotPulse, position, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     robot = RobotPulse(session)
 
     current_base = robot.get_base()
@@ -607,7 +607,7 @@ from pulseapi import (
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     robot = RobotPulse(session)
 
     print("Current environment\n{}".format(robot.get_all_from_environment()))
@@ -663,7 +663,7 @@ from pulseapi import RobotPulse, PulseApiException, pose, SystemState, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host) as session:
+with Session(host, Session.READ_WRITE_MODE) as session:
     robot = RobotPulse(session)
 
     try:
@@ -701,7 +701,7 @@ from pulseapi import Versions, Session
 
 host = "http://127.0.0.1:8081"  # replace with a valid robot address
 
-with Session(host).read_only() as session:
+with Session(host, Session.READ_ONLY_MODE) as session:
     versions = Versions(session)
 
     print(versions.hardware())

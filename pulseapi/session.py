@@ -10,14 +10,14 @@ class Session:
     READ_WRITE_MODE = pdhttp.Session(mode="READ_WRITE")
     READ_ONLY_MODE = pdhttp.Session(mode="READ_ONLY")
 
-    def __init__(self, location: str):
+    def __init__(self, location: str, mode: pdhttp.Session):
         self._api = pdhttp.SessionApi()
         self._api.api_client.configuration.host = location
         self._token = None
         self.location = location
-
-    def open_session(self, mode: pdhttp.Session):
         self._mode = mode
+
+    def open_session(self):
         _, _, headers = self._api.open_session_with_http_info(
             self._mode, _return_http_data_only=False
         )
@@ -27,10 +27,9 @@ class Session:
         if self._token is not None:
             self._api.delete_session(self._token)
             self._token = None
-        self._mode = None
 
     def __enter__(self):
-        self.open_session(self.READ_WRITE_MODE)
+        self.open_session()
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -54,16 +53,6 @@ class Session:
     def location(self, new_location):
         self._api.api_client.configuration.host = new_location
 
-    @contextlib.contextmanager
-    def read_only(self):
-        try:
-            self.open_session(self.READ_ONLY_MODE)
-            yield self
-        except:
-            raise
-        finally:
-            self.close_session()
-
 
 def refresh_token(func):
     @functools.wraps(func)
@@ -74,7 +63,7 @@ def refresh_token(func):
         except pulseapi.PulseApiException as pae:
             if "expired" in pae.body:
                 session = obj._session
-                session.open_session(session.mode)
+                session.open_session()
                 result = func(*args, **kwargs)
             else:
                 raise pae
