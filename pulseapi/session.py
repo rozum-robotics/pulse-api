@@ -7,8 +7,8 @@ import pulseapi
 
 
 class Session:
-    READ_WRITE_MODE = pdhttp.Session(mode="READ_WRITE")
-    READ_ONLY_MODE = pdhttp.Session(mode="READ_ONLY")
+    READ_WRITE = pdhttp.Session(mode="READ_WRITE")
+    READ_ONLY = pdhttp.Session(mode="READ_ONLY")
 
     def __init__(self, location: str, mode: pdhttp.Session):
         self._api = pdhttp.SessionApi()
