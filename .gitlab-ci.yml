@@ -1,15 +1,91 @@
-image: python:3.6
-
+---
 stages:
+  - build
+  - test
   - publish
+
+default:
+  image: python:3.6
+  cache:
+    paths:
+      - ./venv
+  before_script:
+    - python3 -V
+    - python3 -m pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+
+
+install-deps:
+  stage: .pre
+  extends: .rnd-dev-runner
+  script:
+    - pip install -U setuptools twine wheel
+  only:
+    - develop
+    - tags
+
+
+build-prod:
+  extends: .build-package
+  script:
+    - python setup.py sdist bdist_wheel
+  only:
+    - tags
+
+
+build-dev:
+  extends: .build-package
+  script:
+    - VERSION_POSTFIX=".dev$(date +%Y%m%d%H%M%S)"
+    - echo "$(cat version)${VERSION_POSTFIX}" > version
+    - python setup.py sdist bdist_wheel
+  except:
+    - master
+    - tags
+
+
+sonarqube:
+  stage: test
+  image: rozum/sonar-scanner
+  extends: .rnd-dev-runner
+  allow_failure: true
+  script:
+    - python3 -m pip install . -i https://pip.rozum.com/simple
+    - python3 -m pip install pylint
+    - pylint pulseapi --exit-zero -f json >> report.json
+    - sonar-scanner
+      -Dsonar.projectKey=pulse-api
+      -Dsonar.sources=pulseapi,.gitlab-ci.yml
+      -Dsonar.host.url=${SONAR_HOST}
+      -Dsonar.login=${SONAR_LOGIN}
+      -Dsonar.python.pylint.reportPath=report.json
+
 
 publish:
   stage: publish
-  tags:
-    - rnd-dev
+  extends: .rnd-dev-runner
   script:
-    - pip install -U setuptools twine
-    - python setup.py sdist bdist_wheel
-    - twine upload --repository-url ${PYPI_URL} -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/*
+    - twine upload
+      --repository-url ${PYPI_URL}
+      -u ${PYPI_USER} -p ${PYPI_PASSWORD}
+      dist/*
   only:
     - tags
+    - develop
+
+
+.build-package:
+  extends: .rnd-dev-runner
+  stage: build
+  dependencies:
+    - install-deps
+  artifacts:
+    paths:
+      - ./dist/
+    untracked: true
+    expire_in: 1 day
+
+.rnd-dev-runner:
+  tags:
+    - rnd-dev

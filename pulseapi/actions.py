@@ -7,8 +7,8 @@ from pdhttp.models import (
 
 def output_action(port: int, value: str) -> OutputRobotAction:
     """Creates an action to cotrol output ports on the controlbox.
-    
-    :param port: port to control (either 1 or 2) 
+
+    :param port: port to control (either 1 or 2)
     :type port: int
     :param value: value to set on given port (either SIG_HIGH or SIG_LOW)
     :type value: str
@@ -22,7 +22,7 @@ def __gripper_action(value: str) -> GripperRobotAction:
 
 def open_gripper_action() -> GripperRobotAction:
     """Creates an action to open gripper.
-    
+
     :return: action that should be executed during trajectory execution
     :rtype: GripperRobotAction
     """
@@ -30,7 +30,7 @@ def open_gripper_action() -> GripperRobotAction:
 
 def close_gripper_action() -> GripperRobotAction:
     """Creates an action to close gripper.
-    
+
     :return: action that should be executed during trajectory execution
     :rtype: GripperRobotAction
     """

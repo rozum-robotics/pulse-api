@@ -1,10 +1,17 @@
 # Changelog
 
+
+## 1.8.0
+* Added `pulseapi.session` module
+* Changed robot initialization. Now it must be initialized using `Session`
+* API calls now use `Session`
+
+
 ## 1.7.0:
-* added `pulseapi.actions` module
+* Added `pulseapi.actions` module
 * `pulseapi.utils` module:
-  * added optional `actions` parameter to `pose()` and `position()` functions
-  * docstrings refactoring
+  * Added optional `actions` parameter to `pose()` and `position()` functions
+  * Docstrings refactoring
 
 
 ## 1.6.0
