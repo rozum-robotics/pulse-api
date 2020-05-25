@@ -44,6 +44,8 @@ build-dev:
 
 
 sonarcloud-check:
+  before_script:
+    - echo "EMPTY_BEFORE_SCRIPT"
   stage: test
   extends: .rnd-dev-runner
   variables:
