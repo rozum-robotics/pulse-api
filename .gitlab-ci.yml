@@ -60,7 +60,8 @@ sonarcloud-check:
       - .sonar/cache
   script:
     - sonar-scanner
-
+  only:
+    - merge_request
 
 publish:
   stage: publish
