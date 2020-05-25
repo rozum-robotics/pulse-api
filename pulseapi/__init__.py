@@ -18,3 +18,4 @@ from pulseapi.actions import (
 
 # backward compatibility alias
 RestApiException = PulseApiException
+# test really long comment for sonarcloud to make warning ......asdasdsdjkrghuglaiergluad;fghaeirgsakjdgdkjfghkldgfkdlgfjksdfgljk
