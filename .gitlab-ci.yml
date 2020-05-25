@@ -45,21 +45,21 @@ build-dev:
     - tags
 
 
-sonarqube:
-  stage: test
-  image: rozum/sonar-scanner
-  extends: .rnd-dev-runner
-  allow_failure: true
+sonarcloud-check:
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+  tags:
+    - rnd-dev
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
   script:
-    - python3 -m pip install . -i https://pip.rozum.com/simple
-    - python3 -m pip install pylint
-    - pylint pulseapi --exit-zero -f json >> report.json
     - sonar-scanner
-      -Dsonar.projectKey=pulse-api
-      -Dsonar.sources=pulseapi,.gitlab-ci.yml
-      -Dsonar.host.url=${SONAR_HOST}
-      -Dsonar.login=${SONAR_LOGIN}
-      -Dsonar.python.pylint.reportPath=report.json
 
 
 publish:
