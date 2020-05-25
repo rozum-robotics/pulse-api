@@ -21,9 +21,7 @@ install-deps:
   extends: .rnd-dev-runner
   script:
     - pip install -U setuptools twine wheel
-  only:
-    - develop
-    - tags
+
 
 
 build-prod:
