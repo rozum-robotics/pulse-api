@@ -44,9 +44,6 @@ REQUIRED = [
     "pdhttp == 1.8.0.dev2",
     "Deprecated == 1.2.6",
 ]
-DEPENDENCY_LINKS = [
-    "https://pip.rozum.com/#/package/pdhttp",
-]
 
 
 setup(
@@ -54,7 +51,6 @@ setup(
     version=VERSION,
     packages=find_packages(),
     install_requires=REQUIRED,
-    dependency_links=DEPENDENCY_LINKS,
     url=URL,
     license="Apache License 2.0",
     classifiers=[
@@ -68,5 +64,6 @@ setup(
     author_email=EMAIL,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
     zip_safe=False,
 )
