@@ -75,6 +75,29 @@ publish:
     - develop
 
 
+publish-testpypi:
+  stage: publish
+  extends: .rnd-dev-runner
+  script:
+    - twine upload
+      --repository-url ${TESTPYPIORG_URL}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+  only:
+    - tags
+
+
+publish-pypi:
+  stage: publish
+  extends: .rnd-dev-runner
+  script:
+    - twine upload
+      --repository-url ${PYPIORG_URL}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+  only:
+    - tags
+  when: manual
+
+
 .build-package:
   extends: .rnd-dev-runner
   stage: build
