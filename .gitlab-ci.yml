@@ -81,7 +81,7 @@ publish-testpypi:
   script:
     - twine upload
       --repository-url ${TESTPYPIORG_URL}
-      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD} dist/*
   only:
     - tags
 
@@ -92,7 +92,7 @@ publish-pypi:
   script:
     - twine upload
       --repository-url ${PYPIORG_URL}
-      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD} dist/*
   only:
     - tags
   when: manual
