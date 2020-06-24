@@ -70,7 +70,6 @@ publish:
     - twine upload
       --repository-url ${PYPI_URL}
       -u ${PYPI_USER} -p ${PYPI_PASSWORD}
-      --verbose
       dist/*
   only:
     - tags
@@ -113,7 +112,6 @@ publish-pypi:
   artifacts:
     paths:
       - ./dist/
-    untracked: true
     expire_in: 1 day
 
 
