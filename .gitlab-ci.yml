@@ -70,11 +70,38 @@ publish:
     - twine upload
       --repository-url ${PYPI_URL}
       -u ${PYPI_USER} -p ${PYPI_PASSWORD}
-      --verbose
       dist/*
   only:
     - tags
     - develop
+  allow_failure: true
+
+
+publish-testpypi:
+  stage: publish
+  extends: .rnd-dev-runner
+  script:
+    - twine upload
+      --repository-url ${TESTPYPIORG_URL}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+      dist/*
+  only:
+    - tags
+    - develop
+
+
+publish-pypi:
+  stage: publish
+  extends: .rnd-dev-runner
+  script:
+    - twine upload
+      --repository-url ${PYPIORG_URL}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+      dist/*
+  only:
+    - tags
+    - develop
+  when: manual
 
 
 .build-package:
@@ -85,8 +112,8 @@ publish:
   artifacts:
     paths:
       - ./dist/
-    untracked: true
     expire_in: 1 day
+
 
 .rnd-dev-runner:
   tags:

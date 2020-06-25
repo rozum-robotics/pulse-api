@@ -41,11 +41,8 @@ REQUIRED = [
     "six >= 1.10",
     "python_dateutil == 2.8.0",
     "urllib3 == 1.24.2",
-    "pdhttp == 1.8.0.dev2",
+    "pdhttp >= 1.8.0.dev20200624151938,<1.9.0",
     "Deprecated == 1.2.6",
-]
-DEPENDENCY_LINKS = [
-    "https://pip.rozum.com/#/package/pdhttp",
 ]
 
 
@@ -54,7 +51,6 @@ setup(
     version=VERSION,
     packages=find_packages(),
     install_requires=REQUIRED,
-    dependency_links=DEPENDENCY_LINKS,
     url=URL,
     license="Apache License 2.0",
     classifiers=[
@@ -68,5 +64,6 @@ setup(
     author_email=EMAIL,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type="text/markdown",
     zip_safe=False,
 )
