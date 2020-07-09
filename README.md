@@ -18,6 +18,7 @@ supports Python 2.
       - [Quickstart](#quickstart)
       - [API initialization](#api-initialization)
       - [Motion control](#motion-control)
+      - [Freedrive mode](#freedrive-mode)
       - [Controlling accessories and signals](#controlling-accessories-and-signals)
       - [Controlling accessories and signals during trajectory execution](#controlling-accessories-and-signals-during-trajectory-execution)
       - [Tool API](#tool-api)
@@ -296,6 +297,30 @@ robot.jogging(jog(-0.1, -0.8, 0.1, 0, -1, 0.7))
 time.sleep(5)
 # disable the jogging mode
 robot.jogging(jog())
+
+```
+
+[Back to the table of contents](#pulse-robot-python-api)
+
+#### Freedrive mode
+
+Freedrive ("Zero-gravity") mode is intended to be used when there is a need
+to control the robotic arm directly "by-hand". With this functionality, for
+example, the user can develop an application that remembers user defined path.
+
+```python
+from pulseapi import RobotPulse
+
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
+robot = RobotPulse(host)
+
+# enter freedrive mode
+robot.zg_on()
+
+# additional logic goes here
+
+# disable freedrive mode
+robot.zg_off()
 
 ```
 
