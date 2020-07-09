@@ -16,8 +16,6 @@ from pdhttp import (
     SimplifiedCapsuleObstacle,
 )
 
-from pulseapi.session import Session, refresh_token
-
 ActionsList = List[Union[OutputRobotAction, GripperRobotAction]]
 
 
