@@ -220,6 +220,12 @@ class RobotPulse:
         while self.status() == SystemState.MOTION:
             time.sleep(asking_interval)
 
+    def zg_on(self):
+        return self._api.zg_on()
+
+    def zg_off(self):
+        return self._api.zg_off()
+
     @staticmethod
     def __extract_motion_params(**kwargs):
         return {k: v for k, v in locals()["kwargs"].items() if v is not None}
