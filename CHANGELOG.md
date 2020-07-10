@@ -2,9 +2,12 @@
 
 
 ## 1.8.0
-* Added `pulseapi.session` module
-* Changed robot initialization. Now it must be initialized using `Session`
-* API calls now use `Session`
+* Added `experimental` module
+  * Added `session` module
+  * Added `robot` module that is using sessions
+* `pulseapi.robot` module
+  * Added `RobotPulse.zg_on()` and `RobotPulse.zg_off()` methods that control
+  freedrive mode.
 
 
 ## 1.7.0:

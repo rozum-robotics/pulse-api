@@ -5,6 +5,7 @@ from pdhttp.models import (
     GripperRobotAction,
 )
 
+
 def output_action(port: int, value: str) -> OutputRobotAction:
     """Creates an action to cotrol output ports on the controlbox.
 
@@ -17,8 +18,10 @@ def output_action(port: int, value: str) -> OutputRobotAction:
     """
     return OutputRobotAction(RobotActionType.OUTPUT, port, value)
 
+
 def __gripper_action(value: str) -> GripperRobotAction:
     return GripperRobotAction(RobotActionType.GRIPPER, value)
+
 
 def open_gripper_action() -> GripperRobotAction:
     """Creates an action to open gripper.
@@ -27,6 +30,7 @@ def open_gripper_action() -> GripperRobotAction:
     :rtype: GripperRobotAction
     """
     return __gripper_action("OPEN")
+
 
 def close_gripper_action() -> GripperRobotAction:
     """Creates an action to close gripper.

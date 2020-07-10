@@ -35,7 +35,7 @@ class Session:
     def __exit__(self, exc_type, exc_value, traceback):
         self.close_session()
         if exc_value is not None:
-            raise exc_value
+            return False
 
     @property
     def token(self):

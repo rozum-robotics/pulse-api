@@ -40,7 +40,7 @@ REQUIRED = [
     "certifi >= 2019.3.9",
     "six >= 1.10",
     "python_dateutil == 2.8.0",
-    "urllib3 == 1.24.2",
+    "urllib3 >= 1.24.2",
     "pdhttp >= 1.8.0.dev20200624151938,<1.9.0",
     "Deprecated == 1.2.6",
 ]
