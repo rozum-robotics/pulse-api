@@ -217,6 +217,8 @@ robotic arm by hand (e.g., to verify/test a motion trajectory).
 * `pack` - asking the arm to reach a compact pose for transportation.
 * `status_motors` - returns the actual states of the six servo motors integrated
 into the joints of the robotic arm.
+* `stop` - sets the arm in the `EMERGENCY` state. It is required to call 
+  `recover` in order to exit the state and continue commands execution.
 
 **WARNING!** The following example is sample code. Before running, you must
 replace reference motion targets in the sample with the ones applicable to
