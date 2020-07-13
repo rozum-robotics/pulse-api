@@ -6,8 +6,8 @@
   * Added `session` module
   * Added `robot` module that is using sessions
 * `pulseapi.robot` module
-  * Added `RobotPulse.zg_on()` and `RobotPulse.zg_off()` methods that control
-  freedrive mode.
+  * Added `RobotPulse.zg_on()` and `RobotPulse.zg_off()` methods that control freedrive mode.
+  * Added `RobotPulse.stop()`
 
 
 ## 1.7.0:
