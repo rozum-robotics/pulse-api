@@ -4,7 +4,7 @@ import logging
 
 from pdhttp.api.robot_api import RobotApi
 from pdhttp.models import MotionStatus, SystemState
-from pulseapi.constants import MT_JOINT
+from pulseapi.constants import MT_JOINT, SIG_HIGH, SIG_LOW
 
 
 class RobotPulse:
@@ -21,6 +21,18 @@ class RobotPulse:
     def add_to_environment(self, obstacle):
         self.logger.debug(str(obstacle))
         return self._api.add_to_environment(obstacle)
+
+    def bind_stop(self, port, signal_level):
+        result = None
+        if signal_level == SIG_HIGH:
+            result = self._api.bind_stop_port_high(port)
+        elif signal_level == SIG_LOW:
+            result = self._api.bind_stop_port_low(port)
+        else:
+            raise ValueError(
+                "Signal level must be either {} or {}".format(SIG_HIGH, SIG_LOW)
+            )
+        return result
 
     def change_base(self, base_position):
         self.logger.debug(str(base_position))
@@ -39,6 +51,12 @@ class RobotPulse:
         if timeout is not None:
             return self._api.close_gripper(timeout=timeout)
         return self._api.close_gripper()
+
+    def disable_gripper(self):
+        return self._api.disable_gripper()
+
+    def enable_gripper(self):
+        return self._api.enable_gripper()
 
     def freeze(self):
         return self._api.freeze()
