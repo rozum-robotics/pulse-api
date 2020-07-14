@@ -27,6 +27,7 @@ install-deps:
 build-prod:
   extends: .build-package
   script:
+    - echo "${CI_COMMIT_TAG}" > version
     - python setup.py sdist bdist_wheel
   only:
     - tags
