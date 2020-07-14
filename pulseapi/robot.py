@@ -209,6 +209,9 @@ class RobotPulse:
     def status_motors(self):
         return self._api.status_motors()
 
+    def stop(self):
+        return self._api.stop()
+
     @deprecated(reason="You should use await_stop() method", version="1.6.0")
     def await_motion(self, asking_interval=0.1):
         self.logger.debug(str(asking_interval))
