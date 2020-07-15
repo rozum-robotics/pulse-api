@@ -29,9 +29,10 @@ class RobotPulse:
         elif signal_level == SIG_LOW:
             result = self._api.bind_stop_port_low(port)
         else:
-            raise ValueError(
-                "Signal level must be either {} or {}".format(SIG_HIGH, SIG_LOW)
+            error_msg = "Signal level must be either {} or {}".format(
+                SIG_HIGH, SIG_LOW
             )
+            raise ValueError(error_msg)
         return result
 
     def change_base(self, base_position):
