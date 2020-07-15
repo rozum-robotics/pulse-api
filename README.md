@@ -410,22 +410,6 @@ position_targets = [
     position([-0.42, -0.12, 0.35], [math.pi, 0, 0]),
     position([-0.42, -0.17, 0.35], [math.pi, 0, 0]),
     # ask the robot to close gripper at the specified position and 
-        # ask the robot to close gripper at the specified position and
-    # ask the robot to close gripper at the specified position and 
-        # ask the robot to close gripper at the specified position and
-    # ask the robot to close gripper at the specified position and 
-        # ask the robot to close gripper at the specified position and
-    # ask the robot to close gripper at the specified position and 
-        # ask the robot to close gripper at the specified position and
-    # ask the robot to close gripper at the specified position and 
-    # to set output signal to SIG_LOW value on port 1 at the specified position 
-        # to set output signal to SIG_LOW value on port 1 at the specified position
-    # to set output signal to SIG_LOW value on port 1 at the specified position 
-        # to set output signal to SIG_LOW value on port 1 at the specified position
-    # to set output signal to SIG_LOW value on port 1 at the specified position 
-        # to set output signal to SIG_LOW value on port 1 at the specified position
-    # to set output signal to SIG_LOW value on port 1 at the specified position 
-        # to set output signal to SIG_LOW value on port 1 at the specified position
     # to set output signal to SIG_LOW value on port 1 at the specified position 
     position([-0.37, -0.17, 0.35], [math.pi, 0, 0], [
         open_gripper_action(),
