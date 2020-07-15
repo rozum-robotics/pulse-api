@@ -12,7 +12,7 @@ def read_version() -> str:
 def development_status(version: str) -> str:
     if "a" in version:
         dev_status = "Development Status :: 3 - Alpha"
-    elif "dev" in version:
+    elif "dev" in version or "rc" in version:
         dev_status = "Development Status :: 4 - Beta"
     else:
         dev_status = "Development Status :: 5 - Production/Stable"
