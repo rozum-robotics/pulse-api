@@ -334,8 +334,11 @@ Available methods:
 
 * `close_gripper`, `open_gripper` with a preset timeout before executing further commands (default: 500 ms).
 Supported grippers: Schunk and OnRobot.
+* `disable_gripper` and `enable_gripper`. Use this methods before (disable) and after (enable) changing the devices on
+  the wrist of the robot arm if you need to change them when the arm is active (powered on).
 * `set_digital_output_high` `set_digital_output_low`, `get_digital_output` - to work with output ports on the controlbox.
 * `get_digital_input` to work with input ports on the controlbox.
+* `bind_stop` binds stop command to high or low input signal on a specific port.
 
 Signals:
 
@@ -365,6 +368,9 @@ if robot.get_digital_input(3) == SIG_HIGH:
 # execute required operations when input port 1 is inactive
 if robot.get_digital_input(1) == SIG_LOW:
     print("Input port 1 is inactive")
+
+# execute stop() command if input singnal is HIGH on input port 4
+robot.bind_stop(4, SIG_HIGH)
 
 ```
 
