@@ -309,6 +309,8 @@ robot.jogging(jog())
 Freedrive ("Zero-gravity") mode is intended to be used when there is a need
 to control the robotic arm directly "by-hand". With this functionality, for
 example, the user can develop an application that remembers user defined path.
+After mode activation, you can press and hold specific button that is described
+in user manual and move the robotic arm "by-hand".
 
 ```python
 from pulseapi import RobotPulse
