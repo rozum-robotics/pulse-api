@@ -242,6 +242,9 @@ class RobotPulse:
         while self.status() == SystemState.MOTION:
             time.sleep(asking_interval)
 
+    def unbind_stop(self):
+        return self._api.unbind_stop()
+
     def zg_on(self):
         return self._api.zg_on()
 
