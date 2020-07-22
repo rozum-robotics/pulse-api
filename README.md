@@ -217,8 +217,9 @@ robotic arm by hand (e.g., to verify/test a motion trajectory).
 * `pack` - asking the arm to reach a compact pose for transportation.
 * `status_motors` - returns the actual states of the six servo motors integrated
 into the joints of the robotic arm.
-* `stop` - sets the arm in the `EMERGENCY` state. It is required to call 
-  `recover` in order to exit the state and continue commands execution.
+* `stop` - sets the arm in the *Protection mode*. The arm stops moving,
+  retaining its last position and disabled for command execution untill
+  `recover` is called.
 
 **WARNING!** The following example is sample code. Before running, you must
 replace reference motion targets in the sample with the ones applicable to
@@ -336,11 +337,11 @@ Available methods:
 
 * `close_gripper`, `open_gripper` with a preset timeout before executing further commands (default: 500 ms).
 Supported grippers: Schunk and OnRobot.
-* `disable_gripper` and `enable_gripper`. Use this methods before (disable) and after (enable) changing the devices on
-  the wrist of the robot arm if you need to change them when the arm is active (powered on).
+* `disable_gripper` and `enable_gripper`. Use this methods to disable (enable) power supply on wrist for gripper so
+  that you can safely unplug and change gripper without powering off the robotic arm 
 * `set_digital_output_high` `set_digital_output_low`, `get_digital_output` - to work with output ports on the controlbox.
 * `get_digital_input` to work with input ports on the controlbox.
-* `bind_stop` binds stop command to high or low input signal on a specific port.
+* `bind_stop` binds `stop` command to high or low input signal on a specific port.
 
 Signals:
 
