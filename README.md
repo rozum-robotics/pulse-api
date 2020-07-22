@@ -338,7 +338,7 @@ Available methods:
 * `close_gripper`, `open_gripper` with a preset timeout before executing further commands (default: 500 ms).
 Supported grippers: Schunk and OnRobot.
 * `disable_gripper` and `enable_gripper`. Use this methods to disable (enable) power supply on wrist for gripper so
-    that you can safely unplug and change gripper without powering off the robotic arm 
+  that you can safely unplug and change gripper without powering off the robotic arm 
 * `set_digital_output_high` `set_digital_output_low`, `get_digital_output` - to work with output ports on the controlbox.
 * `get_digital_input` to work with input ports on the controlbox.
 * `bind_stop` binds `stop` command to high or low input signal on a specific port.
