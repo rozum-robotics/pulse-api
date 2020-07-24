@@ -1,10 +1,20 @@
 # Changelog
 
+
+## 1.8.0
+* Added `experimental` module
+  * Added `session` module
+  * Added `robot` module that is using sessions
+* `pulseapi.robot` module
+  * Added `RobotPulse.zg_on()` and `RobotPulse.zg_off()` methods that control freedrive mode.
+  * Added `RobotPulse.stop()`, `RobotPulse.bind_stop()` and `RobotPulse.unbind_stop()`
+
+
 ## 1.7.0:
-* added `pulseapi.actions` module
+* Added `pulseapi.actions` module
 * `pulseapi.utils` module:
-  * added optional `actions` parameter to `pose()` and `position()` functions
-  * docstrings refactoring
+  * Added optional `actions` parameter to `pose()` and `position()` functions
+  * Docstrings refactoring
 
 
 ## 1.6.0

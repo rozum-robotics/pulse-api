@@ -3,7 +3,7 @@
 <a href="https://www.python.org/">
 <img alt="Python: 3.5 | 3.6 | 3.7 | 3.8" src="https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7%20%7C%203.8-blue.svg">
 </a>
-<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/badge/pip.rozum.com%20package-1.7.0-green.svg"></a>
+<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/pypi/v/pulse-api"></a>
 <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API.
@@ -18,6 +18,7 @@ supports Python 2.
       - [Quickstart](#quickstart)
       - [API initialization](#api-initialization)
       - [Motion control](#motion-control)
+      - [Freedrive mode](#freedrive-mode)
       - [Controlling accessories and signals](#controlling-accessories-and-signals)
       - [Controlling accessories and signals during trajectory execution](#controlling-accessories-and-signals-during-trajectory-execution)
       - [Tool API](#tool-api)
@@ -36,7 +37,16 @@ Python 3.5+
 
 ## Installation
 
-To get the latest version, use the following command:
+To install from the [Python Package Index](https://pypi.org/project/pulse-api/):
+
+`pip3 install pulse-api`
+
+or, for a specific version
+
+`pip3 install pulse-api==v1.v2.v3`
+
+Alternatively, to get the version from our repository, use the following
+command:
 
 `pip3 install pulse-api -i https://pip.rozum.com/simple`  
 
@@ -59,6 +69,7 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 | 1.5.0, 1.5.1, 1.5.2   | 1.5.0              |
 | 1.6.0                 | 1.6.0              |
 | 1.7.0                 | 1.7.0              |
+| 1.8.0                 | 1.8.0              |
 
 ### Getting started
 
@@ -73,7 +84,7 @@ within 0.6 meters around the manipulator.
 import math
 from pulseapi import RobotPulse, pose, position, PulseApiException, MT_LINEAR
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)  # create an instance of the API wrapper class
 
 # create motion targets
@@ -155,7 +166,7 @@ while True:
 ```python
 from pulseapi import RobotPulse
 # create an instance of the API wrapper class
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 ```
 
@@ -206,6 +217,9 @@ robotic arm by hand (e.g., to verify/test a motion trajectory).
 * `pack` - asking the arm to reach a compact pose for transportation.
 * `status_motors` - returns the actual states of the six servo motors integrated
 into the joints of the robotic arm.
+* `stop` - sets the arm in the *Protection mode*. The arm stops moving,
+  retaining its last position and is disabled for command execution until
+  `recover` is called.
 
 **WARNING!** The following example is sample code. Before running, you must
 replace reference motion targets in the sample with the ones applicable to
@@ -217,7 +231,7 @@ import math
 import time
 from pulseapi import position, pose, RobotPulse, MT_LINEAR, SystemState, jog
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # create motion targets
@@ -291,14 +305,43 @@ robot.jogging(jog())
 
 [Back to the table of contents](#pulse-robot-python-api)
 
+#### Freedrive mode
+
+Freedrive ("Zero-gravity") mode is intended to be used when there is a need
+to control the robotic arm directly "by-hand". With this functionality, for
+example, the user can develop an application that remembers user defined path.
+After mode activation, you can press and hold specific button that is described
+in user manual and move the robotic arm "by-hand".
+
+```python
+from pulseapi import RobotPulse
+
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
+robot = RobotPulse(host)
+
+# enter freedrive mode
+robot.zg_on()
+
+# additional logic goes here
+
+# disable freedrive mode
+robot.zg_off()
+
+```
+
+[Back to the table of contents](#pulse-robot-python-api)
+
 #### Controlling accessories and signals
 
 Available methods:
 
 * `close_gripper`, `open_gripper` with a preset timeout before executing further commands (default: 500 ms).
 Supported grippers: Schunk and OnRobot.
+* `disable_gripper` and `enable_gripper`. Use this methods to disable (enable) power supply on wrist for gripper so
+  that you can safely unplug and change gripper without powering off the robotic arm 
 * `set_digital_output_high` `set_digital_output_low`, `get_digital_output` - to work with output ports on the controlbox.
 * `get_digital_input` to work with input ports on the controlbox.
+* `bind_stop` binds `stop` command to high or low input signal on a specific port.
 
 Signals:
 
@@ -308,7 +351,7 @@ Signals:
 ```python
 from pulseapi import RobotPulse, SIG_LOW, SIG_HIGH
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # ask the robot to close the gripper and continue execution of
@@ -328,6 +371,9 @@ if robot.get_digital_input(3) == SIG_HIGH:
 # execute required operations when input port 1 is inactive
 if robot.get_digital_input(1) == SIG_LOW:
     print("Input port 1 is inactive")
+
+# execute stop() command if input singnal is HIGH on input port 4
+robot.bind_stop(4, SIG_HIGH)
 
 ```
 
@@ -352,7 +398,7 @@ from pulseapi import (
     close_gripper_action,
 )
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # create motion targets with actions
@@ -413,7 +459,7 @@ Helper functions:
 from pulseapi import RobotPulse, position, Point
 from pulseapi import create_simple_capsule_obstacle, tool_shape, tool_info
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 # get info about the current tool
@@ -451,7 +497,7 @@ Available methods:
 ```python
 from pulseapi import RobotPulse, position
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 current_base = robot.get_base()
@@ -494,7 +540,7 @@ from pulseapi import (
     create_capsule_obstacle,
 )
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 print("Current environment\n{}".format(robot.get_all_from_environment()))
@@ -544,7 +590,7 @@ method.
 ```python
 from pulseapi import RobotPulse, PulseApiException, pose, SystemState
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 robot = RobotPulse(host)
 
 try:
@@ -576,7 +622,7 @@ Available methods:
 ```python
 from pulseapi import Versions
 
-host = "127.0.0.1:8081"  # replace with a valid robot address
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
 versions = Versions(host)
 
 print(versions.hardware())

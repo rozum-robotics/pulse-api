@@ -1,15 +1,121 @@
-image: python:3.6
-
+---
 stages:
+  - build
+  - test
   - publish
 
-publish:
-  stage: publish
-  tags:
-    - rnd-dev
+default:
+  image: python:3.6
+  cache:
+    paths:
+      - ./venv
+  before_script:
+    - python3 -V
+    - python3 -m pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+
+
+install-deps:
+  stage: .pre
+  extends: .rnd-dev-runner
   script:
-    - pip install -U setuptools twine
+    - pip install -U setuptools twine wheel
+
+
+
+build-prod:
+  extends: .build-package
+  script:
+    - echo "${CI_COMMIT_TAG}" > version
     - python setup.py sdist bdist_wheel
-    - twine upload --repository-url ${PYPI_URL} -u ${PYPI_USER} -p ${PYPI_PASSWORD} dist/*
   only:
     - tags
+
+
+build-dev:
+  extends: .build-package
+  script:
+    - VERSION_POSTFIX=".dev$(date +%Y%m%d%H%M%S)"
+    - echo "$(cat version)${VERSION_POSTFIX}" > version
+    - python setup.py sdist bdist_wheel
+  except:
+    - master
+    - tags
+
+
+sonarcloud-check:
+  before_script:
+    - echo "EMPTY_BEFORE_SCRIPT"
+  stage: test
+  extends: .rnd-dev-runner
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner
+  only:
+    - merge_request
+
+.publish:
+  stage: publish
+  extends: .rnd-dev-runner
+  script:
+    - twine upload
+      --repository-url ${PYPI_URL}
+      -u ${PYPI_USER} -p ${PYPI_PASSWORD}
+      dist/*
+  only:
+    - tags
+    - develop
+  allow_failure: true
+
+
+publish-testpypi:
+  stage: publish
+  extends: .rnd-dev-runner
+  script:
+    - twine upload
+      --repository-url ${TESTPYPIORG_URL}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+      dist/*
+  only:
+    - tags
+    - develop
+
+
+publish-pypi:
+  stage: publish
+  extends: .rnd-dev-runner
+  script:
+    - twine upload
+      --repository-url ${PYPIORG_URL}
+      -u ${PYPIORG_USER} -p ${PYPIORG_PASSWORD}
+      dist/*
+  only:
+    - tags
+    - develop
+  when: manual
+
+
+.build-package:
+  extends: .rnd-dev-runner
+  stage: build
+  dependencies:
+    - install-deps
+  artifacts:
+    paths:
+      - ./dist/
+    expire_in: 1 day
+
+
+.rnd-dev-runner:
+  tags:
+    - rnd-dev
