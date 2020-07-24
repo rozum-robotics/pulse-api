@@ -218,7 +218,7 @@ robotic arm by hand (e.g., to verify/test a motion trajectory).
 * `status_motors` - returns the actual states of the six servo motors integrated
 into the joints of the robotic arm.
 * `stop` - sets the arm in the *Protection mode*. The arm stops moving,
-  retaining its last position and disabled for command execution untill
+  retaining its last position and is disabled for command execution until
   `recover` is called.
 
 **WARNING!** The following example is sample code. Before running, you must
