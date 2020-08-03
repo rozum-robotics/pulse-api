@@ -8,7 +8,6 @@ from pulseapi.environment import (
 )
 from pulseapi.constants import MT_JOINT, MT_LINEAR, SIG_HIGH, SIG_LOW
 from pulseapi.robot import RobotPulse
-from pulseapi.session import Session
 from pulseapi.utils import pose, position, tool_info, tool_shape, Versions, jog
 from pulseapi.actions import (
     close_gripper_action,
@@ -16,5 +15,9 @@ from pulseapi.actions import (
     output_action,
 )
 
-# backward compatibility alias
-RestApiException = PulseApiException
+try:
+    from pulseapi.aiorobot import AioRobotPulse
+except ImportError as ie:
+    pass  # silent because aiorobot is experimental feature
+
+RestApiException = PulseApiException  # backward compatibility alias
