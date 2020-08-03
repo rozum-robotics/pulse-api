@@ -63,7 +63,7 @@ sonarcloud-check:
   only:
     - merge_request
 
-publish:
+.publish:
   stage: publish
   extends: .rnd-dev-runner
   script:
