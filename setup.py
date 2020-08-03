@@ -12,7 +12,7 @@ def read_version() -> str:
 def development_status(version: str) -> str:
     if "a" in version:
         dev_status = "Development Status :: 3 - Alpha"
-    elif "dev" in version:
+    elif "dev" in version or "rc" in version:
         dev_status = "Development Status :: 4 - Beta"
     else:
         dev_status = "Development Status :: 5 - Production/Stable"
@@ -40,8 +40,8 @@ REQUIRED = [
     "certifi >= 2019.3.9",
     "six >= 1.10",
     "python_dateutil == 2.8.0",
-    "urllib3 == 1.24.2",
-    "pdhttp >= 1.8.0.dev20200624151938,<1.9.0",
+    "urllib3 >= 1.24.2",
+    "pdhttp >= 1.7.1.dev20200803121939,<1.8.0",
     "Deprecated == 1.2.6",
 ]
 
