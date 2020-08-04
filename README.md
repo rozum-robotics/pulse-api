@@ -583,6 +583,9 @@ Available methods:
 * `recover` - the function recovers the arm after an emergency, setting its motion status to IDLE.
 Recovery is possible only after an emergency that is not fatal (corresponds
 to the ERROR status).
+* `status_failure` - the method  returns complete list of recent failures. Each
+  list entry could contain failure message, type, level and datetime. This
+  information could be used for error handling or incident investigation.
 
 For example, we can trigger an API exception by sending `pose` into `set_position`
 method.
@@ -599,6 +602,7 @@ try:
 except PulseApiException as e:
     print("Exception {}while calling robot at {} ".format(e, robot.host))
     status = robot.status()
+    print(robot.status_failure())
     if status.state == SystemState.ERROR:
         robot.recover()
         print("Robot recovered from error. Error message: {}".format(status.message))
