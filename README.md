@@ -602,12 +602,26 @@ try:
 except PulseApiException as e:
     print("Exception {}while calling robot at {} ".format(e, robot.host))
     status = robot.status()
-    print(robot.status_failure())
-    if status.state == SystemState.ERROR:
-        robot.recover()
-        print("Robot recovered from error. Error message: {}".format(status.message))
+    failure = robot.status_failure()
+    if status == SystemState.EMERGENCY:
+        print("Robot in emergency. Error message: {}".format(failure))
 
 ```
+
+If the robotic arm went into "EMERGENCY" state, you can attemt to "recover" the
+arm in order to continue operations execution:
+
+```python
+from pulseapi import RobotPulse, PulseApiException, pose, SystemState
+
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
+robot = RobotPulse(host)
+
+recover_result = robot.recover()
+print("Recover result: {}".format(recover_result))
+
+```
+
 
 [Back to the table of contents](#pulse-robot-python-api)
 
