@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.8.1
+* `pulseapi.robot` module
+  * Added `RobotPulse.status_failure()` method (it was not added in 1.8.0)
 
 ## 1.8.0
 * Added `experimental` module
@@ -8,6 +11,11 @@
 * `pulseapi.robot` module
   * Added `RobotPulse.zg_on()` and `RobotPulse.zg_off()` methods that control freedrive mode.
   * Added `RobotPulse.stop()`, `RobotPulse.bind_stop()` and `RobotPulse.unbind_stop()`
+
+
+## 1.7.1
+* `pulseapi.robot` module
+  * Added `RobotPulse.status_failure()` method
 
 
 ## 1.7.0:

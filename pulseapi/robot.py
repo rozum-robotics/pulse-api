@@ -214,6 +214,9 @@ class RobotPulse:
         )
         return self._api.set_position(target_position, **motion_parameters)
 
+    def status_failure(self):
+        return self._api.status_failure()
+
     @deprecated(reason="You should use status() method", version="1.6.0")
     def status_motion(self):
         result = self._api.status_motion()

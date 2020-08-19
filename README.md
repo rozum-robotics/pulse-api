@@ -3,7 +3,7 @@
 <a href="https://www.python.org/">
 <img alt="Python: 3.5 | 3.6 | 3.7 | 3.8" src="https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7%20%7C%203.8-blue.svg">
 </a>
-<a href="https://pip.rozum.com/#/"><img alt="pip.rozum.com package" src="https://img.shields.io/pypi/v/pulse-api"></a>
+<a href="https://pypi.org/project/pulse-api/"><img alt="pypi.org package" src="https://img.shields.io/pypi/v/pulse-api"></a>
 <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 This folder contains `Python` wrapper for the [Pulse Robot](https://rozum.com/robotic-arm/) REST API.
@@ -68,8 +68,8 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 | 1.4.4                 | 1.4.4              |
 | 1.5.0, 1.5.1, 1.5.2   | 1.5.0              |
 | 1.6.0                 | 1.6.0              |
-| 1.7.0                 | 1.7.0              |
-| 1.8.0                 | 1.8.0              |
+| 1.7.0                 | 1.7.0, 1.7.1       |
+| 1.8.0                 | 1.8.0, 1.8.1       |
 
 ### Getting started
 
@@ -583,6 +583,9 @@ Available methods:
 * `recover` - the function recovers the arm after an emergency, setting its motion status to IDLE.
 Recovery is possible only after an emergency that is not fatal (corresponds
 to the ERROR status).
+* `status_failure` - the method  returns complete list of recent failures. Each
+  list entry could contain failure message, type, level and datetime. This
+  information could be used for error handling or incident investigation.
 
 For example, we can trigger an API exception by sending `pose` into `set_position`
 method.
@@ -599,11 +602,26 @@ try:
 except PulseApiException as e:
     print("Exception {}while calling robot at {} ".format(e, robot.host))
     status = robot.status()
-    if status.state == SystemState.ERROR:
-        robot.recover()
-        print("Robot recovered from error. Error message: {}".format(status.message))
+    failure = robot.status_failure()
+    if status == SystemState.EMERGENCY:
+        print("Robot in emergency. Error message: {}".format(failure))
 
 ```
+
+If the robotic arm went into "EMERGENCY" state, you can attemt to "recover" the
+arm in order to continue operations execution:
+
+```python
+from pulseapi import RobotPulse, PulseApiException, pose, SystemState
+
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
+robot = RobotPulse(host)
+
+recover_result = robot.recover()
+print("Recover result: {}".format(recover_result))
+
+```
+
 
 [Back to the table of contents](#pulse-robot-python-api)
 
