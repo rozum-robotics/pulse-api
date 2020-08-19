@@ -41,7 +41,7 @@ REQUIRED = [
     "six >= 1.10",
     "python_dateutil == 2.8.0",
     "urllib3 >= 1.24.2",
-    "pdhttp >= 1.8.1.dev20200804140542,<1.9.0",
+    "pdhttp >= 1.8.2.dev20200819094650,<1.9.0",
     "Deprecated == 1.2.6",
 ]
 
