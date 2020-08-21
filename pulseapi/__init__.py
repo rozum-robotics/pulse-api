@@ -6,6 +6,7 @@ from pdhttp import (
     SystemState,
     LinearMotionParameters,
     JointMotionParameters,
+    InterpolationType
 )
 from pulseapi.environment import (
     create_box_obstacle,
