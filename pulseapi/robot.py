@@ -148,22 +148,6 @@ class RobotPulse:
         self.logger.debug(linear_poses)
         return self._api.run_linear_poses(linear_poses)
 
-    def run_joint_positions(
-        self,
-        positions: List[Position],
-        motion_parameters: JointMotionParameters,
-    ) -> str:
-        joint_positions = JointPositions(positions, motion_parameters)
-        self.logger.debug(joint_positions)
-        return self._api.run_joint_positions(joint_positions)
-
-    def run_joint_poses(
-        self, poses: List[Pose], motion_parameters: JointMotionParameters
-    ) -> str:
-        joint_poses = JointPoses(poses, motion_parameters)
-        self.logger.debug(joint_poses)
-        return self._api.run_joint_poses(joint_poses)
-
     def run_poses(
         self,
         poses,
