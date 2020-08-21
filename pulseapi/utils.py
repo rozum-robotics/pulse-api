@@ -22,6 +22,7 @@ ActionsList = List[Union[OutputRobotAction, GripperRobotAction]]
 def position(
     point: Iterable[float],
     rotation: Iterable[float],
+    blend: float = 0.0,
     actions: Optional[ActionsList] = None,
 ) -> Position:
     """Creates position motion target.
@@ -40,17 +41,23 @@ def position(
     :param rotation: list or tupple containing roll, pitch, yaw coordinates
     (in radians) for TCP
     :type rotation: Iterable[float]
+    :param blend: float responsible for smoothing the trajectory
+    :type blend: float
     :param actions: list containing actions from pulseapi.actions module,
     defaults to None
     :type actions: Optional[ActionsList], optional
     :return: position motion target
     :rtype: Position
     """
-    return Position(Point(*point), Rotation(*rotation), actions)
+    return Position(
+        Point(*point), Rotation(*rotation), blend=blend, actions=actions
+    )
 
 
 def pose(
-    angles: Iterable[float], actions: Optional[ActionsList] = None
+    angles: Iterable[float],
+    blend: float = 0.0,
+    actions: Optional[ActionsList] = None,
 ) -> Pose:
     """Creates pose motion target.
 
@@ -60,13 +67,15 @@ def pose(
     :param angles: list or tupple containing 6 angles for motors (in degrees).
     Order: base-0th, tcp-5th
     :type angles: Iterable[float]
+    :param blend: float responsible for smoothing the trajectory
+    :type blend: float
     :param actions: list containing actions from pulseapi.actions module,
     defaults to None
     :type actions: Optional[ActionsList], optional
     :return: pose motion target
     :rtype: Pose
     """
-    return Pose(angles, actions)
+    return Pose(angles, blend=blend, actions=actions)
 
 
 def jog(
