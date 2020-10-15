@@ -37,11 +37,7 @@ DEVELOPMENT_STATUS = development_status(VERSION)
 LONG_DESCRIPTION = long_description(DESCRIPTION)
 
 REQUIRED = [
-    "certifi >= 2019.3.9",
-    "six >= 1.10",
-    "python_dateutil == 2.8.0",
-    "urllib3 >= 1.24.2",
-    "pdhttp >= 1.8.2.dev20200819094650,<1.9.0",
+    "pdhttp >= 1.8.4.dev20201015123110,<1.9.0",
     "Deprecated == 1.2.6",
 ]
 
