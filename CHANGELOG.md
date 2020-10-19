@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.2-1.8.4
+* `pulseapi.robot` module
+  * Added `RobotPulse.run_linear_positions()` and `RobotPulse.run_linear_poses()` methods
+* `pulseapi` module
+  * Added `LinearMotionParameters` class and `InterpolationType` enum to be used with the new `run` methods
+* README: updated examples
+
 ## 1.8.1
 * `pulseapi.robot` module
   * Added `RobotPulse.status_failure()` method (it was not added in 1.8.0)
@@ -9,7 +16,7 @@
   * Added `session` module
   * Added `robot` module that is using sessions
 * `pulseapi.robot` module
-  * Added `RobotPulse.zg_on()` and `RobotPulse.zg_off()` methods that control freedrive mode.
+  * Added `RobotPulse.zg_on()` and `RobotPulse.zg_off()` methods that control freedrive mode
   * Added `RobotPulse.stop()`, `RobotPulse.bind_stop()` and `RobotPulse.unbind_stop()`
 
 

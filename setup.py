@@ -37,7 +37,7 @@ DEVELOPMENT_STATUS = development_status(VERSION)
 LONG_DESCRIPTION = long_description(DESCRIPTION)
 
 REQUIRED = [
-    "pdhttp >= 1.8.4.dev20201015123110,<1.9.0",
+    "pdhttp == 1.8.4",
     "Deprecated == 1.2.6",
 ]
 
