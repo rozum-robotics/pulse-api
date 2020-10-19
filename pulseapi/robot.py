@@ -1,9 +1,22 @@
 import time
-from deprecated import deprecated
 import logging
+from typing import List
+
+from deprecated import deprecated
 
 from pdhttp.api.robot_api import RobotApi
-from pdhttp.models import MotionStatus, SystemState
+from pdhttp.models import (
+    MotionStatus,
+    SystemState,
+    LinearPoses,
+    LinearPositions,
+    JointPoses,
+    JointPositions,
+    LinearMotionParameters,
+    JointMotionParameters,
+    Position,
+    Pose,
+)
 from pulseapi.constants import MT_JOINT, SIG_HIGH, SIG_LOW
 
 
@@ -118,6 +131,22 @@ class RobotPulse:
 
     def remove_from_environment_by_name(self, obstacle_name):
         return self._api.remove_from_environment_by_name(obstacle_name)
+
+    def run_linear_positions(
+        self,
+        positions: List[Position],
+        motion_parameters: LinearMotionParameters,
+    ) -> str:
+        linear_positions = LinearPositions(positions, motion_parameters)
+        self.logger.debug(linear_positions)
+        return self._api.run_linear_positions(linear_positions)
+
+    def run_linear_poses(
+        self, poses: List[Pose], motion_parameters: LinearMotionParameters
+    ) -> str:
+        linear_poses = LinearPoses(poses, motion_parameters)
+        self.logger.debug(linear_poses)
+        return self._api.run_linear_poses(linear_poses)
 
     def run_poses(
         self,

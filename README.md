@@ -69,7 +69,8 @@ where **v1**, **v2**, and **v3** (e.g., pulse-api==1.4.3) are version numbers as
 | 1.5.0, 1.5.1, 1.5.2   | 1.5.0              |
 | 1.6.0                 | 1.6.0              |
 | 1.7.0                 | 1.7.0, 1.7.1       |
-| 1.8.0                 | 1.8.0, 1.8.1       |
+| 1.8.0, 1.8.1          | 1.8.0, 1.8.1       |
+| 1.8.2, 1.8.3, 1.8.4   | 1.8.4              |
 
 ### Getting started
 
@@ -176,11 +177,11 @@ robot = RobotPulse(host)
 
 Possible motion targets:
 
-* Positions (`set_position`, `run_positions` and `get_position` methods) - to control
+* Positions (`run_linear_positions`, `set_position`, `run_positions` and `get_position` methods) - to control
 the location of the robot's TCP (tool center point). Use the `position` helper function to create a
-motion target.
-* Poses (`set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
-Use the `pose` helper function to create a motion target.
+motion targets.
+* Poses (`run_linear_poses`, `set_pose`, `run_poses` and `get_pose` methods) - to control motor angles.
+Use the `pose` helper function to create a motion targets.
 * Jogging (`jogging` method) - enter the 'jogging' mode. If the robotic arm 
 already in the 'jogging' mode, use this method to control the direction of the movement.
 Use `jog` helper function to create motion target.
@@ -250,7 +251,7 @@ TCP_VELOCITY_1CM = 0.01
 # use the status command as shown below
 def my_await_stop(robot_instance, asking_interval=0.1):
     status = robot_instance.status()
-    while status.state == SystemState.MOTION:
+    while status == SystemState.MOTION:
         time.sleep(asking_interval)
         status = robot_instance.status()
 
@@ -301,6 +302,67 @@ time.sleep(5)
 # disable the jogging mode
 robot.jogging(jog())
 
+```
+
+The following example demonstrates usage of the `run_linear_positions`
+and `run_linear_poses` methods. **Note:** the arm must be
+in the first position (pose) of the trajectory before usage.
+
+```python
+import math
+
+from pulseapi import (
+    RobotPulse,
+    pose,
+    LinearMotionParameters,
+    position,
+    InterpolationType,
+)
+
+host = "http://127.0.0.1:8081"  # replace with a valid robot address
+robot = RobotPulse(host)  # create an instance of the API wrapper class
+
+SPEED = 25
+VELOCITY = 0.3 # in meters per second
+ACCELERATION = 0.2 # in meters per second squared
+BLEND = 0.01 # in meters - radius of maximum deviation from the trajectory point
+HOME_POSE = pose([0, -90, 0, -90, 0, 0])
+TARGET_POSITIONS = [
+    position([-0.35, 0.3, 0.45], [math.pi, 0.1, 1.57], blend=BLEND),
+    position([-0.35, -0.3, 0.45], [math.pi, 0, 0], blend=BLEND),
+    position([-0.35, -0.3, 0.5], [math.pi, 0, 0], blend=BLEND),
+    position([-0.35, 0.3, 0.5], [math.pi, 0.1, 1.57], blend=BLEND),
+]
+
+TARGET_POSES = [
+    pose([130, -85, -109, -56, 90, 8], blend=BLEND),
+    pose([120, -85, -113, -17, 90, 8], blend=BLEND),
+    pose([100, -93, -104, -26, 89, 8], blend=BLEND),
+    pose([130, -85, -109, -56, 90, 8], blend=BLEND),
+]
+
+
+linear_motion_parameters = LinearMotionParameters(
+    interpolation_type=InterpolationType.BLEND,
+    velocity=VELOCITY,
+    acceleration=ACCELERATION,
+)
+robot.set_pose(HOME_POSE, SPEED)
+robot.set_position(TARGET_POSITIONS[0], SPEED)
+robot.await_stop()
+robot.run_linear_positions(
+    TARGET_POSITIONS,
+    linear_motion_parameters,
+)
+robot.await_stop()
+
+robot.set_pose(TARGET_POSES[0], SPEED)
+robot.await_stop()
+robot.run_linear_poses(
+    TARGET_POSES,
+    linear_motion_parameters,
+)
+robot.await_stop()
 ```
 
 [Back to the table of contents](#pulse-robot-python-api)

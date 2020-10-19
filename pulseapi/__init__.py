@@ -1,5 +1,12 @@
 from pdhttp.rest import ApiException as PulseApiException
-from pdhttp import Point, Rotation, MotionStatus, SystemState
+from pdhttp import (
+    Point,
+    Rotation,
+    MotionStatus,
+    SystemState,
+    LinearMotionParameters,
+    InterpolationType
+)
 from pulseapi.environment import (
     create_box_obstacle,
     create_capsule_obstacle,
